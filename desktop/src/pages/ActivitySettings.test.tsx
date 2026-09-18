@@ -113,7 +113,7 @@ describe('ActivitySettings', () => {
       preferences: {
         schemaVersion: 2,
         profile: {
-          displayName: 'cc-haha',
+          displayName: 'Orion',
           subtitle: 'github.com/NanmiCoder/cc-haha',
           avatarFile: null,
           avatarUpdatedAt: null,
@@ -151,7 +151,7 @@ describe('ActivitySettings', () => {
       preferences: {
         schemaVersion: 2,
         profile: {
-          displayName: 'cc-haha',
+          displayName: 'Orion',
           subtitle: 'github.com/NanmiCoder/cc-haha',
           avatarFile: 'profile/avatar.png',
           avatarUpdatedAt: '2026-05-09T12:00:00.000Z',
@@ -170,7 +170,7 @@ describe('ActivitySettings', () => {
       preferences: {
         schemaVersion: 2,
         profile: {
-          displayName: 'cc-haha',
+          displayName: 'Orion',
           subtitle: 'github.com/NanmiCoder/cc-haha',
           avatarFile: null,
           avatarUpdatedAt: null,
@@ -198,9 +198,9 @@ describe('ActivitySettings', () => {
 
     expect(getStatsMock).toHaveBeenCalledWith('all')
 
-    expect(screen.getByText('cc-haha')).toBeInTheDocument()
-    expect(screen.getByAltText('cc-haha avatar')).toHaveAttribute('src', '/app-icon.png')
-    expect(screen.getByAltText('cc-haha avatar')).toHaveClass('scale-[1.28]')
+    expect(screen.getByText('Orion')).toBeInTheDocument()
+    expect(screen.getByAltText('Orion avatar')).toHaveAttribute('src', '/app-icon.png')
+    expect(screen.getByAltText('Orion avatar')).toHaveClass('scale-[1.28]')
     expect(screen.getByRole('link', { name: 'github.com/NanmiCoder/cc-haha' })).toHaveAttribute(
       'href',
       'https://github.com/NanmiCoder/cc-haha',
@@ -399,7 +399,7 @@ describe('ActivitySettings', () => {
     await flushActivityLoad()
 
     expect(deleteProfileAvatarMock).toHaveBeenCalled()
-    expect(screen.getByAltText('cc-haha avatar')).toHaveAttribute('src', '/app-icon.png')
+    expect(screen.getByAltText('Orion avatar')).toHaveAttribute('src', '/app-icon.png')
   })
 
   it('shows localized duration details and the empty usage state', async () => {

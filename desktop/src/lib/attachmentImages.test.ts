@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { setBaseUrl } from '../api/client'
-import { attachmentImageSource, isInlineImagePath, localImageFileUrl } from './attachmentImages'
+import {
+  attachmentImageSource,
+  isInlineImagePath,
+  isManagedGeneratedImagePath,
+  localImageFileUrl,
+} from './attachmentImages'
 
 describe('attachment image sources', () => {
   it('recognizes the extensions the server inlines as images', () => {
@@ -41,5 +46,21 @@ describe('attachment image sources', () => {
     expect(attachmentImageSource({ path: '/Users/nanmi/Desktop/notes.md' })).toBeUndefined()
     expect(attachmentImageSource({ path: '/Users/nanmi/Pictures', isDirectory: true })).toBeUndefined()
     expect(attachmentImageSource({})).toBeUndefined()
+  })
+})
+
+describe('isManagedGeneratedImagePath', () => {
+  it('recognises generated images under the current product data dir', () => {
+    expect(isManagedGeneratedImagePath('/home/u/.claude/orion/generated-images/a.png')).toBe(true)
+    expect(isManagedGeneratedImagePath('C:\\Users\\u\\.claude\\orion\\generated-images\\a.png')).toBe(true)
+  })
+
+  it('keeps recognising images generated before the rename', () => {
+    expect(isManagedGeneratedImagePath('/home/u/.claude/cc-haha/generated-images/a.png')).toBe(true)
+  })
+
+  it('rejects other paths', () => {
+    expect(isManagedGeneratedImagePath('/home/u/.claude/orion/pets/a.png')).toBe(false)
+    expect(isManagedGeneratedImagePath('/tmp/generated-images/a.png')).toBe(false)
   })
 })

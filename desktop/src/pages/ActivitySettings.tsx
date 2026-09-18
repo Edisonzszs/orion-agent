@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/Card'
 import { Modal } from '@/components/ui/Modal'
 import { type Locale, useTranslation } from '../i18n'
 import { useSettingsStore } from '../stores/settingsStore'
+import { PRODUCT } from '../lib/product'
 import { publicAssetPath } from '../lib/publicAsset'
 
 type HeatmapDay = {
@@ -71,7 +72,7 @@ const DATE_LOCALES: Record<Locale, string> = {
   kr: 'ko-KR',
 }
 const DEFAULT_PROFILE: DesktopProfilePreferences = {
-  displayName: 'cc-haha',
+  displayName: PRODUCT.shortName,
   subtitle: 'github.com/NanmiCoder/cc-haha',
   avatarFile: null,
   avatarUpdatedAt: null,

@@ -1,5 +1,6 @@
 import { getBaseUrl } from '../api/client'
 import { isAbsoluteLocalPath } from './handlePreviewLink'
+import { PRODUCT } from './product'
 
 /**
  * Extensions that count as an inline image attachment.
@@ -16,9 +17,16 @@ export function isInlineImagePath(pathOrName: string | undefined): boolean {
   return !!pathOrName && INLINE_IMAGE_EXTENSION_RE.test(pathOrName)
 }
 
+const MANAGED_GENERATED_IMAGE_SEGMENTS = [
+  `/.claude/${PRODUCT.dataDirName}/generated-images/`,
+  // Transcripts written before the rename still reference the old directory.
+  `/.claude/${PRODUCT.legacyDataDirName}/generated-images/`,
+]
+
 /** Host-managed ImageGen results already render through their dedicated result card. */
 export function isManagedGeneratedImagePath(filePath: string): boolean {
-  return filePath.replaceAll('\\', '/').includes('/.claude/cc-haha/generated-images/')
+  const normalized = filePath.replaceAll('\\', '/')
+  return MANAGED_GENERATED_IMAGE_SEGMENTS.some((segment) => normalized.includes(segment))
 }
 
 /** Serves a local absolute image path through the local server. */

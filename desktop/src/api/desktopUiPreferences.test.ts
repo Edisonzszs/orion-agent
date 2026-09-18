@@ -6,7 +6,7 @@ const preferences = {
   schemaVersion: 3,
   projectDisplayNames: {},
   profile: {
-    displayName: 'cc-haha',
+    displayName: 'Orion',
     subtitle: 'github.com/NanmiCoder/cc-haha',
     avatarFile: null,
     avatarUpdatedAt: null,
