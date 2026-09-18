@@ -49,7 +49,7 @@ describe('deterministic desktop UI smoke setup', () => {
     const configDir = mkdtempSync(join(tmpdir(), 'cc-haha-ui-smoke-provider-'))
     try {
       seedDesktopUiSmokeProvider(configDir)
-      const index = JSON.parse(readFileSync(join(configDir, 'cc-haha', 'providers.json'), 'utf8'))
+      const index = JSON.parse(readFileSync(join(configDir, 'orion', 'providers.json'), 'utf8'))
       expect(index.activeId).toBe('desktop-ui-smoke-provider')
       expect(index.providers).toHaveLength(1)
       expect(index.providers[0]).toMatchObject({

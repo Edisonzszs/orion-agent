@@ -1,3 +1,4 @@
+import product from '../../product.json'
 import { createHash } from 'node:crypto'
 import {
   appendFile,
@@ -1228,7 +1229,7 @@ export async function runDeterministicAcceptance(
   const rootDir = await mkdtemp(join(tmpdir(), 'cc-haha-local-index-acceptance-'))
   const homeDir = join(rootDir, 'home')
   const configDir = join(homeDir, '.claude')
-  const databasePath = join(configDir, 'cc-haha', 'db', 'index-v1.sqlite')
+  const databasePath = join(configDir, product.dataDirName, 'db', 'index-v1.sqlite')
   const originalHome = process.env.HOME
   const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
   const originalLocalIndexMode = process.env.CC_HAHA_LOCAL_INDEX
@@ -1636,7 +1637,7 @@ export async function runBenchmark(
   const rootDir = await mkdtemp(join(tmpdir(), 'cc-haha-local-index-benchmark-'))
   const homeDir = join(rootDir, 'home')
   const configDir = join(homeDir, '.claude')
-  const databasePath = join(configDir, 'cc-haha', 'db', 'index-v1.sqlite')
+  const databasePath = join(configDir, product.dataDirName, 'db', 'index-v1.sqlite')
   const originalHome = process.env.HOME
   const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
   const originalLocalIndexMode = process.env.CC_HAHA_LOCAL_INDEX

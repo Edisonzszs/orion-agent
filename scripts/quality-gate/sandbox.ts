@@ -1,3 +1,4 @@
+import product from '../../product.json'
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -15,7 +16,7 @@ import { createSandboxedTestEnvironment } from '../pr/test-environment'
  * configured: provider state is *copied in*, never written back.
  */
 
-/** Files under `<config>/cc-haha/` that carry provider identity and credentials. */
+/** Files under `<config>/<product data dir>/` that carry provider identity and credentials. */
 export const SEEDABLE_PROVIDER_STATE_FILES = [
   'providers.json',
   'settings.json',
@@ -100,8 +101,8 @@ export function seedProviderState(
   sandboxConfigDir: string,
   files: readonly string[] = SEEDABLE_PROVIDER_STATE_FILES,
 ): string[] {
-  const sourceDir = join(sourceConfigDir, 'cc-haha')
-  const targetDir = join(sandboxConfigDir, 'cc-haha')
+  const sourceDir = join(sourceConfigDir, product.dataDirName)
+  const targetDir = join(sandboxConfigDir, product.dataDirName)
   if (!existsSync(sourceDir)) {
     return []
   }
@@ -129,11 +130,11 @@ export function seedProviderState(
  */
 export const GUARDED_USER_STATE_PATHS = [
   'settings.json',
-  'cc-haha/providers.json',
-  'cc-haha/settings.json',
-  'cc-haha/oauth.json',
-  'cc-haha/openai-oauth.json',
-  'cc-haha/grok-oauth.json',
+  `${product.dataDirName}/providers.json`,
+  `${product.dataDirName}/settings.json`,
+  `${product.dataDirName}/oauth.json`,
+  `${product.dataDirName}/openai-oauth.json`,
+  `${product.dataDirName}/grok-oauth.json`,
 ] as const
 
 /**

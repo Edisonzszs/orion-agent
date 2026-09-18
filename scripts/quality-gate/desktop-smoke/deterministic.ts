@@ -1,3 +1,4 @@
+import product from '../../../product.json'
 import { appendFileSync, cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { mkdtemp } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -71,9 +72,9 @@ export function buildDesktopUiSmokePrompt(projectDir: string) {
 }
 
 export function seedDesktopUiSmokeProvider(configDir: string) {
-  const ccHahaDir = join(configDir, 'cc-haha')
-  mkdirSync(ccHahaDir, { recursive: true })
-  writeFileSync(join(ccHahaDir, 'providers.json'), JSON.stringify({
+  const productDataDir = join(configDir, product.dataDirName)
+  mkdirSync(productDataDir, { recursive: true })
+  writeFileSync(join(productDataDir, 'providers.json'), JSON.stringify({
     activeId: SMOKE_PROVIDER_ID,
     providers: [{
       id: SMOKE_PROVIDER_ID,

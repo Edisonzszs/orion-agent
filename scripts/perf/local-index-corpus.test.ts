@@ -870,7 +870,7 @@ describe('local index file benchmark', () => {
       const firstSource = join(report.fixture.configDir, manifest.sources[0]!.path)
       const databasePath = join(
         report.fixture.configDir,
-        'cc-haha',
+        'orion',
         'db',
         'index-v1.sqlite',
       )
