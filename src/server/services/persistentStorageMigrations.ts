@@ -422,7 +422,15 @@ export function ensurePersistentStorageUpgraded(): Promise<MigrationReport> {
   const configDir = getConfigDir()
   if (!migrationPromise || migrationConfigDir !== configDir) {
     migrationConfigDir = configDir
-    migrationPromise = runPersistentStorageMigrations(configDir)
+    const promise = runPersistentStorageMigrations(configDir)
+    // A rejected migration must not stay memoized: it would re-reject on
+    // every call for the life of the process. Clear the memo so the next
+    // call retries; the returned promise still rejects for this caller.
+    promise.catch(() => {
+      migrationPromise = null
+      migrationConfigDir = null
+    })
+    migrationPromise = promise
   }
   return migrationPromise
 }

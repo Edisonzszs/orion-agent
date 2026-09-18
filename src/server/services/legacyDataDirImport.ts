@@ -161,7 +161,16 @@ export async function importLegacyProductDataDir(configDir: string): Promise<Leg
   const targetRoot = path.join(configDir, PRODUCT_DATA_DIR_NAME)
   const markerPath = path.join(targetRoot, LEGACY_IMPORT_MARKER_FILE)
 
-  if (await pathExists(markerPath)) {
+  let markerExists: boolean
+  try {
+    markerExists = await pathExists(markerPath)
+  } catch (error) {
+    // E.g. ENOTDIR when the target directory path exists as a regular file.
+    report.status = 'partial'
+    report.failures.push(`marker check: ${describeError(error)}`)
+    return report
+  }
+  if (markerExists) {
     report.status = 'skipped-marker'
     return report
   }
@@ -169,7 +178,13 @@ export async function importLegacyProductDataDir(configDir: string): Promise<Leg
     return report
   }
 
-  await fs.mkdir(targetRoot, { recursive: true })
+  try {
+    await fs.mkdir(targetRoot, { recursive: true })
+  } catch (error) {
+    report.status = 'partial'
+    report.failures.push(`mkdir: ${describeError(error)}`)
+    return report
+  }
   for (const entry of LEGACY_IMPORT_ENTRIES) {
     await copyEntry(legacyRoot, targetRoot, entry, report)
   }
@@ -179,7 +194,15 @@ export async function importLegacyProductDataDir(configDir: string): Promise<Leg
     return report
   }
 
-  await fs.writeFile(markerPath, `${new Date().toISOString()}\n`, 'utf-8')
+  try {
+    await fs.writeFile(markerPath, `${new Date().toISOString()}\n`, 'utf-8')
+  } catch (error) {
+    // The copies stand; withholding the marker makes the next start retry,
+    // and never-overwrite makes that retry safe.
+    report.status = 'partial'
+    report.failures.push(`marker write: ${describeError(error)}`)
+    return report
+  }
   report.status = 'imported'
   return report
 }

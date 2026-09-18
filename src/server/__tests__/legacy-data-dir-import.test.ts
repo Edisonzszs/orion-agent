@@ -188,4 +188,20 @@ describe('legacy data dir import', () => {
       'settings.json',
     ])
   })
+
+  test('records top-level failures instead of throwing when the target exists as a file', async () => {
+    await writeLegacyFixture()
+    await fs.writeFile(targetDir, 'not-a-directory')
+
+    const report = await importLegacyProductDataDir(tempDir)
+
+    expect(report.status).toBe('partial')
+    expect(report.failures.length).toBeGreaterThanOrEqual(1)
+    expect(await exists(path.join(targetDir, LEGACY_IMPORT_MARKER_FILE))).toBe(false)
+    expect(await fs.readFile(path.join(legacyDir, 'settings.json'), 'utf-8')).toBe('{"env":{"A":"1"}}\n')
+
+    resetPersistentStorageMigrationsForTests()
+    const migrated = await ensurePersistentStorageUpgraded()
+    expect(migrated.failures.some((failure) => failure.startsWith('legacy-import:'))).toBe(true)
+  })
 })
