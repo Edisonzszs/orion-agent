@@ -174,7 +174,17 @@ export async function importLegacyProductDataDir(configDir: string): Promise<Leg
     report.status = 'skipped-marker'
     return report
   }
-  if (!(await pathExists(legacyRoot))) {
+  let legacyExists: boolean
+  try {
+    legacyExists = await pathExists(legacyRoot)
+  } catch (error) {
+    // E.g. EACCES/EPERM/ELOOP on lstat of the legacy root: degrade into the
+    // report instead of rejecting every ensurePersistentStorageUpgraded call.
+    report.status = 'partial'
+    report.failures.push(`legacy check: ${describeError(error)}`)
+    return report
+  }
+  if (!legacyExists) {
     return report
   }
 

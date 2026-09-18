@@ -427,8 +427,12 @@ export function ensurePersistentStorageUpgraded(): Promise<MigrationReport> {
     // every call for the life of the process. Clear the memo so the next
     // call retries; the returned promise still rejects for this caller.
     promise.catch(() => {
-      migrationPromise = null
-      migrationConfigDir = null
+      // Only clear a memo that still points at this promise; a stale
+      // rejection must not wipe a fresh memo started in the meantime.
+      if (migrationPromise === promise) {
+        migrationPromise = null
+        migrationConfigDir = null
+      }
     })
     migrationPromise = promise
   }

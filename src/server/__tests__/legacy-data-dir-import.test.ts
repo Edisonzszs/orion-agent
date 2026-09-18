@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test'
 import * as fs from 'fs/promises'
 import * as os from 'os'
 import * as path from 'path'
@@ -15,6 +15,10 @@ import {
 let tempDir: string
 let legacyDir: string
 let targetDir: string
+
+// Snapshot before any mock.module call so the mock can delegate to the real
+// implementations for every path except the one under test, and restore after.
+const realFs = { ...fs }
 
 async function exists(filePath: string): Promise<boolean> {
   try {
@@ -203,5 +207,37 @@ describe('legacy data dir import', () => {
     resetPersistentStorageMigrationsForTests()
     const migrated = await ensurePersistentStorageUpgraded()
     expect(migrated.failures.some((failure) => failure.startsWith('legacy-import:'))).toBe(true)
+  })
+
+  test('records a legacy-check failure instead of throwing when the legacy root lstat errors', async () => {
+    await fs.mkdir(legacyDir, { recursive: true })
+    // No portable organic trigger exists for a non-ENOENT lstat of exactly
+    // `<configDir>/cc-haha` (lstat succeeds on broken/looping symlinks, and
+    // configDir-level failures surface in the marker check first), so force
+    // EACCES through the module seam for that one path only.
+    mock.module('fs/promises', () => ({
+      ...realFs,
+      lstat: async (target: fs.PathLike) => {
+        if (typeof target === 'string' && path.resolve(target) === path.resolve(legacyDir)) {
+          throw Object.assign(new Error(`EACCES: permission denied, lstat '${target}'`), { code: 'EACCES' })
+        }
+        return realFs.lstat(target)
+      },
+    }))
+    try {
+      const report = await importLegacyProductDataDir(tempDir)
+
+      expect(report.status).toBe('partial')
+      expect(report.failures.length).toBe(1)
+      expect(report.failures[0]!.startsWith('legacy check: ')).toBe(true)
+      // Returned before fs.mkdir(targetRoot): nothing was created in the new directory.
+      expect(await exists(targetDir)).toBe(false)
+
+      resetPersistentStorageMigrationsForTests()
+      const migrated = await ensurePersistentStorageUpgraded()
+      expect(migrated.failures.some((failure) => failure.startsWith('legacy-import: legacy check:'))).toBe(true)
+    } finally {
+      mock.module('fs/promises', () => realFs)
+    }
   })
 })

@@ -147,7 +147,20 @@ All ruling-4 assertions hold: /health ok; `orion/providers.json` parses with num
 4. **Legacy-import failure-recording semantics:** top-level failures are recorded in the migration report (never crash startup, retried next boot); an operator must read the report to notice a permanently failing entry. Consider surfacing in doctor/diagnostics later.
 5. **Keeper decisions deferred to batch 2/3** (explicit keep-or-rename needed): localStorage/env keys, partitions, mkdtemp prefixes, macOS helper names, local-index hash namespace, promo text/URLs.
 6. **Batch 2 scope (desktop-visible layer + packaging/update sources)** is not started; `desktop/package.json` identity assertions deliberately untouched (ruling 3 of the batch plan).
+7. **First-boot H5 fixed-port miss (ruled documented, not fixed):** on the first boot after upgrade the Electron host reads `h5Access.fixedPort` from `<configDir>/orion/settings.json` (`desktop/electron/services/serverRuntime.ts` → `readH5FixedPort` in sidecarManager.ts) BEFORE the sidecar server runs the legacy import, so a port set under cc-haha is invisible for exactly one boot (the server binds the default/sticky port) and self-heals on the next boot. Ruled documented-not-fixed: no users beyond the owner yet, one-boot self-heal, and a legacy-fallback read would be batch-2/3 removal debt.
 
 ## 6. Batch 1 conclusion
 
 All five verification steps completed; zero unexpected residuals; no fixes required in Task 7; every fresh check within its environment bar; smoke boot proves the end-to-end legacy → orion import + upgrade path on a real server process. Batch 1 is complete; batch 2 (desktop visible layer + packaging/update) to be planned separately.
+
+## 7. Batch 2 checklist (accumulated)
+
+Carried from the batch-1 final review plus earlier deferrals; none block batch 1.
+
+- **`pet-window.json` is absent from `LEGACY_IMPORT_ENTRIES`** — pet window state resets on upgrade. Any widening of the allow-list MUST bump the marker (e.g. `.imported-from-cc-haha-v2`) or move to entry-level markers: the already-written `.imported-from-cc-haha` marker suppresses re-import for existing installs.
+- **Symlinked legacy dirs are skipped wholesale while status stays `'imported'`** — skipped entries land in `report.skippedSymlinks` but the status does not degrade; consider a `'partial'` status or doctor surfacing.
+- **Doctor target ids `cc-haha-providers` / `cc-haha-settings`** (in `src/server/services/doctorService.ts`) are plausibly user-visible — include in the batch-2 sweep.
+- **`settings.general.traceHintOn` still says "cc-haha traces directory"** (`desktop/src/i18n/locales/*.ts`) — factually wrong now that traces live in `orion/traces`; top of the locale sweep.
+- **Renderer `ProductIdentity` twin cross-check test** (`desktop/src/lib/product.ts` vs `product.json`) — closes remaining-risk 3.
+- **`package.json` identity assertions** — ruled deferred from batch 1 (batch plan ruling 3).
+- **One CI/Linux pass** for symlink test coverage (also remaining-risk 1).
