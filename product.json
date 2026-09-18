@@ -1,0 +1,12 @@
+{
+  "name": "Orion Agent",
+  "shortName": "Orion",
+  "cliName": "orion",
+  "dataDirName": "orion",
+  "legacyDataDirName": "cc-haha",
+  "appId": "com.orion-agent.desktop",
+  "github": { "owner": "Edisonzszs", "repo": "orion-agent" },
+  "homepage": "https://github.com/Edisonzszs/orion-agent",
+  "docsUrl": "https://github.com/Edisonzszs/orion-agent/tree/main/docs",
+  "artifactPrefix": "Orion-Agent"
+}

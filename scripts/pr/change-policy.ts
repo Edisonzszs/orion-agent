@@ -61,6 +61,7 @@ const cliCorePrefixes = [
 ]
 
 const desktopNativeExactPaths = new Set([
+  'product.json',
   'bun.lock',
   'package.json',
   'desktop/bun.lock',
@@ -73,6 +74,7 @@ const desktopNativeExactPaths = new Set([
 ])
 
 const desktopWebExactPaths = new Set([
+  'product.json',
   'desktop/bun.lock',
   'desktop/package.json',
   'desktop/package-lock.json',
@@ -150,6 +152,8 @@ const persistencePrefixes = [
   'src/server/__tests__/desktop-ui-preferences',
   'desktop/src/lib/persistenceMigrations',
   'scripts/quality-gate/persistence-upgrade',
+  'src/server/services/legacyDataDirImport',
+  'src/server/__tests__/legacy-data-dir-import',
 ]
 
 const policyPrefixes = [
@@ -172,6 +176,7 @@ const policyExactPaths = new Set([
   'CONTRIBUTING.md',
   'docs/en/internals/contributing.md',
   'docs/internals/contributing.md',
+  'product.json',
   'package.json',
 ])
 
@@ -415,7 +420,9 @@ export function evaluateChangePolicy(
     missingTestSignals: missingTests,
     checks: {
       desktop: touchesDesktopWeb,
-      server: selectionFiles.some((file) => file.startsWith('src/') && !isAgentInstructionPath(file)),
+      server: selectionFiles.some((file) => (
+        (file.startsWith('src/') && !isAgentInstructionPath(file)) || file === 'product.json'
+      )),
       adapters: selectionFiles.some((file) => file.startsWith('adapters/') && !isAgentInstructionPath(file)),
       desktopNative: touchesDesktopNative,
       providerContract: touchesProviderContract,

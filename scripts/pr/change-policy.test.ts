@@ -296,6 +296,25 @@ describe('evaluateChangePolicy', () => {
       rmSync(dir, { recursive: true, force: true })
     }
   })
+
+  test('routes product identity changes to every product surface', () => {
+    const result = evaluateChangePolicy(['product.json'])
+
+    expect(result.checks.server).toBe(true)
+    expect(result.checks.desktop).toBe(true)
+    expect(result.checks.desktopNative).toBe(true)
+    expect(result.checks.policy).toBe(true)
+  })
+
+  test('routes the legacy data-dir import to the persistence check', () => {
+    const result = evaluateChangePolicy([
+      'src/server/services/legacyDataDirImport.ts',
+      'src/server/__tests__/legacy-data-dir-import.test.ts',
+    ])
+
+    expect(result.checks.server).toBe(true)
+    expect(result.checks.persistence).toBe(true)
+  })
 })
 
 describe('evaluateChangePolicy dependent-file widening', () => {
