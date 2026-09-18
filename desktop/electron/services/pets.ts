@@ -2,6 +2,7 @@ import { constants, type Dirent } from 'node:fs'
 import { lstat, mkdir, mkdtemp, open, opendir, realpath, rename, rm, writeFile } from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
+import { PRODUCT_DATA_DIR_NAME } from './appIdentity'
 
 export const CUSTOM_PET_SPRITESHEET_WIDTH = 1536
 export const CUSTOM_PET_SPRITESHEET_HEIGHT = 2288
@@ -255,7 +256,7 @@ export function resolveCustomPetsRoot(options: CustomPetsRootOptions = {}): stri
   const claudeConfigDir = configuredRoot
     ? path.resolve(resolveHomePath(configuredRoot, homeDir))
     : path.join(homeDir, '.claude')
-  return path.join(claudeConfigDir, 'cc-haha', 'pets')
+  return path.join(claudeConfigDir, PRODUCT_DATA_DIR_NAME, 'pets')
 }
 
 export async function ensureCustomPetsRoot(options: CustomPetsRootOptions = {}): Promise<string> {

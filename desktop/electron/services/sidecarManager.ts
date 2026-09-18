@@ -23,6 +23,7 @@ import net from 'node:net'
 import os from 'node:os'
 import path from 'node:path'
 import { isBrowserSafePort } from '../../src/lib/browserSafePort'
+import { PRODUCT_DATA_DIR_NAME } from './appIdentity'
 
 export const SERVER_BIND_HOST = '0.0.0.0'
 export const SERVER_CONTROL_HOST = '127.0.0.1'
@@ -203,10 +204,10 @@ export function electronHostDiagnosticsFile(
   env: NodeJS.ProcessEnv = process.env,
   homeDir = os.homedir(),
 ): string {
-  return path.join(claudeConfigDir(env, homeDir), 'cc-haha', 'diagnostics', 'electron-host.log')
+  return path.join(claudeConfigDir(env, homeDir), PRODUCT_DATA_DIR_NAME, 'diagnostics', 'electron-host.log')
 }
 
-/** Parse h5Access.fixedPort out of cc-haha/settings.json contents. */
+/** Parse h5Access.fixedPort out of the product data dir's settings.json contents. */
 export function parseH5FixedPort(contents: string): number | null {
   let value: unknown
   try {
@@ -224,7 +225,7 @@ export function parseH5FixedPort(contents: string): number | null {
 
 export function readH5FixedPort(env: NodeJS.ProcessEnv = process.env): number | null {
   try {
-    const settingsPath = path.join(claudeConfigDir(env), 'cc-haha', 'settings.json')
+    const settingsPath = path.join(claudeConfigDir(env), PRODUCT_DATA_DIR_NAME, 'settings.json')
     return parseH5FixedPort(readFileSync(settingsPath, 'utf-8'))
   } catch {
     return null
@@ -400,7 +401,7 @@ export function appendHostDiagnostic(
 function ensurePrivateHostDiagnosticsDirectory(directory: string): void {
   const parent = path.dirname(directory)
   const rootBoundary = path.basename(directory) === 'diagnostics' &&
-      path.basename(parent) === 'cc-haha'
+      path.basename(parent) === PRODUCT_DATA_DIR_NAME
     ? path.dirname(parent)
     : parent
   mkdirSync(rootBoundary, { recursive: true, mode: 0o700 })

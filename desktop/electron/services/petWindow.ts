@@ -16,6 +16,7 @@ import {
 } from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import { PRODUCT_DATA_DIR_NAME } from './appIdentity'
 
 export const PET_WINDOW_WIDTH = 384
 export const PET_WINDOW_HEIGHT = 400
@@ -152,7 +153,7 @@ export function petWindowStatePath(
   const configRoot = configuredRoot
     ? path.resolve(resolveHomePath(configuredRoot, normalizedHome))
     : path.join(normalizedHome, '.claude')
-  return path.join(configRoot, 'cc-haha', PET_WINDOW_STATE_FILE)
+  return path.join(configRoot, PRODUCT_DATA_DIR_NAME, PET_WINDOW_STATE_FILE)
 }
 
 export function readPetWindowPosition(

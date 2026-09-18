@@ -81,14 +81,14 @@ describe('Electron sidecar manager', () => {
     expect(electronHostDiagnosticsFile(
       { CLAUDE_CONFIG_DIR: portableDir },
       path.join(tmpdir(), 'unused-home'),
-    )).toBe(path.join(portableDir, 'cc-haha', 'diagnostics', 'electron-host.log'))
+    )).toBe(path.join(portableDir, 'orion', 'diagnostics', 'electron-host.log'))
   })
 
   it('resolves the default Electron host log without consulting real user state', () => {
     const isolatedHome = path.resolve(path.sep, '__cc_haha_injected_test_home__')
 
     expect(electronHostDiagnosticsFile({}, isolatedHome)).toBe(
-      path.join(isolatedHome, '.claude', 'cc-haha', 'diagnostics', 'electron-host.log'),
+      path.join(isolatedHome, '.claude', 'orion', 'diagnostics', 'electron-host.log'),
     )
   })
 
@@ -376,7 +376,7 @@ describe('Electron sidecar manager', () => {
   it('creates the Electron diagnostics directory with private permissions', () => {
     if (process.platform === 'win32') return
     const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-mode-'))
-    const diagnosticsDir = path.join(dir, 'cc-haha', 'diagnostics')
+    const diagnosticsDir = path.join(dir, 'orion', 'diagnostics')
     const logPath = path.join(diagnosticsDir, 'electron-host.log')
     try {
       appendHostDiagnostic(logPath, 'private mode probe')
@@ -391,7 +391,7 @@ describe('Electron sidecar manager', () => {
   it('rejects a symlinked Electron diagnostics directory without changing its target', () => {
     if (process.platform === 'win32') return
     const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-symlink-dir-'))
-    const diagnosticsDir = path.join(dir, 'cc-haha', 'diagnostics')
+    const diagnosticsDir = path.join(dir, 'orion', 'diagnostics')
     const unrelatedDir = path.join(dir, 'unrelated')
     const unrelatedLog = path.join(unrelatedDir, 'electron-host.log')
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
@@ -418,13 +418,13 @@ describe('Electron sidecar manager', () => {
     const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-symlink-parent-'))
     const configDir = path.join(dir, 'config')
     const unrelatedDir = path.join(dir, 'unrelated')
-    const diagnosticsDir = path.join(configDir, 'cc-haha', 'diagnostics')
+    const diagnosticsDir = path.join(configDir, 'orion', 'diagnostics')
     const unrelatedDiagnosticsDir = path.join(unrelatedDir, 'diagnostics')
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     try {
       mkdirSync(configDir)
       mkdirSync(unrelatedDiagnosticsDir, { recursive: true, mode: 0o755 })
-      symlinkSync(unrelatedDir, path.join(configDir, 'cc-haha'), 'dir')
+      symlinkSync(unrelatedDir, path.join(configDir, 'orion'), 'dir')
 
       appendHostDiagnostic(path.join(diagnosticsDir, 'electron-host.log'), 'must not escape')
 
@@ -440,7 +440,7 @@ describe('Electron sidecar manager', () => {
   it('rejects a symlinked Electron diagnostics file without copying its target', () => {
     if (process.platform === 'win32') return
     const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-symlink-file-'))
-    const diagnosticsDir = path.join(dir, 'cc-haha', 'diagnostics')
+    const diagnosticsDir = path.join(dir, 'orion', 'diagnostics')
     const logPath = path.join(diagnosticsDir, 'electron-host.log')
     const unrelatedLog = path.join(dir, 'unrelated.log')
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
@@ -674,9 +674,9 @@ describe('Electron sidecar manager', () => {
       expect(preferredServerPorts(env)).toEqual([50123])
 
       // An explicit fixed port wins over the sticky port.
-      mkdirSync(path.join(configDir, 'cc-haha'), { recursive: true })
+      mkdirSync(path.join(configDir, 'orion'), { recursive: true })
       writeFileSync(
-        path.join(configDir, 'cc-haha', 'settings.json'),
+        path.join(configDir, 'orion', 'settings.json'),
         JSON.stringify({ h5Access: { fixedPort: 28670 } }),
         'utf-8',
       )

@@ -49,7 +49,7 @@ import {
 } from './services/appMode'
 import { installMacOsChromiumKeychainPromptGuard } from './services/keychain'
 import { installStdioWriteFailureGuards } from './services/stdioGuards'
-import { applyWindowsAppUserModelId } from './services/appIdentity'
+import { applyWindowsAppUserModelId, PRODUCT_DATA_DIR_NAME } from './services/appIdentity'
 import { installMainWindowNavigationGuards, installPreviewNavigationGuards } from './services/navigationGuards'
 import { installPreviewCleanupOnRendererNavigation } from './services/previewLifecycle'
 import { logNotificationSmokeRendererAck, scheduleNotificationSmoke } from './services/notificationSmoke'
@@ -260,7 +260,7 @@ function getPublicAccessManager() {
   if (publicAccessManager) return publicAccessManager
   let queue: Promise<unknown> = Promise.resolve()
   publicAccessManager = new PublicAccessManager({
-    directory: path.join(getAppMode(app).activeConfigDir ?? app.getPath('userData'), 'cc-haha', 'public-access'),
+    directory: path.join(getAppMode(app).activeConfigDir ?? app.getPath('userData'), PRODUCT_DATA_DIR_NAME, 'public-access'),
     backend: {
       request<T>(route: string, method: string, body?: unknown): Promise<T> {
         const operation = queue.catch(() => {}).then(async () => {

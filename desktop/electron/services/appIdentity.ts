@@ -1,6 +1,14 @@
+import product from '../../../product.json'
+
 export type AppUserModelIdHost = {
   setAppUserModelId(id: string): void
 }
+
+/** Display name from product.json; the Electron menu and notifications fall back to it. */
+export const PRODUCT_NAME: string = product.name
+
+/** Sub-directory of the Claude config root that holds this product's own state. */
+export const PRODUCT_DATA_DIR_NAME: string = product.dataDirName
 
 // Must stay in sync with build.appId in desktop/package.json. Windows attributes
 // toast notifications (and taskbar pinning) to this AppUserModelID; without an

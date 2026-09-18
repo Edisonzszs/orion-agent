@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it, vi } from 'vitest'
-import { applyWindowsAppUserModelId, WINDOWS_APP_USER_MODEL_ID } from './appIdentity'
+import { applyWindowsAppUserModelId, PRODUCT_DATA_DIR_NAME, PRODUCT_NAME, WINDOWS_APP_USER_MODEL_ID } from './appIdentity'
 
 describe('applyWindowsAppUserModelId', () => {
   it('sets the AppUserModelID on Windows so toast notifications are attributed to the app', () => {
@@ -24,5 +24,13 @@ describe('applyWindowsAppUserModelId', () => {
     const packageJsonPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'package.json')
     const pkg = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as { build?: { appId?: string } }
     expect(WINDOWS_APP_USER_MODEL_ID).toBe(pkg.build?.appId)
+  })
+
+  it('reads the product identity from product.json', () => {
+    const productPath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'product.json')
+    const product = JSON.parse(readFileSync(productPath, 'utf8')) as { name: string; dataDirName: string }
+    expect(PRODUCT_NAME).toBe(product.name)
+    expect(PRODUCT_DATA_DIR_NAME).toBe(product.dataDirName)
+    expect(PRODUCT_DATA_DIR_NAME).toBe('orion')
   })
 })
