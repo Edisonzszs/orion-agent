@@ -11,6 +11,7 @@ import {
   PROVIDER_REQUEST_COMPATIBILITY_SCHEMA_VERSION,
 } from '../types/provider.js'
 import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
+import { importLegacyProductDataDir } from './legacyDataDirImport.js'
 
 export const CURRENT_PROVIDER_INDEX_SCHEMA_VERSION = PROVIDER_REQUEST_COMPATIBILITY_SCHEMA_VERSION
 
@@ -388,6 +389,16 @@ async function migrateLegacyRootProviders(
 async function runPersistentStorageMigrations(configDir: string): Promise<MigrationReport> {
   const report: MigrationReport = { migratedEntries: [], failures: [] }
   const productDataDir = path.join(configDir, PRODUCT_DATA_DIR_NAME)
+
+  // Fill the new product directory from the previous one before upgrading
+  // any JSON in it, so imported files go through the same schema upgrades.
+  const legacyImport = await importLegacyProductDataDir(configDir)
+  for (const copied of legacyImport.copied) {
+    report.migratedEntries.push(`legacy-import: ${copied}`)
+  }
+  for (const failure of legacyImport.failures) {
+    report.failures.push(`legacy-import: ${failure}`)
+  }
 
   await migrateLegacyRootProviders(configDir, productDataDir, report)
 

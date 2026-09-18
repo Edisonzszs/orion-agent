@@ -29,6 +29,10 @@ const checks: Check[] = [
     ],
   },
   {
+    title: 'Legacy product data directory import',
+    command: ['bun', 'test', './src/server/__tests__/legacy-data-dir-import.test.ts'],
+  },
+  {
     title: 'Server persistent JSON migrations',
     command: ['bun', 'test', './src/server/__tests__/persistence-upgrade.test.ts'],
   },
