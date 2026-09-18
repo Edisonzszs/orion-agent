@@ -4,7 +4,7 @@ Verification task (Task 7) executed 2026-09-18/19 on `main` at HEAD `9f7e8cf`, b
 
 Spec: `docs/superpowers/specs/2026-09-18-orion-agent-rebrand-v1-design.md`. Plan: `docs/superpowers/plans/2026-09-18-orion-rebrand-batch1-identity-datadir.md`.
 
-## 1. Scope landed (8 commits, 103 files, +2557 / −440)
+## 1. Scope landed (8 code commits; the 103-file, +2557/−440 net stats cover the full `945a0e5..9f7e8cf` range, which also includes the spec and plan docs commits `f4cccbc`/`4d381ea`)
 
 | Commit | Subject | Task | Files |
 |---|---|---|---|
@@ -64,7 +64,7 @@ Result: **3 hits, all accepted residuals, 0 unexpected** — no fix needed:
    - `final macOS helper cursor resource verification` ×4 (macOS-only)
    - `packaged artifact inspection` ×3 (Linux/macOS packaging layouts)
    Verdict: **passed per environment bar** (failure set ⊆ known pre-existing, by name).
-2. Combined focused invocation of the batch's 9 new/changed test files, one `bun test --timeout 15000` run:
+2. Combined focused invocation of the 9 behaviorally-relevant test files of the ~47 changed (the rest were string-only syncs covered by task-level runs), one `bun test --timeout 15000` run:
    `./scripts/pr/product-identity.test.ts ./scripts/pr/change-policy.test.ts ./scripts/pr/quality-contract.test.ts ./scripts/quality-gate/sandbox.test.ts ./scripts/quality-gate/desktop-smoke/deterministic.test.ts ./scripts/quality-gate/providerTargets.test.ts ./src/server/__tests__/legacy-data-dir-import.test.ts ./src/server/__tests__/persistence-upgrade.test.ts ./src/server/__tests__/provider-presets.test.ts`
    → **102 pass / 0 fail** (650 expect calls, 10.31s). Cross-task integration proven in a single process. **passed**
 
@@ -78,7 +78,7 @@ Result: **3 hits, all accepted residuals, 0 unexpected** — no fix needed:
 | `check:desktop` (renderer) | Task 5: lint + tsc + build PASS; vitest 5853 pass / 17 fail byte-identical at base (same names) | **passed per environment bar** (no new failures) |
 | local-index-corpus (perf) | Task 6: 12 pass / 2 fail, both proven pre-existing on pristine stash baseline | **passed per environment bar** |
 
-**Not run fresh in this task, why:** check:server / check:electron / check:desktop full lanes (controller ruling 3: reuse allowed, no commits since task evidence; full server lane structurally cannot finish on this machine); check:native, check:provider-contract, check:chat-contract, check:agent-flow, check:docs, check:coverage (not selected for fresh re-run by ruling 3; agent-flow/live.test.ts, providerTargets.test.ts, sandbox.test.ts, deterministic.test.ts — the batch-touched members — are covered fresh in the 102/0 run; check:policy's 27-file set includes the pr/*.ts members).
+**Not run fresh in this task, why:** check:server / check:electron / check:desktop full lanes (controller ruling 3: reuse allowed, no commits since task evidence; full server lane structurally cannot finish on this machine); check:native, check:provider-contract, check:chat-contract, check:agent-flow, check:docs, check:coverage (not selected for fresh re-run by ruling 3; providerTargets.test.ts, sandbox.test.ts and deterministic.test.ts are covered fresh in the 102/0 run; agent-flow/live.test.ts was covered at task level only — Task 6's focused 4-file quality-gate run, 39 pass / 0 fail; check:policy's 27-file set includes the pr/*.ts members).
 
 ### Step 4 — smoke boot (fresh; sandbox config dir, port 3458)
 
