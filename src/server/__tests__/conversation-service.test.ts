@@ -214,7 +214,7 @@ describe('ConversationService', () => {
     expect(env.ANTHROPIC_BASE_URL).toBe('https://example.invalid/anthropic')
     expect(env.ANTHROPIC_MODEL).toBe('test-model')
     expect(env.CLAUDE_CODE_ATTRIBUTION_HEADER).toBe('0')
-    expect(env.CLAUDE_CODE_DIAGNOSTICS_FILE).toBe(path.join(tmpDir, 'cc-haha', 'diagnostics', 'cli-diagnostics.jsonl'))
+    expect(env.CLAUDE_CODE_DIAGNOSTICS_FILE).toBe(path.join(tmpDir, 'orion', 'diagnostics', 'cli-diagnostics.jsonl'))
     expect(env.CLAUDE_COWORK_MEMORY_PATH_OVERRIDE).toBe(
       `${path.join(tmpDir, 'projects', 'D--workspace-code-myself-code-cc-haha', 'memory')}${path.sep}`,
     )
@@ -230,9 +230,9 @@ describe('ConversationService', () => {
     const unrelatedDir = path.join(tmpDir, 'unrelated-cli-diagnostics')
     const unrelatedDiagnosticsDir = path.join(unrelatedDir, 'diagnostics')
     await fs.mkdir(unrelatedDiagnosticsDir, { recursive: true, mode: 0o755 })
-    await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
-    await fs.rm(path.join(tmpDir, 'cc-haha'), { recursive: true, force: true })
-    await fs.symlink(unrelatedDir, path.join(tmpDir, 'cc-haha'), 'dir')
+    await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
+    await fs.rm(path.join(tmpDir, 'orion'), { recursive: true, force: true })
+    await fs.symlink(unrelatedDir, path.join(tmpDir, 'orion'), 'dir')
 
     const service = new ConversationService() as any
     const env = (await service.buildChildEnv('/tmp')) as Record<string, string>
@@ -381,7 +381,7 @@ describe('ConversationService', () => {
   )
 
   test('strips inherited provider env when desktop provider config exists', async () => {
-    const ccHahaDir = path.join(tmpDir, 'cc-haha')
+    const ccHahaDir = path.join(tmpDir, 'orion')
     await fs.mkdir(ccHahaDir, { recursive: true })
     await fs.writeFile(
       path.join(ccHahaDir, 'providers.json'),
@@ -401,8 +401,8 @@ describe('ConversationService', () => {
     for (const { settingsFile, setting, preference } of [
       { settingsFile: 'settings.json', setting: undefined, preference: undefined },
       { settingsFile: 'settings.json', setting: '0', preference: undefined },
-      { settingsFile: 'cc-haha/settings.json', setting: 'false', preference: undefined },
-      { settingsFile: 'cc-haha/settings.json', setting: 'false', preference: true },
+      { settingsFile: 'orion/settings.json', setting: 'false', preference: undefined },
+      { settingsFile: 'orion/settings.json', setting: 'false', preference: true },
       { settingsFile: 'settings.json', setting: '1', preference: false },
     ]) {
       test(`desktop team tools survive child startup (${entrypoint}, ${settingsFile}=${setting ?? 'unset'}, preference=${preference ?? 'unset'})`, async () => {
@@ -612,7 +612,7 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv injects CLAUDE_CODE_OAUTH_TOKEN when official mode + haha oauth token exists', async () => {
-    const ccHahaDir = path.join(tmpDir, 'cc-haha')
+    const ccHahaDir = path.join(tmpDir, 'orion')
     await fs.mkdir(ccHahaDir, { recursive: true })
     await fs.writeFile(
       path.join(ccHahaDir, 'settings.json'),
@@ -976,7 +976,7 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv does NOT inject CLAUDE_CODE_OAUTH_TOKEN when not official mode', async () => {
-    const ccHahaDir = path.join(tmpDir, 'cc-haha')
+    const ccHahaDir = path.join(tmpDir, 'orion')
     await fs.mkdir(ccHahaDir, { recursive: true })
     await fs.writeFile(
       path.join(ccHahaDir, 'settings.json'),
@@ -1227,7 +1227,7 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv can force official auth even when a custom default provider exists', async () => {
-    const ccHahaDir = path.join(tmpDir, 'cc-haha')
+    const ccHahaDir = path.join(tmpDir, 'orion')
     await fs.mkdir(ccHahaDir, { recursive: true })
     await fs.writeFile(
       path.join(ccHahaDir, 'settings.json'),
@@ -1285,7 +1285,7 @@ describe('ConversationService', () => {
 
     expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBe('1')
     expect(env.OPENAI_CODEX_OAUTH_FILE).toBe(
-      path.join(tmpDir, 'cc-haha', 'openai-oauth.json'),
+      path.join(tmpDir, 'orion', 'openai-oauth.json'),
     )
     expect(env.ANTHROPIC_MODEL).toBe('gpt-5.6-sol')
     expect(env.ANTHROPIC_DEFAULT_SONNET_MODEL).toBe('gpt-5.6-terra')
@@ -1305,7 +1305,7 @@ describe('ConversationService', () => {
     })) as Record<string, string>
 
     expect(env.CC_HAHA_GROK_OAUTH_PROVIDER).toBe('1')
-    expect(env.GROK_OAUTH_FILE).toBe(path.join(tmpDir, 'cc-haha', 'grok-oauth.json'))
+    expect(env.GROK_OAUTH_FILE).toBe(path.join(tmpDir, 'orion', 'grok-oauth.json'))
     expect(env.ANTHROPIC_MODEL).toBe('grok-4.5')
     expect(env.CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST).toBe('1')
     expect(env.CLAUDE_CODE_OAUTH_TOKEN).toBeUndefined()
@@ -1336,7 +1336,7 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv does not leak inherited CLAUDE_CODE_OAUTH_TOKEN when official token is unavailable', async () => {
-    const ccHahaDir = path.join(tmpDir, 'cc-haha')
+    const ccHahaDir = path.join(tmpDir, 'orion')
     await fs.mkdir(ccHahaDir, { recursive: true })
     await fs.writeFile(
       path.join(ccHahaDir, 'settings.json'),

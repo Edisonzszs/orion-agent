@@ -19,6 +19,7 @@ import { resetSettingsCache } from '../../utils/settings/settingsCache.js'
 import { addFileGlobRuleToGitignore } from '../../utils/git/gitignore.js'
 import { isEnvTruthy } from '../../utils/envUtils.js'
 import { getProcessEnvWithTerminalShellEnvironment } from '../../utils/terminalShellEnvironment.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export const VALID_PERMISSION_MODES = [
   'default',
@@ -109,7 +110,7 @@ export class SettingsService {
   async getAgentTeamsEnabled(): Promise<boolean> {
     const user = await this.getUserSettings()
     if (typeof user.agentTeamsEnabled === 'boolean') return user.agentTeamsEnabled
-    const managed = await this.readJsonFile(path.join(this.getConfigDir(), 'cc-haha', 'settings.json'))
+    const managed = await this.readJsonFile(path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'settings.json'))
     const inherited = await getProcessEnvWithTerminalShellEnvironment()
     const key = 'CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS'
     const legacyValue = normalizeJsonObject(managed.env)?.[key] ??

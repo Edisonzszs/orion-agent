@@ -5,6 +5,7 @@ import { randomBytes } from 'node:crypto'
 import { ApiError } from '../middleware/errorHandler.js'
 import { readRecoverableJsonFile } from './recoverableJsonFile.js'
 import { ensurePersistentStorageUpgraded } from './persistentStorageMigrations.js'
+import { PRODUCT, PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 const CURRENT_DESKTOP_UI_PREFERENCES_SCHEMA_VERSION = 5
 const MAX_PROJECT_PREFERENCE_ENTRIES = 2_000
@@ -78,7 +79,7 @@ const DEFAULT_SIDEBAR_PROJECT_PREFERENCES: SidebarProjectPreferences = {
 }
 
 const DEFAULT_PROFILE_PREFERENCES: DesktopProfilePreferences = {
-  displayName: 'cc-haha',
+  displayName: PRODUCT.shortName,
   subtitle: DEFAULT_PROFILE_SUBTITLE,
   avatarFile: null,
   avatarUpdatedAt: null,
@@ -360,11 +361,11 @@ export class DesktopUiPreferencesService {
   }
 
   private getPreferencesPath(): string {
-    return path.join(this.getConfigDir(), 'cc-haha', 'desktop-ui.json')
+    return path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'desktop-ui.json')
   }
 
   private getProfileDir(): string {
-    return path.join(this.getConfigDir(), 'cc-haha', 'profile')
+    return path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'profile')
   }
 
   private getProfileAvatarPath(avatarFile: string): string {
@@ -372,7 +373,7 @@ export class DesktopUiPreferencesService {
     if (!normalized) {
       throw ApiError.badRequest('Invalid avatar file path')
     }
-    return path.join(this.getConfigDir(), 'cc-haha', normalized)
+    return path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, normalized)
   }
 
   private async fileExists(filePath: string): Promise<boolean> {

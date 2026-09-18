@@ -1,5 +1,5 @@
 import { join } from 'node:path'
-import { getCcHahaDir } from '../../../utils/envUtils.js'
+import { getProductDataDir } from '../../../utils/envUtils.js'
 import type { LocalIndexMode } from './types.js'
 
 export const LOCAL_INDEX_INVALID_MODE = 'LOCAL_INDEX_INVALID_MODE' as const
@@ -27,5 +27,5 @@ export function resolveLocalIndexMode(
 }
 
 export function getLocalIndexDatabasePath(): string {
-  return join(getCcHahaDir(), 'db', 'index-v1.sqlite')
+  return join(getProductDataDir(), 'db', 'index-v1.sqlite')
 }

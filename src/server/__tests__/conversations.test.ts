@@ -2405,7 +2405,7 @@ describe('WebSocket Chat Integration', () => {
   })
 
   it('refreshes the first-turn AI title from the completed assistant transcript', async () => {
-    const providerConfigPath = path.join(tmpDir, 'cc-haha', 'providers.json')
+    const providerConfigPath = path.join(tmpDir, 'orion', 'providers.json')
     const originalProviderConfig = await fs.readFile(providerConfigPath, 'utf-8').catch(() => null)
     const upstreamInputs: string[] = []
     const titleModelServer = Bun.serve({

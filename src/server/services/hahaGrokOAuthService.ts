@@ -20,6 +20,7 @@ import {
   getNetworkProxyUrl,
   loadNetworkSettings,
 } from './networkSettings.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export type StoredGrokOAuthTokens = {
   accessToken: string
@@ -69,7 +70,7 @@ function escapeHtml(value: string): string {
 
 export function getHahaGrokOAuthFilePath(): string {
   const configDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')
-  return path.join(configDir, 'cc-haha', 'grok-oauth.json')
+  return path.join(configDir, PRODUCT_DATA_DIR_NAME, 'grok-oauth.json')
 }
 
 export class HahaGrokOAuthService {

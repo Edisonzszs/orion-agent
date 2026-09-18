@@ -314,7 +314,7 @@ describe('local index activity parity', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => configDir,
-      resolveDatabasePath: () => join(configDir, 'cc-haha', 'db', 'index-v1.sqlite'),
+      resolveDatabasePath: () => join(configDir, 'orion', 'db', 'index-v1.sqlite'),
       createWatcher: options => {
         watcherOptions = options
         return watcher

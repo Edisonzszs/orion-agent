@@ -10,6 +10,7 @@ import type {
   CuGrantFlags,
 } from '../../vendor/computer-use-mcp/types.js'
 import { getClaudeConfigHomeDir } from '../envUtils.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export type StoredAuthorizedApp = {
   bundleId: string
@@ -45,7 +46,7 @@ const FAIL_CLOSED_GRANT_FLAGS: CuGrantFlags = {
 export function getComputerUseConfigPath(): string {
   return join(
     getClaudeConfigHomeDir(),
-    'cc-haha',
+    PRODUCT_DATA_DIR_NAME,
     'computer-use-config.json',
   )
 }

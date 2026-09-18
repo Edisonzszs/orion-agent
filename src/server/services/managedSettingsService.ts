@@ -5,6 +5,7 @@ import { randomBytes } from 'node:crypto'
 import { ApiError } from '../middleware/errorHandler.js'
 import { normalizeJsonObject, readRecoverableJsonFile } from './recoverableJsonFile.js'
 import { ensurePersistentStorageUpgraded } from './persistentStorageMigrations.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export class ManagedSettingsService {
   private static writeLocks = new Map<string, Promise<void>>()
@@ -14,7 +15,7 @@ export class ManagedSettingsService {
   }
 
   private getSettingsPath(): string {
-    return path.join(this.getConfigDir(), 'cc-haha', 'settings.json')
+    return path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'settings.json')
   }
 
   private async withWriteLock<T>(

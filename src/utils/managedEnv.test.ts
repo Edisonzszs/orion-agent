@@ -78,7 +78,7 @@ describe('managedEnv', () => {
   })
 
   test.each(['0', '1', undefined])('protects the General team preference %j through settings application', async (enabled) => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'settings.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'settings.json'), {
       env: {
         CC_HAHA_AGENT_TEAMS_ENABLED: enabled === '1' ? '0' : '1',
         CC_HAHA_AGENT_TEAMS_DEFAULT: '0',
@@ -98,7 +98,7 @@ describe('managedEnv', () => {
   })
 
   test('starts a standalone provider proxy for CLI-only OpenAI-compatible providers', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'agnes-provider',
       providers: [
         {
@@ -131,7 +131,7 @@ describe('managedEnv', () => {
   })
 
   test('does not let settings replace host-owned provider routing credentials', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'settings.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'settings.json'), {
       env: {
         CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST: '0',
         CC_HAHA_LOCAL_ACCESS_TOKEN: 'stale-settings-token',

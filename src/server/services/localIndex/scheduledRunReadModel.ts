@@ -15,6 +15,7 @@ import {
   type SourceFingerprint,
 } from './sourceFingerprint.js'
 import { resolveLocalIndexMode } from './config.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../../constants/orionProduct.js'
 
 type PageOptions = {
   taskId?: string
@@ -74,7 +75,7 @@ export function captureScheduledRunReadModelTarget(
   return {
     scope,
     sourcePath,
-    databasePath: join(scope, 'cc-haha', 'db', 'scheduled-runs-v1.sqlite'),
+    databasePath: join(scope, PRODUCT_DATA_DIR_NAME, 'db', 'scheduled-runs-v1.sqlite'),
   }
 }
 

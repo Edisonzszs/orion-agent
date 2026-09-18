@@ -32,6 +32,7 @@ import {
   getNetworkProxyUrl,
   loadNetworkSettings,
 } from './networkSettings.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export type StoredOpenAIOAuthTokens = {
   accessToken: string
@@ -87,7 +88,7 @@ function escapeHtml(s: string): string {
 export function getHahaOpenAIOAuthFilePath(): string {
   const configDir =
     process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')
-  return path.join(configDir, 'cc-haha', 'openai-oauth.json')
+  return path.join(configDir, PRODUCT_DATA_DIR_NAME, 'openai-oauth.json')
 }
 
 export class HahaOpenAIOAuthService {

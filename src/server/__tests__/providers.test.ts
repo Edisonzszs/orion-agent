@@ -97,13 +97,13 @@ function sampleInput(overrides?: Partial<CreateProviderInput>): CreateProviderIn
 
 /** Read the settings.json written to the temp config dir */
 async function readSettings(): Promise<Record<string, unknown>> {
-  const raw = await fs.readFile(path.join(tmpDir, 'cc-haha', 'settings.json'), 'utf-8')
+  const raw = await fs.readFile(path.join(tmpDir, 'orion', 'settings.json'), 'utf-8')
   return JSON.parse(raw) as Record<string, unknown>
 }
 
 /** Read the providers.json written to the temp config dir */
 async function readProvidersConfig(): Promise<Record<string, unknown>> {
-  const raw = await fs.readFile(path.join(tmpDir, 'cc-haha', 'providers.json'), 'utf-8')
+  const raw = await fs.readFile(path.join(tmpDir, 'orion', 'providers.json'), 'utf-8')
   return JSON.parse(raw) as Record<string, unknown>
 }
 
@@ -235,12 +235,12 @@ describe('ProviderService', () => {
     })
 
     test('should recover from a malformed providers index after an upgrade', async () => {
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
-      await fs.writeFile(path.join(tmpDir, 'cc-haha', 'providers.json'), '{not json', 'utf-8')
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
+      await fs.writeFile(path.join(tmpDir, 'orion', 'providers.json'), '{not json', 'utf-8')
 
       const svc = new ProviderService()
       const result = await svc.listProviders()
-      const files = await fs.readdir(path.join(tmpDir, 'cc-haha'))
+      const files = await fs.readdir(path.join(tmpDir, 'orion'))
 
       expect(result).toEqual({
         providers: [],
@@ -251,13 +251,13 @@ describe('ProviderService', () => {
     })
 
     test('should normalize a legacy activeProviderId field', async () => {
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       const provider = {
         id: 'legacy-provider',
         ...sampleInput({ name: 'Legacy Provider' }),
       }
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'providers.json'),
+        path.join(tmpDir, 'orion', 'providers.json'),
         JSON.stringify({ activeProviderId: provider.id, providers: [provider] }),
         'utf-8',
       )
@@ -332,7 +332,7 @@ describe('ProviderService', () => {
       const svc = new ProviderService()
       await svc.addProvider(sampleInput())
 
-      await expect(fs.readFile(path.join(tmpDir, 'cc-haha', 'settings.json'), 'utf-8')).rejects.toThrow()
+      await expect(fs.readFile(path.join(tmpDir, 'orion', 'settings.json'), 'utf-8')).rejects.toThrow()
     })
 
     test('custom providers keep thinking compatibility without narrowing CLI effort', async () => {
@@ -527,9 +527,9 @@ describe('ProviderService', () => {
 
     describe('ChatGPT Official provider metadata', () => {
       test('normalizes the built-in ChatGPT provider as an active provider id', async () => {
-        await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+        await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
         await fs.writeFile(
-          path.join(tmpDir, 'cc-haha', 'providers.json'),
+          path.join(tmpDir, 'orion', 'providers.json'),
           JSON.stringify({ activeId: 'openai-official', providers: [] }),
           'utf-8',
         )
@@ -572,7 +572,7 @@ describe('ProviderService', () => {
         const env = settings.env as Record<string, string>
         expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBe('1')
         expect(env.OPENAI_CODEX_OAUTH_FILE).toBe(
-          path.join(tmpDir, 'cc-haha', 'openai-oauth.json'),
+          path.join(tmpDir, 'orion', 'openai-oauth.json'),
         )
         expect(env.ANTHROPIC_MODEL).toBe('gpt-5.6-sol')
         expect(env.ANTHROPIC_DEFAULT_HAIKU_MODEL).toBe('gpt-5.6-luna')
@@ -615,7 +615,7 @@ describe('ProviderService', () => {
         const env = settings.env as Record<string, string>
         expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBe('1')
         expect(env.OPENAI_CODEX_OAUTH_FILE).toBe(
-          path.join(tmpDir, 'cc-haha', 'openai-oauth.json'),
+          path.join(tmpDir, 'orion', 'openai-oauth.json'),
         )
         expect(env.ANTHROPIC_BASE_URL).toBeUndefined()
         expect(env.ANTHROPIC_API_KEY).toBeUndefined()
@@ -623,9 +623,9 @@ describe('ProviderService', () => {
       })
 
       test('auth status reports ChatGPT Official from the desktop OpenAI token file', async () => {
-        await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+        await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
         await fs.writeFile(
-          path.join(tmpDir, 'cc-haha', 'openai-oauth.json'),
+          path.join(tmpDir, 'orion', 'openai-oauth.json'),
           JSON.stringify({
             accessToken: 'openai-access',
             refreshToken: 'openai-refresh',
@@ -647,9 +647,9 @@ describe('ProviderService', () => {
       })
 
       test('auth status reports Claude Official from the desktop Claude token file', async () => {
-        await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+        await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
         await fs.writeFile(
-          path.join(tmpDir, 'cc-haha', 'oauth.json'),
+          path.join(tmpDir, 'orion', 'oauth.json'),
           JSON.stringify({
             accessToken: 'claude-access',
             refreshToken: 'claude-refresh',
@@ -697,9 +697,9 @@ describe('ProviderService', () => {
 
     describe('Grok Official provider metadata', () => {
       test('normalizes the built-in Grok provider and appends it to legacy provider order', async () => {
-        await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+        await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
         await fs.writeFile(
-          path.join(tmpDir, 'cc-haha', 'providers.json'),
+          path.join(tmpDir, 'orion', 'providers.json'),
           JSON.stringify({
             activeId: 'grok-official',
             providers: [],
@@ -747,7 +747,7 @@ describe('ProviderService', () => {
         expect(config.activeId).toBe('grok-official')
         expect(env.CC_HAHA_GROK_OAUTH_PROVIDER).toBe('1')
         expect(env.GROK_OAUTH_FILE).toBe(
-          path.join(tmpDir, 'cc-haha', 'grok-oauth.json'),
+          path.join(tmpDir, 'orion', 'grok-oauth.json'),
         )
         expect(env.ANTHROPIC_MODEL).toBe('grok-4.6')
         expect(env.ANTHROPIC_DEFAULT_HAIKU_MODEL).toBe('grok-4.6')
@@ -758,9 +758,9 @@ describe('ProviderService', () => {
       })
 
       test('auth status reports Grok Official from the isolated Grok token file', async () => {
-        await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+        await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
         await fs.writeFile(
-          path.join(tmpDir, 'cc-haha', 'grok-oauth.json'),
+          path.join(tmpDir, 'orion', 'grok-oauth.json'),
           JSON.stringify({
             accessToken: 'grok-access',
             refreshToken: 'grok-refresh',
@@ -1341,8 +1341,8 @@ describe('ProviderService', () => {
         id: `saved-${presetId}`,
         ...sampleInput({ presetId, baseUrl, models: { main: model, haiku: model, sonnet: model, opus: model } }),
       }
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
-      await fs.writeFile(path.join(tmpDir, 'cc-haha', 'providers.json'), JSON.stringify({
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
+      await fs.writeFile(path.join(tmpDir, 'orion', 'providers.json'), JSON.stringify({
         providers: [legacyProvider],
         activeId: legacyProvider.id,
       }))
@@ -1475,9 +1475,9 @@ describe('ProviderService', () => {
 
     test('should preserve existing settings.json fields on activation', async () => {
       // Pre-seed settings with an extra field
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'settings.json'),
+        path.join(tmpDir, 'orion', 'settings.json'),
         JSON.stringify({ theme: 'dark', env: { CUSTOM_VAR: 'keep-me' } }),
       )
 
@@ -1495,8 +1495,8 @@ describe('ProviderService', () => {
     })
 
     test('should recover malformed managed settings before activation sync', async () => {
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
-      await fs.writeFile(path.join(tmpDir, 'cc-haha', 'settings.json'), '{not json', 'utf-8')
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
+      await fs.writeFile(path.join(tmpDir, 'orion', 'settings.json'), '{not json', 'utf-8')
 
       const svc = new ProviderService()
       const provider = await svc.addProvider(sampleInput())
@@ -1505,7 +1505,7 @@ describe('ProviderService', () => {
 
       const settings = await readSettings()
       const env = settings.env as Record<string, string>
-      const files = await fs.readdir(path.join(tmpDir, 'cc-haha'))
+      const files = await fs.readdir(path.join(tmpDir, 'orion'))
 
       expect(env.ANTHROPIC_BASE_URL).toBe('https://api.example.com')
       expect(files.some((name) => name.startsWith('settings.json.invalid-'))).toBe(true)

@@ -69,6 +69,7 @@ import {
   createImageMetadataText,
   maybeResizeAndDownsampleImageBuffer,
 } from '../../utils/imageResizer.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 const MAX_CAPTURED_PROCESS_LINES = 80
 const MAX_CAPTURED_SDK_MESSAGES = 40
@@ -1890,7 +1891,7 @@ export class ConversationService {
 
     const configDir =
       process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')
-    const ccHahaDir = path.join(configDir, 'cc-haha')
+    const ccHahaDir = path.join(configDir, PRODUCT_DATA_DIR_NAME)
     const providersIndexPath = path.join(ccHahaDir, 'providers.json')
     const settingsPath = path.join(ccHahaDir, 'settings.json')
 
@@ -1956,7 +1957,7 @@ export class ConversationService {
 
     const configDir =
       process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')
-    const settingsPath = path.join(configDir, 'cc-haha', 'settings.json')
+    const settingsPath = path.join(configDir, PRODUCT_DATA_DIR_NAME, 'settings.json')
     try {
       const raw = fs.readFileSync(settingsPath, 'utf-8')
       const parsed = JSON.parse(raw) as { env?: Record<string, string> }

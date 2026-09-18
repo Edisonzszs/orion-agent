@@ -41,6 +41,7 @@ import {
   buildGrokOfficialRuntimeEnv,
   isGrokOfficialProviderId,
 } from './grokOfficialProvider.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export const MANAGED_PROVIDER_ENV_KEYS = [
   'ANTHROPIC_BASE_URL',
@@ -498,7 +499,7 @@ export function readActiveProviderManagedEnv(
   options?: { serverPort?: number },
 ): Record<string, string> | null {
   try {
-    const raw = fs.readFileSync(path.join(configDir, 'cc-haha', 'providers.json'), 'utf-8')
+    const raw = fs.readFileSync(path.join(configDir, PRODUCT_DATA_DIR_NAME, 'providers.json'), 'utf-8')
     const index = normalizeProvidersIndex(JSON.parse(raw))
     if (!index?.activeId) return null
 
@@ -522,7 +523,7 @@ export function readActiveProviderManagedEnv(
 
 export function activeProviderNeedsProxy(configDir: string): boolean {
   try {
-    const raw = fs.readFileSync(path.join(configDir, 'cc-haha', 'providers.json'), 'utf-8')
+    const raw = fs.readFileSync(path.join(configDir, PRODUCT_DATA_DIR_NAME, 'providers.json'), 'utf-8')
     const index = normalizeProvidersIndex(JSON.parse(raw))
     if (
       !index?.activeId ||

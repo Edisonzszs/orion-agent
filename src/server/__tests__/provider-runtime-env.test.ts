@@ -39,7 +39,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('routes Anthropic providers without nested tool media through the proxy', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-media-compat',
       providers: [{
         id: 'provider-media-compat',
@@ -55,7 +55,7 @@ describe('providerRuntimeEnv', () => {
 
     expect(activeProviderNeedsProxy(tmpDir)).toBe(true)
 
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-media-native',
       providers: [{
         id: 'provider-media-native',
@@ -73,7 +73,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('normalizes and preserves Grok Official as the active runtime provider', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'grok-official',
       providers: [],
       providerOrder: ['claude-official', 'openai-official'],
@@ -91,7 +91,7 @@ describe('providerRuntimeEnv', () => {
 
     expect(env).toMatchObject({
       CC_HAHA_GROK_OAUTH_PROVIDER: '1',
-      GROK_OAUTH_FILE: path.join(tmpDir, 'cc-haha', 'grok-oauth.json'),
+      GROK_OAUTH_FILE: path.join(tmpDir, 'orion', 'grok-oauth.json'),
       CC_HAHA_IMAGE_PROVIDER_KIND: 'grok_oauth',
       CC_HAHA_IMAGE_PROVIDER_ID: 'grok-official',
       CC_HAHA_IMAGE_MODEL: 'grok-imagine-image-quality',
@@ -108,7 +108,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('routes custom image generation through its own optional credentials', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-images',
       providers: [{
         id: 'provider-images',
@@ -142,7 +142,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('clears stale image routing when the next active provider has no image capability', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-chat-only',
       providers: [{
         id: 'provider-chat-only',
@@ -176,7 +176,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('keeps Claude Code effort capabilities for an unlisted custom model', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-1',
       providers: [
         {
@@ -252,7 +252,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('does not let legacy preset metadata disable compatible model effort', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-xuanshu',
       providers: [
         {
@@ -291,7 +291,7 @@ describe('providerRuntimeEnv', () => {
       sonnet: 'glm-5.3[1m]',
       opus: 'glm-5.3[1m]',
     }
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-zhipu-standard',
       providers: [{
         id: 'provider-zhipu-standard',
@@ -318,7 +318,7 @@ describe('providerRuntimeEnv', () => {
       'glm-5.3-flash[1m]': 1000000,
     })
 
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-zhipu-coding-plan',
       providers: [{
         id: 'provider-zhipu-coding-plan',
@@ -342,7 +342,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('active provider env overrides stale proxy settings while preserving unrelated env', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-1',
       providers: [
         {
@@ -389,7 +389,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('honors explicitly enabled tool search for native Anthropic providers', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       schemaVersion: PROVIDER_TOOL_SEARCH_OPT_IN_SCHEMA_VERSION,
       activeId: 'provider-1',
       providers: [
@@ -418,7 +418,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('honors disabled experimental betas for active providers', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-1',
       providers: [
         {
@@ -446,7 +446,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('keeps providers readable when stored tool search values are stringly typed', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-1',
       providers: [
         {
@@ -475,7 +475,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('does not write tool search env for OpenAI proxy providers', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-1',
       providers: [
         {
@@ -503,7 +503,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   test('applies updated docs-backed preset env for domestic Anthropic-compatible providers', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-kimi',
       providers: [
         {
@@ -540,7 +540,7 @@ describe('providerRuntimeEnv', () => {
       'kimi-for-coding-highspeed': 262144,
     })
 
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-kimi-legacy',
       providers: [
         {
@@ -572,7 +572,7 @@ describe('providerRuntimeEnv', () => {
         'thinking,required_thinking,effort,xhigh_effort,max_effort',
     })
 
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-zhipu',
       providers: [
         {
@@ -613,7 +613,7 @@ describe('providerRuntimeEnv', () => {
   })
 
   // getManagedEnvKeys() is the erase list used to strip stale provider env out of
-  // cc-haha/settings.json. It is built by unioning every preset's defaultEnv keys, so
+  // orion/settings.json. It is built by unioning every preset's defaultEnv keys, so
   // deleting a preset outright would drop keys only that preset declares — they would
   // then never be cleaned and would leak into every provider activated afterwards.
   test('keeps the settings.json erase list covering retired presets env keys', () => {
@@ -630,7 +630,7 @@ describe('providerRuntimeEnv', () => {
   // deleting the entry would silently drop it. Older records may also lack
   // authStrategy / modelContextWindows and fall back to the preset for those too.
   test('keeps resolving preset runtime env for providers saved against a retired preset', async () => {
-    await writeJson(path.join(tmpDir, 'cc-haha', 'providers.json'), {
+    await writeJson(path.join(tmpDir, 'orion', 'providers.json'), {
       activeId: 'provider-shengsuanyun',
       providers: [
         {

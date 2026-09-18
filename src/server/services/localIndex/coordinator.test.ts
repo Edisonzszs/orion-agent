@@ -220,7 +220,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => '/tmp/config',
-      resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+      resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
       openDatabase: () => fakeDatabase(() => {}),
       createIndex: () => index,
       discoverSources: async () => [],
@@ -261,7 +261,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => '/tmp/config',
-      resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+      resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
       openDatabase: () => database,
       createIndex: () => createFakeIndex(),
       discoverSources: async () => [],
@@ -285,7 +285,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: currentMode, warningCode: null }),
       resolveScope: () => '/tmp/config',
-      resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+      resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
       openDatabase: () => fakeDatabase(() => { closes += 1 }),
       createIndex: () => createFakeIndex([candidate(1)]),
       discoverSources: async () => [],
@@ -305,12 +305,12 @@ describe('local index coordinator', () => {
 
   it('stops serving scope A before reopening the runtime index for scope B', async () => {
     let activeScope = '/tmp/config-a'
-    let activePath = '/tmp/config-a/cc-haha/db/index-v1.sqlite'
+    let activePath = '/tmp/config-a/orion/db/index-v1.sqlite'
     let opens = 0
     let closes = 0
     const indexes = new Map([
       [activePath, createFakeIndex([candidate(1, activeScope)])],
-      ['/tmp/config-b/cc-haha/db/index-v1.sqlite', createFakeIndex([
+      ['/tmp/config-b/orion/db/index-v1.sqlite', createFakeIndex([
         candidate(2, '/tmp/config-b'),
       ])],
     ])
@@ -332,7 +332,7 @@ describe('local index coordinator', () => {
     expect(coordinator.listSessions().sessions.map(row => row.id)).toEqual(['session-1'])
 
     activeScope = '/tmp/config-b'
-    activePath = '/tmp/config-b/cc-haha/db/index-v1.sqlite'
+    activePath = '/tmp/config-b/orion/db/index-v1.sqlite'
 
     expect(coordinator.getPublicStatus().state).toBe('building')
     expect(coordinator.listSessions()).toEqual({ sessions: [], total: 0 })
@@ -345,7 +345,7 @@ describe('local index coordinator', () => {
   it('converges external append, create, and delete events through the serial writer pump', async () => {
     const root = await createTempDir('coordinator-watch-convergence')
     const configDir = join(root, 'config')
-    const databasePath = join(configDir, 'cc-haha', 'db', 'index-v1.sqlite')
+    const databasePath = join(configDir, 'orion', 'db', 'index-v1.sqlite')
     const first = await createRealTranscript(configDir, '-repo', 'first', 'First')
     let watcherOptions!: ReconciliationWatcherOptions
     let watcherStops = 0
@@ -452,7 +452,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => configDir,
-      resolveDatabasePath: () => join(configDir, 'cc-haha', 'db', 'index-v1.sqlite'),
+      resolveDatabasePath: () => join(configDir, 'orion', 'db', 'index-v1.sqlite'),
       openDatabase: () => fakeDatabase(() => {}),
       createIndex: () => index,
       createProjector: () => projector,
@@ -516,7 +516,7 @@ describe('local index coordinator', () => {
   it('withholds activity readiness while main-source or full-sweep failures can leave stale rows', async () => {
     const root = await createTempDir('coordinator-activity-stale-gate')
     const configDir = join(root, 'config')
-    const databasePath = join(configDir, 'cc-haha', 'db', 'index-v1.sqlite')
+    const databasePath = join(configDir, 'orion', 'db', 'index-v1.sqlite')
     const source = await createRealTranscript(
       configDir,
       '-repo',
@@ -616,7 +616,7 @@ describe('local index coordinator', () => {
   it('withholds persisted activity totals while a parser upgrade is waiting to rebuild', async () => {
     const root = await createTempDir('coordinator-activity-parser-upgrade')
     const configDir = join(root, 'config')
-    const databasePath = join(configDir, 'cc-haha', 'db', 'index-v1.sqlite')
+    const databasePath = join(configDir, 'orion', 'db', 'index-v1.sqlite')
     const source = await createRealTranscript(
       configDir,
       '-repo',
@@ -782,7 +782,7 @@ describe('local index coordinator', () => {
       const coordinator = createLocalIndexCoordinator({
         resolveMode: () => ({ mode: 'on', warningCode: null }),
         resolveScope: () => '/tmp/config',
-        resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+        resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
         openDatabase: () => {
           opens += 1
           if (!shouldBackup || opens === 1) {
@@ -848,7 +848,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => '/tmp/config',
-      resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+      resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
       openDatabase: () => database,
       createIndex: () => createFakeIndex(),
       createProjector: () => ({
@@ -897,7 +897,7 @@ describe('local index coordinator', () => {
   it('auto-recovers a corrupt header once and requires explicit rebuild for a future schema', async () => {
     const root = await createTempDir('coordinator-real-recovery')
     const configDir = join(root, 'config')
-    const databasePath = join(configDir, 'cc-haha', 'db', 'index-v1.sqlite')
+    const databasePath = join(configDir, 'orion', 'db', 'index-v1.sqlite')
     const source = await createRealTranscript(configDir, '-repo', 'source', 'Canonical')
     const sourceBefore = await Bun.file(source.path).text()
     await mkdir(dirname(databasePath), { recursive: true })
@@ -921,7 +921,7 @@ describe('local index coordinator', () => {
     await waitFor(() => recovered.getPublicStatus().state === 'ready')
     await recovered.stop()
     expect(await Bun.file(source.path).text()).toBe(sourceBefore)
-    expect((await readdir(join(configDir, 'cc-haha', 'db', 'backups'))).length).toBe(1)
+    expect((await readdir(join(configDir, 'orion', 'db', 'backups'))).length).toBe(1)
 
     const { Database } = await import('bun:sqlite')
     const future = new Database(databasePath)
@@ -933,11 +933,11 @@ describe('local index coordinator', () => {
       state: 'degraded',
       lastErrorCode: 'SCHEMA_UNSUPPORTED',
     })
-    expect((await readdir(join(configDir, 'cc-haha', 'db', 'backups'))).length).toBe(1)
+    expect((await readdir(join(configDir, 'orion', 'db', 'backups'))).length).toBe(1)
 
     await unsupported.rebuild()
     await waitFor(() => unsupported.getPublicStatus().state === 'ready')
-    expect((await readdir(join(configDir, 'cc-haha', 'db', 'backups'))).length).toBe(2)
+    expect((await readdir(join(configDir, 'orion', 'db', 'backups'))).length).toBe(2)
     expect(await Bun.file(source.path).text()).toBe(sourceBefore)
     await unsupported.stop()
   })
@@ -1185,7 +1185,7 @@ describe('local index coordinator', () => {
   it('resumes a killed backfill from committed source progress', async () => {
     const root = await createTempDir('coordinator-resume')
     const configDir = join(root, 'config')
-    const databasePath = join(configDir, 'cc-haha', 'db', 'index-v1.sqlite')
+    const databasePath = join(configDir, 'orion', 'db', 'index-v1.sqlite')
     const candidates: SessionSourceCandidate[] = []
     for (let index = 0; index < 30; index += 1) {
       candidates.push(await createRealTranscript(
@@ -1459,7 +1459,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => '/tmp/config',
-      resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+      resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
       openDatabase: () => {
         opens += 1
         if (opens === 1) {
@@ -1520,7 +1520,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => '/tmp/config',
-      resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+      resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
       openDatabase: () => {
         opens += 1
         if (opens === 1) {
@@ -1581,7 +1581,7 @@ describe('local index coordinator', () => {
     const coordinator = createLocalIndexCoordinator({
       resolveMode: () => ({ mode: 'on', warningCode: null }),
       resolveScope: () => '/tmp/config',
-      resolveDatabasePath: () => '/tmp/config/cc-haha/db/index-v1.sqlite',
+      resolveDatabasePath: () => '/tmp/config/orion/db/index-v1.sqlite',
       openDatabase: () => {
         opens += 1
         if (opens === 1) {
@@ -1738,8 +1738,8 @@ describe('local index coordinator', () => {
     const root = await createTempDir('coordinator-rebuild-scope')
     const firstScope = join(root, 'scope-a')
     const secondScope = join(root, 'scope-b')
-    const firstPath = join(firstScope, 'cc-haha', 'db', 'index-v1.sqlite')
-    const secondPath = join(secondScope, 'cc-haha', 'db', 'index-v1.sqlite')
+    const firstPath = join(firstScope, 'orion', 'db', 'index-v1.sqlite')
+    const secondPath = join(secondScope, 'orion', 'db', 'index-v1.sqlite')
     let currentScope = firstScope
     let currentPath = firstPath
     const coordinator = createLocalIndexCoordinator({
@@ -1832,7 +1832,7 @@ describe('local index coordinator', () => {
     'sanitizes an actual read-only database create failure as a disk write failure',
     async () => {
       const configDir = await createTempDir('readonly-create')
-      const databaseDir = join(configDir, 'cc-haha', 'db')
+      const databaseDir = join(configDir, 'orion', 'db')
       await mkdir(databaseDir, { recursive: true })
       await chmod(databaseDir, 0o500)
       const coordinator = createLocalIndexCoordinator({

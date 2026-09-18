@@ -69,6 +69,7 @@ import type {
 import {
   BUILT_IN_PROVIDER_IDS,
 } from '../types/provider.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 const DEFAULT_INDEX: ProvidersIndex = {
   schemaVersion: CURRENT_PROVIDER_INDEX_SCHEMA_VERSION,
@@ -177,12 +178,12 @@ export class ProviderService {
     return process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')
   }
 
-  private getCcHahaDir(): string {
-    return path.join(this.getConfigDir(), 'cc-haha')
+  private getProductDataDir(): string {
+    return path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME)
   }
 
   private getIndexPath(): string {
-    return path.join(this.getCcHahaDir(), 'providers.json')
+    return path.join(this.getProductDataDir(), 'providers.json')
   }
 
   private async readIndex(): Promise<ProvidersIndex> {

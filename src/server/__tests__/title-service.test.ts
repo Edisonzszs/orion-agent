@@ -79,9 +79,9 @@ describe('titleService', () => {
 
     try {
       const providerId = 'zhipu-test'
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'providers.json'),
+        path.join(tmpDir, 'orion', 'providers.json'),
         JSON.stringify({
           activeId: providerId,
           providers: [
@@ -129,9 +129,9 @@ describe('titleService', () => {
 
     try {
       const providerId = 'fallback-thinking-test'
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'providers.json'),
+        path.join(tmpDir, 'orion', 'providers.json'),
         JSON.stringify({
           activeId: providerId,
           providers: [
@@ -177,9 +177,9 @@ describe('titleService', () => {
 
     try {
       const providerId = 'deepseek-test'
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'providers.json'),
+        path.join(tmpDir, 'orion', 'providers.json'),
         JSON.stringify({
           activeId: providerId,
           providers: [
@@ -237,9 +237,9 @@ describe('titleService', () => {
 
     try {
       const providerId = 'title-clean-test'
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'providers.json'),
+        path.join(tmpDir, 'orion', 'providers.json'),
         JSON.stringify({
           activeId: providerId,
           providers: [
@@ -299,9 +299,9 @@ describe('titleService', () => {
 
     try {
       const providerId = 'title-language-test'
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'providers.json'),
+        path.join(tmpDir, 'orion', 'providers.json'),
         JSON.stringify({
           activeId: providerId,
           providers: [
@@ -429,9 +429,9 @@ describe('titleService', () => {
 
     try {
       const providerId = 'auth-token-title-test'
-      await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+      await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
       await fs.writeFile(
-        path.join(tmpDir, 'cc-haha', 'providers.json'),
+        path.join(tmpDir, 'orion', 'providers.json'),
         JSON.stringify({
           activeId: providerId,
           providers: [

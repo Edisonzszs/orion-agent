@@ -10,6 +10,7 @@ import {
   resolve,
   sep,
 } from 'node:path'
+import { PRODUCT_DATA_DIR_NAME } from '../../../constants/orionProduct.js'
 
 export const LOCAL_INDEX_UNSAFE_PATH = 'LOCAL_INDEX_UNSAFE_PATH' as const
 export const LOCAL_INDEX_BUSY_TIMEOUT_MS = 100
@@ -93,7 +94,7 @@ export function prepareManagedDatabasePath(options: {
   }
 
   const lexicalScope = resolve(options.scope)
-  const expectedPath = join(lexicalScope, 'cc-haha', 'db', options.filename)
+  const expectedPath = join(lexicalScope, PRODUCT_DATA_DIR_NAME, 'db', options.filename)
   if (databasePath !== expectedPath) throw new UnsafeLocalIndexPathError()
 
   // Recursive creation is restricted to the caller-owned trust root. Every
@@ -104,7 +105,7 @@ export function prepareManagedDatabasePath(options: {
   if (!scopeSnapshot.isDirectory() && !scopeSnapshot.isSymbolicLink()) {
     throw new UnsafeLocalIndexPathError()
   }
-  const ccHahaDir = join(lexicalScope, 'cc-haha')
+  const ccHahaDir = join(lexicalScope, PRODUCT_DATA_DIR_NAME)
   const databaseDir = join(ccHahaDir, 'db')
   ensureRealManagedDirectory(ccHahaDir, trustRoot)
   ensureRealManagedDirectory(databaseDir, trustRoot)

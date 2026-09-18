@@ -8,6 +8,7 @@ import {
   stat,
 } from 'node:fs/promises'
 import { basename, dirname, join, resolve } from 'node:path'
+import { PRODUCT_DATA_DIR_NAME } from '../../../constants/orionProduct.js'
 
 export type LocalIndexErrorCode =
   | 'SQLITE_CORRUPT'
@@ -85,7 +86,7 @@ export function isConfirmedLocalIndexCorruption(error: unknown): boolean {
 }
 
 function assertManagedDatabasePath(scope: string, databasePath: string): void {
-  const expected = resolve(scope, 'cc-haha', 'db', 'index-v1.sqlite')
+  const expected = resolve(scope, PRODUCT_DATA_DIR_NAME, 'db', 'index-v1.sqlite')
   if (resolve(databasePath) !== expected) {
     throw new LocalIndexRecoveryError(LOCAL_INDEX_UNSAFE_PATH)
   }
@@ -109,7 +110,7 @@ async function prepareManagedBackupsRoot(
 ): Promise<string> {
   const normalizedScope = resolve(scope)
   await mkdir(normalizedScope, { recursive: true })
-  const ccHahaDir = join(normalizedScope, 'cc-haha')
+  const ccHahaDir = join(normalizedScope, PRODUCT_DATA_DIR_NAME)
   const databaseDir = join(ccHahaDir, 'db')
   const backupsRoot = join(databaseDir, 'backups')
   if (dirname(resolve(databasePath)) !== databaseDir) {

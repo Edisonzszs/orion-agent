@@ -6,6 +6,7 @@ import type { Server, ServerWebSocket, WebSocketHandler } from 'bun'
 import { isLocalAccessAuthorized } from './localAccessAuth.js'
 import { remoteProviderRouteAllowed, remoteSettingsRouteAllowed, type ApiRequestContext } from './remoteBrowserPolicy.js'
 import type { WebSocketData } from './ws/handler.js'
+import { PRODUCT_DATA_DIR_NAME } from '../constants/orionProduct.js'
 
 const PREFIX = '/api/public-access'
 const COOKIE = '__Host-haha-remote'
@@ -80,7 +81,7 @@ export class PublicAccessServer {
 
   constructor(private deps: Dependencies) {
     this.now = deps.now ?? Date.now
-    this.storePath = deps.storePath ?? path.join(process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude'), 'cc-haha', 'public-access-devices.json')
+    this.storePath = deps.storePath ?? path.join(process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude'), PRODUCT_DATA_DIR_NAME, 'public-access-devices.json')
   }
 
   private load() {

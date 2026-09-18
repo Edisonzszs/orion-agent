@@ -165,7 +165,7 @@ describe('scheduled run projection API', () => {
   })
 
   test('keeps the same reset contract when SQLite is unavailable and reads canonical JSON', async () => {
-    const dbPath = path.join(tmpDir, 'cc-haha', 'db', 'scheduled-runs-v1.sqlite')
+    const dbPath = path.join(tmpDir, 'orion', 'db', 'scheduled-runs-v1.sqlite')
     await fs.mkdir(dbPath, { recursive: true })
     const first = await get(
       'http://localhost/api/scheduled-tasks/runs?limit=1&summaryOnly=true',

@@ -6,6 +6,7 @@ import { getClaudeConfigHomeDir } from '../../utils/envUtils.js'
 import { AGENT_SKILLS_DIR, isAgentSkillsDirectoryEnabled } from '../../skills/skillRoots.js'
 import { ProvidersIndexSchema } from '../types/provider.js'
 import { diagnosticsService } from './diagnosticsService.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export type DoctorItemKind = 'json' | 'jsonl' | 'directory'
 export type DoctorItemStatus = 'ok' | 'not_configured' | 'missing' | 'invalid_json' | 'invalid_jsonl' | 'invalid_schema' | 'unreadable'
@@ -171,13 +172,13 @@ export class DoctorService {
         'cc-haha-providers',
         'Managed providers',
         'user',
-        path.join(this.configDir, 'cc-haha', 'providers.json'),
+        path.join(this.configDir, PRODUCT_DATA_DIR_NAME, 'providers.json'),
       ),
       this.jsonTarget(
         'cc-haha-settings',
         'Managed provider settings',
         'user',
-        path.join(this.configDir, 'cc-haha', 'settings.json'),
+        path.join(this.configDir, PRODUCT_DATA_DIR_NAME, 'settings.json'),
       ),
       this.jsonTarget('adapters', 'Adapters config', 'user', path.join(this.configDir, 'adapters.json')),
       this.jsonTarget(
@@ -207,18 +208,18 @@ export class DoctorService {
         path.join(this.configDir, 'cowork_plugins'),
       ),
       this.jsonTarget('user-mcp', 'User MCP config', 'user', this.getUserMcpConfigPath()),
-      this.jsonTarget('oauth', 'OAuth tokens', 'user', path.join(this.configDir, 'cc-haha', 'oauth.json')),
+      this.jsonTarget('oauth', 'OAuth tokens', 'user', path.join(this.configDir, PRODUCT_DATA_DIR_NAME, 'oauth.json')),
       this.jsonTarget(
         'openai-oauth',
         'OpenAI OAuth tokens',
         'user',
-        path.join(this.configDir, 'cc-haha', 'openai-oauth.json'),
+        path.join(this.configDir, PRODUCT_DATA_DIR_NAME, 'openai-oauth.json'),
       ),
       this.jsonTarget(
         'grok-oauth',
         'Grok OAuth tokens',
         'user',
-        path.join(this.configDir, 'cc-haha', 'grok-oauth.json'),
+        path.join(this.configDir, PRODUCT_DATA_DIR_NAME, 'grok-oauth.json'),
       ),
     ]
 

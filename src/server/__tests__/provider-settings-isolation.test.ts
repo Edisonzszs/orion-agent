@@ -33,7 +33,7 @@ describe('provider settings isolation', () => {
   })
 
   async function readCcHahaSettings(): Promise<Record<string, unknown>> {
-    const raw = await fs.readFile(path.join(tmpDir, 'cc-haha', 'settings.json'), 'utf-8')
+    const raw = await fs.readFile(path.join(tmpDir, 'orion', 'settings.json'), 'utf-8')
     return JSON.parse(raw)
   }
 
@@ -46,7 +46,7 @@ describe('provider settings isolation', () => {
     }
   }
 
-  test('activating a provider writes only cc-haha/settings.json', async () => {
+  test('activating a provider writes only orion/settings.json', async () => {
     const minimax = await service.addProvider({
       presetId: 'minimax',
       name: 'MiniMax',
@@ -117,10 +117,10 @@ describe('provider settings isolation', () => {
     expect(await originalSettingsExists()).toBe(false)
   })
 
-  test('activation preserves unrelated cc-haha settings and env', async () => {
-    await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+  test('activation preserves unrelated orion settings and env', async () => {
+    await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
     await fs.writeFile(
-      path.join(tmpDir, 'cc-haha', 'settings.json'),
+      path.join(tmpDir, 'orion', 'settings.json'),
       JSON.stringify({
         customField: 'should_be_preserved',
         env: {
@@ -153,9 +153,9 @@ describe('provider settings isolation', () => {
   })
 
   test('activateOfficial removes only provider-managed env', async () => {
-    await fs.mkdir(path.join(tmpDir, 'cc-haha'), { recursive: true })
+    await fs.mkdir(path.join(tmpDir, 'orion'), { recursive: true })
     await fs.writeFile(
-      path.join(tmpDir, 'cc-haha', 'settings.json'),
+      path.join(tmpDir, 'orion', 'settings.json'),
       JSON.stringify({ env: { EXISTING_VAR: 'keep-me' } }, null, 2),
     )
     const provider = await service.addProvider({
@@ -178,7 +178,7 @@ describe('provider settings isolation', () => {
     expect(env?.EXISTING_VAR).toBe('keep-me')
   })
 
-  test('providers.json and cc-haha/settings.json stay isolated from Claude settings.json', async () => {
+  test('providers.json and orion/settings.json stay isolated from Claude settings.json', async () => {
     await fs.writeFile(
       path.join(tmpDir, 'settings.json'),
       JSON.stringify({

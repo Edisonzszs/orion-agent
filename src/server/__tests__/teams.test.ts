@@ -2870,7 +2870,7 @@ describe('TeamService', () => {
     )
     const archivePath = path.join(
       tmpDir,
-      'cc-haha',
+      'orion',
       'agent-teams',
       `${crypto.createHash('sha256').update(leadSessionId).digest('hex')}.json`,
     )
@@ -3012,7 +3012,7 @@ describe('TeamService', () => {
     }
     const archivePath = path.join(
       tmpDir,
-      'cc-haha',
+      'orion',
       'agent-teams',
       `${crypto.createHash('sha256').update(sessionId).digest('hex')}.json`,
     )

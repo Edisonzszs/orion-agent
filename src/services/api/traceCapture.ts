@@ -25,6 +25,7 @@ import {
   type LocalIndexIoMetrics,
   type SourceFingerprint,
 } from '../../server/services/localIndex/sourceFingerprint.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 const TRACE_PREVIEW_CHARS = 240_000
 export const TRACE_STREAM_CAPTURE_BYTES = 1024 * 1024
@@ -288,16 +289,16 @@ export function isTraceCaptureEnabled(): boolean {
 }
 
 export function getTraceStorageDir(): string {
-  return join(getClaudeConfigHomeDir(), 'cc-haha', 'traces')
+  return join(getClaudeConfigHomeDir(), PRODUCT_DATA_DIR_NAME, 'traces')
 }
 
 function currentTraceScopeContext(): TraceScopeContext {
   const scope = getClaudeConfigHomeDir()
   return {
     scope,
-    storageDir: join(scope, 'cc-haha', 'traces'),
+    storageDir: join(scope, PRODUCT_DATA_DIR_NAME, 'traces'),
     target: {
-      path: join(scope, 'cc-haha', 'db', 'trace-index-v1.sqlite'),
+      path: join(scope, PRODUCT_DATA_DIR_NAME, 'db', 'trace-index-v1.sqlite'),
       scope,
     },
   }
@@ -2029,13 +2030,13 @@ async function appendTraceEntry(sessionId: string, entry: TraceFileEntry): Promi
   const scope = getClaudeConfigHomeDir()
   const filePath = join(
     scope,
-    'cc-haha',
+    PRODUCT_DATA_DIR_NAME,
     'traces',
     `${normalizedSessionId}.jsonl`,
   )
   const target: TraceIndexTarget = {
     scope,
-    path: join(scope, 'cc-haha', 'db', 'trace-index-v1.sqlite'),
+    path: join(scope, PRODUCT_DATA_DIR_NAME, 'db', 'trace-index-v1.sqlite'),
   }
   const queueKey = `${scope}\0${normalizedSessionId}`
   const previous = traceWriteQueues.get(queueKey) ?? Promise.resolve()
@@ -2356,7 +2357,7 @@ function sanitizeTraceFileName(sessionId: string): string {
 }
 
 function getManagedSettingsPath(scope = getClaudeConfigHomeDir()): string {
-  return join(scope, 'cc-haha', 'settings.json')
+  return join(scope, PRODUCT_DATA_DIR_NAME, 'settings.json')
 }
 
 function defaultTraceCaptureSettings(
@@ -2364,7 +2365,7 @@ function defaultTraceCaptureSettings(
 ): TraceCaptureSettings {
   return {
     enabled: true,
-    storageDir: join(scope, 'cc-haha', 'traces'),
+    storageDir: join(scope, PRODUCT_DATA_DIR_NAME, 'traces'),
   }
 }
 

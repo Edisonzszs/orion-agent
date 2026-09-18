@@ -12,6 +12,7 @@ import {
   projectProviderSummaryForSharing,
   type SharedDiagnosticEvent,
 } from './diagnosticsShare.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export type DiagnosticSeverity = 'debug' | 'info' | 'warn' | 'error'
 
@@ -101,7 +102,7 @@ export class DiagnosticsService {
   private writeQueue: Promise<void> = Promise.resolve()
 
   getLogDir(): string {
-    return path.join(this.getConfigDir(), 'cc-haha', 'diagnostics')
+    return path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'diagnostics')
   }
 
   getDiagnosticsPath(): string {
@@ -777,7 +778,7 @@ export class DiagnosticsService {
   }
 
   private async buildProvidersSummary(): Promise<Record<string, unknown>> {
-    const providerPath = path.join(this.getConfigDir(), 'cc-haha', 'providers.json')
+    const providerPath = path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'providers.json')
     try {
       const raw = await fs.readFile(providerPath, 'utf-8')
       const parsed = JSON.parse(raw) as {

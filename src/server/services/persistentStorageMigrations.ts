@@ -10,6 +10,7 @@ import {
   PROVIDER_TOOL_SEARCH_OPT_IN_SCHEMA_VERSION,
   PROVIDER_REQUEST_COMPATIBILITY_SCHEMA_VERSION,
 } from '../types/provider.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export const CURRENT_PROVIDER_INDEX_SCHEMA_VERSION = PROVIDER_REQUEST_COMPATIBILITY_SCHEMA_VERSION
 
@@ -334,16 +335,16 @@ function buildManagedSettingsForMigratedProvider(provider: JsonObject | undefine
 
 async function migrateLegacyRootProviders(
   configDir: string,
-  ccHahaDir: string,
+  productDataDir: string,
   report: MigrationReport,
 ): Promise<void> {
-  const targetPath = path.join(ccHahaDir, 'providers.json')
+  const targetPath = path.join(productDataDir, 'providers.json')
   try {
     await fs.access(targetPath)
     return
   } catch (error) {
     if (errnoCode(error) !== 'ENOENT') {
-      report.failures.push(`cc-haha/providers.json: ${error instanceof Error ? error.message : String(error)}`)
+      report.failures.push(`${PRODUCT_DATA_DIR_NAME}/providers.json: ${error instanceof Error ? error.message : String(error)}`)
       return
     }
   }
@@ -358,9 +359,9 @@ async function migrateLegacyRootProviders(
     if (!migrated) return
 
     await writeJsonFile(targetPath, migrated)
-    report.migratedEntries.push('providers.json -> cc-haha/providers.json')
+    report.migratedEntries.push(`providers.json -> ${PRODUCT_DATA_DIR_NAME}/providers.json`)
 
-    const settingsPath = path.join(ccHahaDir, 'settings.json')
+    const settingsPath = path.join(productDataDir, 'settings.json')
     const settings = await readJsonFile(settingsPath).catch(() => ({ missing: false, value: undefined, raw: '' }))
     if (!settings.missing) return
 
@@ -373,7 +374,7 @@ async function migrateLegacyRootProviders(
     )
     if (managedSettings) {
       await writeJsonFile(settingsPath, managedSettings)
-      report.migratedEntries.push('providers.json -> cc-haha/settings.json')
+      report.migratedEntries.push(`providers.json -> ${PRODUCT_DATA_DIR_NAME}/settings.json`)
     }
   } catch (error) {
     if (error instanceof SyntaxError) {
@@ -386,19 +387,19 @@ async function migrateLegacyRootProviders(
 
 async function runPersistentStorageMigrations(configDir: string): Promise<MigrationReport> {
   const report: MigrationReport = { migratedEntries: [], failures: [] }
-  const ccHahaDir = path.join(configDir, 'cc-haha')
+  const productDataDir = path.join(configDir, PRODUCT_DATA_DIR_NAME)
 
-  await migrateLegacyRootProviders(configDir, ccHahaDir, report)
+  await migrateLegacyRootProviders(configDir, productDataDir, report)
 
   await migrateJsonEntry(
-    path.join(ccHahaDir, 'providers.json'),
-    'cc-haha/providers.json',
+    path.join(productDataDir, 'providers.json'),
+    `${PRODUCT_DATA_DIR_NAME}/providers.json`,
     report,
     migrateProvidersIndex,
   )
   await migrateJsonEntry(
-    path.join(ccHahaDir, 'settings.json'),
-    'cc-haha/settings.json',
+    path.join(productDataDir, 'settings.json'),
+    `${PRODUCT_DATA_DIR_NAME}/settings.json`,
     report,
     migrateManagedSettings,
   )

@@ -32,6 +32,7 @@ import {
 import type { TaskListLifecycleState } from '../../utils/tasks.js'
 import { cleanupTeamDirectories } from '../../utils/swarm/teamHelpers.js'
 import type { TaskInfo } from './taskService.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -1443,7 +1444,7 @@ export class TeamService {
   }
 
   private getWorkbenchArchiveDir(): string {
-    return path.join(this.getConfigDir(), 'cc-haha', 'agent-teams')
+    return path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'agent-teams')
   }
 
   private getWorkbenchArchivePath(sessionId: string): string {

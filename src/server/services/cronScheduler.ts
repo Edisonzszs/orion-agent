@@ -41,6 +41,7 @@ import {
   paginateScheduledRunRecords,
   type ScheduledRunSummary,
 } from './localIndex/scheduledRunIndex.js'
+import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -913,7 +914,7 @@ export class CronScheduler {
       return true
     }
 
-    const ccHahaDir = path.join(this.getConfigDir(), 'cc-haha')
+    const ccHahaDir = path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME)
     if (existsSync(path.join(ccHahaDir, 'providers.json'))) {
       return true
     }
@@ -943,7 +944,7 @@ export class CronScheduler {
 
     try {
       const raw = readFileSync(
-        path.join(this.getConfigDir(), 'cc-haha', 'settings.json'),
+        path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME, 'settings.json'),
         'utf-8',
       )
       const parsed = JSON.parse(raw) as { env?: Record<string, string> }

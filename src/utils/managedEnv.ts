@@ -21,6 +21,7 @@ import {
   getSettings_DEPRECATED,
   getSettingsForSource,
 } from './settings/settings.js'
+import { PRODUCT_DATA_DIR_NAME } from '../constants/orionProduct.js'
 
 /**
  * `claude ssh` remote: ANTHROPIC_UNIX_SOCKET routes auth through a -R forwarded
@@ -140,7 +141,7 @@ function getCcHahaSettingsEnv(): Record<string, string> {
       ? ensureStandaloneProviderProxy()
       : undefined
   try {
-    const ccHahaSettings = join(configDir, 'cc-haha', 'settings.json')
+    const ccHahaSettings = join(configDir, PRODUCT_DATA_DIR_NAME, 'settings.json')
     const raw = readFileSync(ccHahaSettings, 'utf-8')
     const parsed = JSON.parse(raw) as { env?: Record<string, string> }
     const settingsEnv = normalizeLegacyDeepSeekManagedEnv(parsed.env ?? {}).env
