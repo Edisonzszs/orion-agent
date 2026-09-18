@@ -42,7 +42,6 @@ desktop/brand-assets/
 .claude/
 
 # Superpowers plans & specs (local only)
-docs/superpowers/
 .superpowers/
 
 # Temp server/web logs
