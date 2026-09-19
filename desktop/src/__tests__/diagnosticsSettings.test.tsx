@@ -210,7 +210,7 @@ describe('Settings > Diagnostics tab', () => {
         generatedAt: '2026-07-11T00:00:00.000Z',
         items: [
           {
-            id: 'cc-haha-providers',
+            id: 'orion-providers',
             label: 'Managed providers',
             kind: 'json',
             scope: 'user',
@@ -820,7 +820,7 @@ describe('Settings > Diagnostics tab', () => {
             bytes: 0,
           },
           {
-            id: 'cc-haha-providers',
+            id: 'orion-providers',
             label: 'Managed providers',
             kind: 'json' as const,
             scope: 'user' as const,

@@ -20,7 +20,7 @@ const MIN_PET_SIZE = 96
 const MAX_PET_SIZE = 192
 const DEFAULT_PET_SIZE = 144
 const MAX_PET_SESSION_ID_LENGTH = 200
-const DEFAULT_PROFILE_SUBTITLE = 'github.com/NanmiCoder/cc-haha'
+const DEFAULT_PROFILE_SUBTITLE = PRODUCT.homepage.replace(/^https?:\/\//, '')
 const DEFAULT_PET_ID = 'dada-code'
 
 const AVATAR_CONTENT_TYPES = {

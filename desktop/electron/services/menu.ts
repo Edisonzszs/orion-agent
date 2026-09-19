@@ -1,5 +1,6 @@
 import type { App, BrowserWindow, MenuItemConstructorOptions } from 'electron'
 import { ELECTRON_EVENT_CHANNELS } from '../ipc/channels'
+import { PRODUCT_NAME } from './appIdentity'
 import { hideWindowSafely, toggleWindowFullScreen } from './windows'
 
 export type NativeMenuDestination = 'about' | 'settings'
@@ -142,7 +143,7 @@ export async function installApplicationMenu(
     return
   }
 
-  const template = buildApplicationMenuTemplate(app.name || 'Claude Code Haha', destination => {
+  const template = buildApplicationMenuTemplate(app.name || PRODUCT_NAME, destination => {
     getMainWindow()?.webContents.send(ELECTRON_EVENT_CHANNELS.nativeMenuNavigate, destination)
   }, platform, {
     hide: () => {

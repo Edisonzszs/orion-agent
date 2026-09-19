@@ -169,13 +169,13 @@ export class DoctorService {
     const targets: DoctorTarget[] = [
       this.jsonTarget('user-settings', 'User settings', 'user', path.join(this.configDir, 'settings.json')),
       this.jsonTarget(
-        'cc-haha-providers',
+        'orion-providers',
         'Managed providers',
         'user',
         path.join(this.configDir, PRODUCT_DATA_DIR_NAME, 'providers.json'),
       ),
       this.jsonTarget(
-        'cc-haha-settings',
+        'orion-settings',
         'Managed provider settings',
         'user',
         path.join(this.configDir, PRODUCT_DATA_DIR_NAME, 'settings.json'),
@@ -304,7 +304,7 @@ export class DoctorService {
 
     try {
       const parsed = JSON.parse(raw)
-      if (target.id === 'cc-haha-providers') {
+      if (target.id === 'orion-providers') {
         const result = ProvidersIndexSchema.safeParse(parsed)
         if (!result.success) {
           const error = result.error.issues

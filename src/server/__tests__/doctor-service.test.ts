@@ -160,7 +160,7 @@ describe('DoctorService', () => {
     const service = new DoctorService({ configDir: schemaConfigDir, homeDir })
 
     const report = await service.getReport()
-    const providers = report.items.find((item) => item.id === 'cc-haha-providers')
+    const providers = report.items.find((item) => item.id === 'orion-providers')
 
     expect(providers?.status).toBe('invalid_schema')
     expect(providers?.error).toContain('providers.0.presetId')
