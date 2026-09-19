@@ -214,7 +214,7 @@ describe('Settings > Diagnostics tab', () => {
             label: 'Managed providers',
             kind: 'json',
             scope: 'user',
-            path: '~/.claude/cc-haha/providers.json',
+            path: '~/.claude/orion/providers.json',
             protected: true,
             exists: true,
             status: 'invalid_schema',
@@ -769,7 +769,7 @@ describe('Settings > Diagnostics tab', () => {
       expect(doctorApiMock.report).toHaveBeenCalledWith('/workspace/project')
     })
     expect(window.localStorage.getItem('cc-haha-theme')).toBe('cc-haha-theme-value')
-    expect(screen.getByText('~/.claude/cc-haha/providers.json')).toBeInTheDocument()
+    expect(screen.getByText('~/.claude/orion/providers.json')).toBeInTheDocument()
     expect(screen.getByText(/Invalid schema/i)).toBeInTheDocument()
     expect(screen.getByText(/User and active project/i)).toBeInTheDocument()
     expect(screen.getByText('Healthy: 1 · Not configured: 0 · Missing: 0 · Invalid: 1')).toBeInTheDocument()
@@ -824,7 +824,7 @@ describe('Settings > Diagnostics tab', () => {
             label: 'Managed providers',
             kind: 'json' as const,
             scope: 'user' as const,
-            path: '~/.claude/cc-haha/providers.json',
+            path: '~/.claude/orion/providers.json',
             protected: true,
             exists: true,
             status: 'invalid_schema' as const,
@@ -841,7 +841,7 @@ describe('Settings > Diagnostics tab', () => {
     fireEvent.click(await screen.findByRole('button', { name: /Run Doctor/i }))
 
     expect(await screen.findByText('Healthy: 1 · Not configured: 1 · Missing: 0 · Invalid: 1')).toBeInTheDocument()
-    expect(screen.getByText('~/.claude/cc-haha/providers.json')).toBeInTheDocument()
+    expect(screen.getByText('~/.claude/orion/providers.json')).toBeInTheDocument()
     expect(screen.queryByText('~/.claude/adapters.json')).not.toBeInTheDocument()
   })
 
@@ -866,7 +866,7 @@ describe('Settings > Diagnostics tab', () => {
 
     fireEvent.click(screen.getByText('Diagnostics'))
     fireEvent.click(await screen.findByRole('button', { name: /Run Doctor/i }))
-    expect(await screen.findByText('~/.claude/cc-haha/providers.json')).toBeInTheDocument()
+    expect(await screen.findByText('~/.claude/orion/providers.json')).toBeInTheDocument()
 
     await act(async () => {
       useSessionStore.setState((state) => ({
@@ -885,7 +885,7 @@ describe('Settings > Diagnostics tab', () => {
     })
 
     await waitFor(() => {
-      expect(screen.queryByText('~/.claude/cc-haha/providers.json')).not.toBeInTheDocument()
+      expect(screen.queryByText('~/.claude/orion/providers.json')).not.toBeInTheDocument()
     })
     expect(screen.getByText(/User only/i)).toBeInTheDocument()
   })
