@@ -165,10 +165,10 @@ describe('release desktop workflow', () => {
     }
 
     expect(desktopPackage.description).toBeTruthy()
-    expect(desktopPackage.homepage).toBe('https://github.com/NanmiCoder/cc-haha')
-    expect(desktopPackage.author?.name).toBe('NanmiCoder')
-    expect(desktopPackage.author?.email).toBe('relakkes@gmail.com')
-    expect(desktopPackage.build?.linux?.maintainer).toBe('NanmiCoder <relakkes@gmail.com>')
+    expect(desktopPackage.homepage).toBe('https://github.com/Edisonzszs/orion-agent')
+    expect(desktopPackage.author?.name).toBe('Edisonzszs')
+    expect(desktopPackage.author?.email).toBe('Edisonzszs@users.noreply.github.com')
+    expect(desktopPackage.build?.linux?.maintainer).toBe('Edisonzszs <Edisonzszs@users.noreply.github.com>')
   })
 
   test('release workflow requires macOS Gatekeeper launch approval for signed builds', () => {
@@ -549,27 +549,27 @@ describe('release desktop workflow', () => {
       }
     }
     const version = desktopPackage.version
-    expect(desktopPackage.build.artifactName).toBe('Claude-Code-Haha-${version}-${os}-${arch}.${ext}')
+    expect(desktopPackage.build.artifactName).toBe('Orion-Agent-${version}-${os}-${arch}.${ext}')
 
     const expectedReleaseAssets = [
-      `Claude-Code-Haha-${version}-mac-arm64.dmg`,
-      `Claude-Code-Haha-${version}-mac-arm64.dmg.blockmap`,
-      `Claude-Code-Haha-${version}-mac-arm64.zip`,
-      `Claude-Code-Haha-${version}-mac-arm64.zip.blockmap`,
-      `Claude-Code-Haha-${version}-mac-x64.dmg`,
-      `Claude-Code-Haha-${version}-mac-x64.dmg.blockmap`,
-      `Claude-Code-Haha-${version}-mac-x64.zip`,
-      `Claude-Code-Haha-${version}-mac-x64.zip.blockmap`,
-      `Claude-Code-Haha-${version}-linux-x86_64.AppImage`,
-      `Claude-Code-Haha-${version}-linux-amd64.deb`,
-      `Claude-Code-Haha-${version}-linux-x86_64.rpm`,
-      `Claude-Code-Haha-${version}-linux-arm64.AppImage`,
-      `Claude-Code-Haha-${version}-linux-arm64.deb`,
-      `Claude-Code-Haha-${version}-linux-aarch64.rpm`,
-      `Claude-Code-Haha-${version}-win-x64.exe`,
-      `Claude-Code-Haha-${version}-win-x64.exe.blockmap`,
-      `Claude-Code-Haha-${version}-win-arm64.exe`,
-      `Claude-Code-Haha-${version}-win-arm64.exe.blockmap`,
+      `Orion-Agent-${version}-mac-arm64.dmg`,
+      `Orion-Agent-${version}-mac-arm64.dmg.blockmap`,
+      `Orion-Agent-${version}-mac-arm64.zip`,
+      `Orion-Agent-${version}-mac-arm64.zip.blockmap`,
+      `Orion-Agent-${version}-mac-x64.dmg`,
+      `Orion-Agent-${version}-mac-x64.dmg.blockmap`,
+      `Orion-Agent-${version}-mac-x64.zip`,
+      `Orion-Agent-${version}-mac-x64.zip.blockmap`,
+      `Orion-Agent-${version}-linux-x86_64.AppImage`,
+      `Orion-Agent-${version}-linux-amd64.deb`,
+      `Orion-Agent-${version}-linux-x86_64.rpm`,
+      `Orion-Agent-${version}-linux-arm64.AppImage`,
+      `Orion-Agent-${version}-linux-arm64.deb`,
+      `Orion-Agent-${version}-linux-aarch64.rpm`,
+      `Orion-Agent-${version}-win-x64.exe`,
+      `Orion-Agent-${version}-win-x64.exe.blockmap`,
+      `Orion-Agent-${version}-win-arm64.exe`,
+      `Orion-Agent-${version}-win-arm64.exe.blockmap`,
     ]
     const namespacedMetadata = [
       'latest-mac-macOS-ARM64.yml',
@@ -659,8 +659,8 @@ describe('release desktop workflow', () => {
     expect(desktopPackage.build.publish).toEqual([
       {
         provider: 'github',
-        owner: 'NanmiCoder',
-        repo: 'cc-haha',
+        owner: 'Edisonzszs',
+        repo: 'orion-agent',
       },
     ])
     expect(desktopPackage.build.mac?.publish).toBeUndefined()

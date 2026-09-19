@@ -1,18 +1,18 @@
 {
-  "name": "claude-code-desktop",
+  "name": "orion-agent-desktop",
   "private": true,
-  "version": "0.6.4",
-  "description": "Desktop coding agent workbench for Claude Code Haha.",
-  "homepage": "https://github.com/NanmiCoder/cc-haha",
+  "version": "0.1.0",
+  "description": "Desktop coding agent workbench for Orion Agent.",
+  "homepage": "https://github.com/Edisonzszs/orion-agent",
   "author": {
-    "name": "NanmiCoder",
-    "email": "relakkes@gmail.com"
+    "name": "Edisonzszs",
+    "email": "Edisonzszs@users.noreply.github.com"
   },
   "type": "module",
   "main": "electron-dist/main.cjs",
   "build": {
-    "appId": "com.claude-code-haha.desktop",
-    "productName": "Claude Code Haha",
+    "appId": "com.orion-agent.desktop",
+    "productName": "Orion Agent",
     "asar": true,
     "asarUnpack": [
       "dist/**",
@@ -24,7 +24,7 @@
       "src-tauri/binaries/**",
       "node_modules/@ngrok/**"
     ],
-    "artifactName": "Claude-Code-Haha-${version}-${os}-${arch}.${ext}",
+    "artifactName": "Orion-Agent-${version}-${os}-${arch}.${ext}",
     "npmRebuild": false,
     "directories": {
       "output": "build-artifacts/electron"
@@ -74,13 +74,13 @@
       ],
       "icon": "src-tauri/icons",
       "category": "Development",
-      "maintainer": "NanmiCoder <relakkes@gmail.com>"
+      "maintainer": "Edisonzszs <Edisonzszs@users.noreply.github.com>"
     },
     "publish": [
       {
         "provider": "github",
-        "owner": "NanmiCoder",
-        "repo": "cc-haha"
+        "owner": "Edisonzszs",
+        "repo": "orion-agent"
       }
     ]
   },

@@ -10,10 +10,12 @@ export const PRODUCT_NAME: string = product.name
 /** Sub-directory of the Claude config root that holds this product's own state. */
 export const PRODUCT_DATA_DIR_NAME: string = product.dataDirName
 
-// Must stay in sync with build.appId in desktop/package.json. Windows attributes
-// toast notifications (and taskbar pinning) to this AppUserModelID; without an
-// explicit call, notifications from a dev/unpackaged run can silently fail to show.
-export const WINDOWS_APP_USER_MODEL_ID = 'com.claude-code-haha.desktop'
+// The Windows AppUserModelID must equal build.appId in desktop/package.json;
+// scripts/pr/product-identity.test.ts asserts that sync at the repo root.
+// Windows attributes toast notifications (and taskbar pinning) to this
+// AppUserModelID; without an explicit call, notifications from a
+// dev/unpackaged run can silently fail to show.
+export const WINDOWS_APP_USER_MODEL_ID = product.appId
 
 export function applyWindowsAppUserModelId(
   app: AppUserModelIdHost,

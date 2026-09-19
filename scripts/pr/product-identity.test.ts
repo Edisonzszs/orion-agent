@@ -21,9 +21,9 @@ type ProductJson = {
   artifactPrefix: string
 }
 
-describe('product.json', () => {
-  const product = readJson<ProductJson>('product.json')
+const product = readJson<ProductJson>('product.json')
 
+describe('product.json', () => {
   test('declares every identity field as a non-empty string', () => {
     for (const key of [
       'name', 'shortName', 'cliName', 'dataDirName', 'legacyDataDirName',
@@ -49,5 +49,37 @@ describe('product.json', () => {
     const repoUrl = `https://github.com/${product.github.owner}/${product.github.repo}`
     expect(product.homepage).toBe(repoUrl)
     expect(product.docsUrl.startsWith(repoUrl)).toBe(true)
+  })
+})
+
+describe('desktop/package.json stays in sync with product.json', () => {
+  const desktop = readJson<{
+    name: string
+    version: string
+    description: string
+    homepage: string
+    author: { name: string; email?: string }
+    build: {
+      productName?: string
+      appId?: string
+      artifactName?: string
+      publish?: Array<{ provider: string; owner: string; repo: string }>
+      linux?: { maintainer?: string }
+    }
+  }>('desktop/package.json')
+
+  test('identity fields mirror product.json', () => {
+    expect(desktop.build.productName).toBe(product.name)
+    expect(desktop.build.appId).toBe(product.appId)
+    expect(desktop.build.artifactName).toBe(`${product.artifactPrefix}-\${version}-\${os}-\${arch}.\${ext}`)
+    expect(desktop.build.publish).toEqual([
+      { provider: 'github', owner: product.github.owner, repo: product.github.repo },
+    ])
+    expect(desktop.homepage).toBe(product.homepage)
+    expect(desktop.author.name).toBe(product.github.owner)
+    expect(desktop.build.linux?.maintainer).toBe(`${product.github.owner} <${product.github.owner}@users.noreply.github.com>`)
+    expect(desktop.name).toBe('orion-agent-desktop')
+    expect(desktop.version).toBe('0.1.0')
+    expect(desktop.description).toBe('Desktop coding agent workbench for Orion Agent.')
   })
 })
