@@ -1048,7 +1048,7 @@ export const zh: Record<TranslationKey, string> = {
 
   // Settings > Terminal
   'settings.terminal.title': '終端',
-  'settings.terminal.description': '直接執行宿主機命令，用於安裝外掛、Skills、MCP 等擴充套件。桌面端已內建 claude-haha；文件裡的 claude <引數> 可替換成 claude-haha <引數>，例如 claude-haha plugin install ... 或 claude-haha mcp add ...',
+  'settings.terminal.description': '直接執行宿主機命令，用於安裝外掛、Skills、MCP 等擴充套件。桌面端已內建 orion；文件裡的 claude <引數> 可替換成 orion <引數>，例如 orion plugin install ... 或 orion mcp add ...',
   'settings.terminal.infoLabel': '終端安裝說明',
   'settings.terminal.clear': '清屏',
   'settings.terminal.restart': '重啟',
