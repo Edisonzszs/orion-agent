@@ -7,6 +7,7 @@ import {
   buildWindowsLauncherWrapper,
   ensureDesktopCliLauncherInstalled,
   getDesktopCliCommandName,
+  upsertManagedPathBlock,
 } from '../services/desktopCliLauncherService.js'
 
 const isWindows = process.platform === 'win32'
@@ -81,12 +82,12 @@ describe('ensureDesktopCliLauncherInstalled', () => {
     process.env.CLAUDE_CLI_PATH = sourcePath
 
     const status = await ensureDesktopCliLauncherInstalled()
-    const launcherPath = join(tempHome, '.local', 'bin', 'claude-haha')
+    const launcherPath = join(tempHome, '.local', 'bin', 'orion')
     const shellConfigPath = join(tempHome, '.zshrc')
 
     expect(status.supported).toBe(true)
     expect(status.installed).toBe(true)
-    expect(status.command).toBe('claude-haha')
+    expect(status.command).toBe('orion')
     expect(status.launcherPath).toBe(launcherPath)
     expect(status.availableInNewTerminals).toBe(true)
     expect(status.needsTerminalRestart).toBe(true)
@@ -111,12 +112,12 @@ describe('ensureDesktopCliLauncherInstalled', () => {
 
     await ensureDesktopCliLauncherInstalled()
 
-    const launcher = await readFile(join(tempHome, '.local', 'bin', 'claude-haha'), 'utf8')
+    const launcher = await readFile(join(tempHome, '.local', 'bin', 'orion'), 'utf8')
     expect(launcher).toContain(`export CLAUDE_CONFIG_DIR='${portableDir}'`)
   })
 
   it('uses a Windows cmd launcher so portable env can be injected', () => {
-    expect(getDesktopCliCommandName('win32')).toBe('claude-haha.cmd')
+    expect(getDesktopCliCommandName('win32')).toBe('orion.cmd')
 
     process.env.CLAUDE_CONFIG_DIR = 'C:\\Portable\\ClaudeConfig'
     const wrapper = buildWindowsLauncherWrapper('C:\\Apps\\cc-haha\\claude-sidecar.exe')
@@ -136,6 +137,18 @@ describe('ensureDesktopCliLauncherInstalled', () => {
 
     expect(status.supported).toBe(false)
     expect(status.installed).toBe(false)
-    expect(status.command).toBe('claude-haha')
+    expect(status.command).toBe('orion')
+  })
+
+  it('upserting replaces a legacy Claude Code Haha PATH block instead of stranding it', async () => {
+    const legacyBlock = [
+      '# >>> Claude Code Haha PATH >>>',
+      'export PATH="$HOME/.local/bin:$PATH"',
+      '# <<< Claude Code Haha PATH <<<',
+      '',
+    ].join('\n')
+    const updated = upsertManagedPathBlock(legacyBlock, '# >>> Orion Agent PATH >>>\nexport PATH="$HOME/.local/bin:$PATH"\n# <<< Orion Agent PATH <<<\n')
+    expect(updated).not.toContain('Claude Code Haha')
+    expect(updated.match(/>>> Orion Agent PATH >>>/g)).toHaveLength(1)
   })
 })

@@ -15,10 +15,14 @@ import { execFileNoThrow } from '../../utils/execFileNoThrow.js'
 import { getShellConfigPaths } from '../../utils/shellConfig.js'
 import { getUserBinDir } from '../../utils/xdg.js'
 
-const DESKTOP_CLI_NAME = 'claude-haha'
+const DESKTOP_CLI_NAME = 'orion'
 const DESKTOP_CLI_WINDOWS_LEGACY_EXE = `${DESKTOP_CLI_NAME}.exe`
-const PATH_BLOCK_START = '# >>> Claude Code Haha PATH >>>'
-const PATH_BLOCK_END = '# <<< Claude Code Haha PATH <<<'
+const PATH_BLOCK_START = '# >>> Orion Agent PATH >>>'
+const PATH_BLOCK_END = '# <<< Orion Agent PATH <<<'
+// Blocks written before the Orion rename still carry the Claude Code Haha
+// markers; upsert must strip them or they strand as duplicate PATH exports.
+const LEGACY_PATH_BLOCK_START = '# >>> Claude Code Haha PATH >>>'
+const LEGACY_PATH_BLOCK_END = '# <<< Claude Code Haha PATH <<<'
 const WINDOWS_PATH_TARGET = 'Windows User PATH'
 const WINDOWS_USER_BIN_EXPR = '%USERPROFILE%\\.local\\bin'
 
@@ -82,16 +86,23 @@ export function upsertManagedPathBlock(
   existingContent: string,
   block: string,
 ): string {
-  const escapedStart = PATH_BLOCK_START.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  const escapedEnd = PATH_BLOCK_END.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const escape = (marker: string) => marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const legacyPattern = new RegExp(
+    `${escape(LEGACY_PATH_BLOCK_START)}[\\s\\S]*?${escape(LEGACY_PATH_BLOCK_END)}\\n?`,
+    'm',
+  )
+  const content = existingContent.replace(legacyPattern, '')
+
+  const escapedStart = escape(PATH_BLOCK_START)
+  const escapedEnd = escape(PATH_BLOCK_END)
   const pattern = new RegExp(`${escapedStart}[\\s\\S]*?${escapedEnd}\\n?`, 'm')
   const nextBlock = `${block.trimEnd()}\n`
 
-  if (pattern.test(existingContent)) {
-    return existingContent.replace(pattern, nextBlock)
+  if (pattern.test(content)) {
+    return content.replace(pattern, nextBlock)
   }
 
-  const trimmed = existingContent.trimEnd()
+  const trimmed = content.trimEnd()
   if (!trimmed) {
     return nextBlock
   }
@@ -282,7 +293,7 @@ APP_ROOT=${quotedAppRoot}
 ${configExport}
 
 if [[ ! -x "$SIDECAR" ]]; then
-  echo "claude-haha launcher could not find bundled sidecar: $SIDECAR" >&2
+  echo "orion launcher could not find bundled sidecar: $SIDECAR" >&2
   exit 127
 fi
 
@@ -330,7 +341,7 @@ export function buildWindowsLauncherWrapper(sourcePath: string) {
     `set "APP_ROOT=${appRoot}"`,
     configLine.trimEnd(),
     'if not exist "%SIDECAR%" (',
-    '  echo claude-haha launcher could not find bundled sidecar: %SIDECAR% 1>&2',
+    '  echo orion launcher could not find bundled sidecar: %SIDECAR% 1>&2',
     '  exit /b 127',
     ')',
     '"%SIDECAR%" cli --app-root "%APP_ROOT%" %*',
