@@ -17,7 +17,7 @@ import { isValidHttpProxyUrl } from '../settings/shared'
 /**
  * The About panel: version, update channel and the project's links.
  *
- * Moved verbatim out of `Settings.tsx`. Its repo/social constants come along because
+ * Moved verbatim out of `Settings.tsx`. Its repo constants come along because
  * nothing else in that file referenced them; `isValidHttpProxyUrl` stayed in
  * `./shared`, since the General panel needs it too.
  */

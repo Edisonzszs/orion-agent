@@ -2220,7 +2220,7 @@ export const zh: Record<TranslationKey, string> = {
   'settings.general.notificationsStatusUnsupported': '當前環境不可用',
   'settings.general.notificationsAuthorize': '授權通知',
   'settings.general.notificationsOpenSettings': '開啟系統設定',
-  'settings.general.notificationsTestTitle': 'Orion Agent notifications are enabled',
+  'settings.general.notificationsTestTitle': 'Orion Agent 通知已啟用',
   'settings.general.notificationsTestBody': '後續授權確認和 Agent 回覆完成都會透過系統通知提醒。',
   'settings.general.traceTitle': 'Agent Trace',
   'settings.general.traceDescription': '收集本地會話的模型請求鏈路，用於排查卡住、失敗和異常等待。',
