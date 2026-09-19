@@ -1049,7 +1049,7 @@ export const kr: Record<TranslationKey, string> = {
 
   // Settings > Terminal
   'settings.terminal.title': '터미널',
-  'settings.terminal.description': '플러그인, 스킬, MCP 설정을 위해 호스트 컴퓨터의 명령을 실행합니다. 데스크톱 앱에는 orion가 포함되어 있습니다. 문서의 claude <args>를 orion <args>로 바꾸세요. 예: orion plugin install ... 또는 orion mcp add ...',
+  'settings.terminal.description': '플러그인, 스킬, MCP 설정을 위해 호스트 컴퓨터의 명령을 실행합니다. 데스크톱 앱에는 orion이 포함되어 있습니다. 문서의 claude <args>를 orion <args>로 바꾸세요. 예: orion plugin install ... 또는 orion mcp add ...',
   'settings.terminal.infoLabel': '터미널 설정 도움말',
   'settings.terminal.clear': '지우기',
   'settings.terminal.restart': '다시 시작',
