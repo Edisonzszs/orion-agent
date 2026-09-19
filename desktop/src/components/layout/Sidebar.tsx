@@ -44,6 +44,7 @@ import {
 import { getDesktopHost } from '../../lib/desktopHost'
 import { hasRunningBackgroundTasks } from '../../lib/backgroundTasks'
 import { getSessionWorkspaceState } from '../../lib/sessionWorkspace'
+import { PRODUCT } from '../../lib/product'
 
 const desktopHost = getDesktopHost()
 const isDesktopRuntime = desktopHost.isDesktop
@@ -944,23 +945,23 @@ export function Sidebar({
           {/* The mark only stands in for the wordmark on the rail. Expanded,
               the name says it better and the icon beside it is just clutter;
               collapsed, the copy is width-clamped to zero and the header would
-              otherwise be empty. `sm` is the cleanest cut of the mark — two C's
-              and the seal bar, no cursor or sparkles to turn to mush at 24px. */}
+              otherwise be empty. `sm` is the cleanest cut of the mark — the
+              ring alone, no stars to turn to mush at 24px. */}
           {/* Expanded, `pl-3` lands the wordmark on the same 24px line as the
               nav icons, the search glyph and the settings gear below it —
               the section's own `px-3` alone left it sticking out on its own.
               Collapsed, the mark is centered on the rail instead. */}
           <div className={`flex min-w-0 items-center ${expanded ? 'gap-2.5 pl-3' : 'justify-center'}`}>
             {!expanded ? <OrionMark size="sm" /> : null}
-            {/* One form, at every width. The header used to carry "Claude Code
-                Haha" and swap to this below ~230px of title region, which meant
+            {/* One form, at every width. The header used to carry the product
+                name and swap to this below ~230px of title region, which meant
                 the app answered to two names depending on how the sidebar was
                 dragged. It goes by the short one. */}
             <span
               className={`sidebar-copy ${expanded ? 'sidebar-copy--visible' : 'sidebar-copy--hidden'} text-base font-bold tracking-tight text-[var(--color-text-primary)]`}
               style={{ fontFamily: 'var(--font-headline)' }}
             >
-              cc-<span className="text-[var(--color-brand)]">haha</span>
+              Or<span className="text-[var(--color-brand)]">ion</span>
             </span>
           </div>
           <div className={`flex items-center ${expanded ? 'gap-1.5' : 'flex-col gap-2'}`}>
@@ -986,7 +987,7 @@ export function Sidebar({
               />
             </span>
             <a
-              href="https://github.com/NanmiCoder/cc-haha"
+              href={PRODUCT.homepage}
               target="_blank"
               rel="noopener noreferrer"
               className={`sidebar-copy ${expanded ? 'sidebar-copy--visible' : 'sidebar-copy--hidden'} inline-flex items-center justify-center rounded-[var(--radius-sm)] p-1 text-[var(--color-text-tertiary)] transition-colors hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]`}

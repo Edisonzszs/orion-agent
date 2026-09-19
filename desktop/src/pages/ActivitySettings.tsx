@@ -73,7 +73,7 @@ const DATE_LOCALES: Record<Locale, string> = {
 }
 const DEFAULT_PROFILE: DesktopProfilePreferences = {
   displayName: PRODUCT.shortName,
-  subtitle: 'github.com/NanmiCoder/cc-haha',
+  subtitle: PRODUCT.homepage.replace(/^https?:\/\//, ''),
   avatarFile: null,
   avatarUpdatedAt: null,
 }

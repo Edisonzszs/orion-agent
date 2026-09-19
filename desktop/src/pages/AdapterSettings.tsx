@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useAdapterStore } from '../stores/adapterStore'
 import { useTranslation } from '../i18n'
+import { PRODUCT } from '../lib/product'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { LoadingState } from '@/components/ui/LoadingState'
@@ -20,7 +21,7 @@ type AdapterUnbindTarget =
   | 'slackApp'
 
 const FEISHU_CREATE_BOT_URL = 'https://open.feishu.cn/page/openclaw?form=multiAgent'
-const IM_CONFIG_DOCS_URL = 'https://cchaha.ai/im/'
+const IM_CONFIG_DOCS_URL = `${PRODUCT.docsUrl}/en/im/`
 
 const IM_TABS: readonly ImTab[] = [
   'telegram',
