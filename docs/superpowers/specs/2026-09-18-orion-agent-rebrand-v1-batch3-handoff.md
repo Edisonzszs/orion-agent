@@ -8,11 +8,11 @@ Base `d899fa8` (batch 2 handoff) → HEAD `f4a3ccc`. Four code commits from task
 
 | Commit | Subject | Files | Content |
 |---|---|---|---|
-| `1bb1585` | docs: batch 3 implementation plan (CLI rename + repo layout) | 1 | `.superpowers/sdd/2026-09-19-orion-rebrand-batch3-cli-rename.md` plan |
-| `bb84981` | feat(cli): rename the launcher to orion | 8 | `bin/claude-haha` → `bin/orion` (git rename, content 0-changed); root `package.json` name `claude-code-local` → `orion-agent` + bin `orion` + scripts `orion`/`start`; `bun.lock` bin stanza; `scripts/cli-launcher.test.ts`, `desktop/scripts/build-sidecars.test.ts`, `src/cli/print.partialOutput.test.ts` fixture names; `src/localRecoveryCli.ts` usage text; `src/server/services/conversationService.ts` dev-mode bin path |
+| `1bb1585` | docs: batch 3 implementation plan (CLI rename + repo layout) | 1 | `docs/superpowers/plans/2026-09-19-orion-rebrand-batch3-cli-rename.md` plan |
+| `bb84981` | feat(cli): rename the launcher to orion | 8 | `bin/claude-haha` → `bin/orion` (git rename, content 0-changed); root `package.json` name `claude-code-local` → `orion-agent` + bin `orion` + scripts `orion`/`start`; `bun.lock` workspace `name` metadata line; `scripts/cli-launcher.test.ts`, `desktop/scripts/build-sidecars.test.ts`, `src/cli/print.partialOutput.test.ts` fixture names; `src/localRecoveryCli.ts` usage text; `src/server/services/conversationService.ts` dev-mode bin path |
 | `79b858e` | feat(launcher): install the orion command with PATH marker migration | 6 | `desktopCliLauncherService.ts`: writes `# >>> Orion Agent PATH >>>` markers and migrates legacy `# >>> Claude Code Haha PATH >>>` blocks (regex-matched, so old blocks are cleaned up, not stranded); `desktop/sidecars/launcherRouting.ts` command name + test; 3 test files synced (incl. `desktop-cli-launcher.test.ts` +19 lines of migration coverage) |
 | `cdc82e9` | feat(i18n): point the terminal help at the orion command | 8 | 5 locale files `settings.terminal.description` → `orion`; `TerminalSettings.test.tsx` synced; also removes stale root `issue-triage-after-v0.5.5.md` (−252) |
-| `6de2f74` | fix(i18n): correct the Korean particle after orion | 1 | `kr.ts`: particle form for `orion` (은/는) |
+| `6de2f74` | fix(i18n): correct the Korean particle after orion | 1 | `kr.ts`: particle form for `orion` (이/가 family: 이) |
 | `f4a3ccc` | chore: remove the stale root package-lock.json | 1 | Ruling 1, task 4 — see §4 |
 
 ## 2. Tests added/changed in the batch
@@ -62,7 +62,7 @@ All lanes at HEAD (task 1-3 merge `6de2f74` first, then re-run where marked afte
 
 **Decision: delete.** Evidence gathered before touching it:
 
-- Root installs via bun: `bun.lock` tracked, current (updated by `bb84981` to the new bin stanza).
+- Root installs via bun: `bun.lock` tracked, current (updated by `bb84981` to the new workspace `name` metadata line).
 - No consumer of the root npm lock: all three workflows reference `site/package-lock.json` explicitly (`cache-dependency-path`, `npm --prefix site ci`); `scripts/pr/change-policy.ts:187` and the inlined copy in `pr-triage.yml` list `'package-lock.json'` only as a path→area classifier (`docsExactPaths`) — inert on deletion, no test asserts the file's existence; remaining code hits are generic filename patterns (`exampleCommands.ts` regex, `generatedFiles.ts` list, `nativeInstaller/download.ts` creates its own staging-dir lock).
 - **Staleness was brand-relevant:** the lock still carried 1 × `claude-haha` (the old bin name) and 0 × `orion` — a stray `npm ci` at repo root would have reinstalled the pre-rename launcher name. Removal closes that trap.
 - Guardrails honored: `desktop/package-lock.json` does not exist (`desktop/bun.lock` is the tracked lock; `.gitignore:36` already covers the npm name there) — untouched; `site/package-lock.json` is tracked and CI-consumed — untouched.
@@ -94,6 +94,7 @@ Class K = keeper (deliberate), F = fixture (test data, not brand), D = deferred 
 - [ ] Task 5 (next): directory move per plan §repo-layout; post-move re-verification list in §6.1.
 - [ ] Batch 5: docs/site/README sweep — 94 lines / 22 files counted in §5 (plus the `Claude Code Haha PATH` marker prose variants in docs).
 - [ ] Batch 5: installer-layer dual-path decision (`installer.nsh`, `recover-legacy-install-data.ps1`), `tauri.conf.json` updater URL/product fields (or delete with batch 4 src-tauri work), `build-macos-arm64.sh:17`, `build-linux.sh:32`, `desktop/README.md:1`.
+- [ ] Batch 5: remove stale pre-rename launcher wrappers from the user bin dir (`claude-haha`, `claude-haha.cmd`, `claude-haha.exe`) — `removeLegacyWindowsBinaryLauncher` now looks for `orion.exe` only (`desktopCliLauncherService.ts:382-410`); sweep should derive from a `LEGACY_DESKTOP_CLI_NAME` constant, mirroring `LEGACY_PATH_BLOCK_START`.
 - [ ] Ruling still needed: Feishu registration app name (adapters.ts:398).
 - [ ] Batch 5: unify `release-desktop.yml` asset-prefix assertions (`Orion-Agent-`); final repo-wide old-brand audit; decide `src/server/index.ts:646` log line (§5).
 - [ ] Carried from batch 2: twin-guard structural import check + direct `author.email` assertion; OrionMark `flex-shrink-0`; win32 doctor path-separator CI item; ui-smoke substantive run before release.
