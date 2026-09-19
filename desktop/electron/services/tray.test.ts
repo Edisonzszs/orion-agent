@@ -84,9 +84,9 @@ describe('Electron tray service', () => {
 
       const template = trayMocks.buildFromTemplate.mock.calls[0]?.[0] as Array<{ label?: string, click?: () => void, type?: string }>
       expect(template.map(item => item.label ?? item.type)).toEqual([
-        'Show Claude Code Haha',
+        'Show Orion Agent',
         'separator',
-        'Quit Claude Code Haha',
+        'Quit Orion Agent',
       ])
 
       template[0]?.click?.()

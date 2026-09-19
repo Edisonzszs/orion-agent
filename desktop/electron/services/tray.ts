@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs'
 import path from 'node:path'
 import type { App, Tray } from 'electron'
+import { PRODUCT_NAME } from './appIdentity'
 
 type ElectronTrayRuntime = Pick<typeof import('electron'), 'Menu' | 'Tray' | 'nativeImage'>
 
@@ -42,11 +43,11 @@ export async function installTray({
   const { Menu, Tray, nativeImage } = electronRuntime ?? await import('electron')
   const icon = nativeImage.createFromPath(resolveTrayIconPath(desktopRoot))
   const tray = new Tray(icon)
-  tray.setToolTip(app.name || 'Claude Code Haha')
+  tray.setToolTip(app.name || PRODUCT_NAME)
   tray.setContextMenu(Menu.buildFromTemplate([
-    { label: 'Show Claude Code Haha', click: show },
+    { label: `Show ${PRODUCT_NAME}`, click: show },
     { type: 'separator' },
-    { label: 'Quit Claude Code Haha', click: quit },
+    { label: `Quit ${PRODUCT_NAME}`, click: quit },
   ]))
   tray.on('click', show)
 

@@ -20,7 +20,7 @@ import {
   getNetworkProxyUrl,
   loadNetworkSettings,
 } from './networkSettings.js'
-import { PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
+import { PRODUCT, PRODUCT_DATA_DIR_NAME } from '../../constants/orionProduct.js'
 
 export type StoredGrokOAuthTokens = {
   accessToken: string
@@ -51,7 +51,7 @@ const CALLBACK_PATH = '/callback'
 
 export const GROK_OAUTH_SUCCESS_HTML = `<!doctype html><html><head><meta charset="utf-8"><title>Grok Login Success</title>
 <style>body{font-family:-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#fafafa;color:#333}.card{text-align:center;padding:40px;background:white;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.06)}h1{color:#16a34a;margin:0 0 12px}p{color:#666}</style>
-</head><body><div class="card"><h1>✓ Grok Login Successful</h1><p>Authorization is complete. You can close this window and return to Claude Code Haha.</p></div><script>setTimeout(() => window.close(), 3000)</script></body></html>`
+</head><body><div class="card"><h1>✓ Grok Login Successful</h1><p>Authorization is complete. You can close this window and return to ${PRODUCT.name}.</p></div><script>setTimeout(() => window.close(), 3000)</script></body></html>`
 
 function renderErrorHtml(message: string): string {
   return `<!doctype html><html><head><meta charset="utf-8"><title>Grok Login Failed</title>

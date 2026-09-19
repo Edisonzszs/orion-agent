@@ -10,6 +10,7 @@
  */
 
 import { z } from 'zod'
+import { PRODUCT } from '../../constants/orionProduct.js'
 import { hahaOAuthService } from '../services/hahaOAuthService.js'
 import { ApiError, errorResponse } from '../middleware/errorHandler.js'
 
@@ -106,7 +107,7 @@ function renderCallbackPage(success: boolean, errorMsg: string | null): string {
     return `<!doctype html>
 <html><head><meta charset="utf-8"><title>Login Success</title>
 <style>body{font-family:-apple-system,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#fafafa;color:#333}.card{text-align:center;padding:40px;background:white;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,.06)}h1{color:#16a34a;margin:0 0 12px}p{color:#666}</style>
-</head><body><div class="card"><h1>✓ Login Successful</h1><p>You can close this window and return to Claude Code Haha.</p></div>
+</head><body><div class="card"><h1>✓ Login Successful</h1><p>You can close this window and return to ${PRODUCT.name}.</p></div>
 <script>setTimeout(() => window.close(), 1500)</script>
 </body></html>`
   }
