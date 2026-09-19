@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useDismissable } from '@/hooks/useDismissable'
-import { BrandSeal } from '@/components/composite/BrandSeal'
+import { OrionMark } from '@/components/composite/OrionMark'
 import { Button } from '@/components/ui/Button'
 import { IconButton } from '@/components/ui/IconButton'
 import { ApiError } from '../api/client'
@@ -672,7 +672,7 @@ export function EmptySession() {
         <div className={`flex flex-col items-center text-center ${
           isMobileComposer ? 'max-w-[300px] gap-3' : 'max-w-[420px] gap-[13px]'
         }`}>
-          <BrandSeal size={isMobileComposer ? 'lg' : 'xl'} />
+          <OrionMark size={isMobileComposer ? 'lg' : 'xl'} />
           <h1
             className={`font-bold tracking-tight text-[var(--color-text-primary)] ${
               isMobileComposer ? 'text-2xl' : 'text-[27px]'

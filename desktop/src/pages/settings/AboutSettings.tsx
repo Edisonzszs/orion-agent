@@ -10,7 +10,7 @@ import { useUpdateStore } from '../../stores/updateStore'
 import { formatBytes } from '../../lib/formatBytes'
 import { getDesktopHost } from '../../lib/desktopHost'
 import { publicAssetPath } from '../../lib/publicAsset'
-import { BrandSeal } from '../../components/composite/BrandSeal'
+import { OrionMark } from '../../components/composite/OrionMark'
 import { isValidHttpProxyUrl } from '../settings/shared'
 
 /**
@@ -154,7 +154,7 @@ export function AboutSettings() {
   return (
     <div className="w-full min-w-0 max-w-2xl mx-auto flex flex-col items-center py-6">
       {/* Logo + App Name + Version */}
-      <BrandSeal size="xl" className="mb-4" />
+      <OrionMark size="xl" className="mb-4" />
       <h1 className="text-xl font-bold text-[var(--color-text-primary)]" style={{ fontFamily: 'var(--font-headline)' }}>Claude Code Haha</h1>
       {version && (
         <div className="mt-1 flex items-center gap-2 text-xs text-[var(--color-text-tertiary)]">

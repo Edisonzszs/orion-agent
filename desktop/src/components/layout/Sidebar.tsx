@@ -4,7 +4,7 @@ import { releaseWorkspaceSession } from '../../lib/workspace/releaseSession'
 import { useSessionStore } from '../../stores/sessionStore'
 import { useUIStore } from '../../stores/uiStore'
 import { useTranslation, type TranslationKey } from '../../i18n'
-import { BrandSeal } from '@/components/composite/BrandSeal'
+import { OrionMark } from '@/components/composite/OrionMark'
 import { Button } from '@/components/ui/Button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -951,7 +951,7 @@ export function Sidebar({
               the section's own `px-3` alone left it sticking out on its own.
               Collapsed, the mark is centered on the rail instead. */}
           <div className={`flex min-w-0 items-center ${expanded ? 'gap-2.5 pl-3' : 'justify-center'}`}>
-            {!expanded ? <BrandSeal size="sm" /> : null}
+            {!expanded ? <OrionMark size="sm" /> : null}
             {/* One form, at every width. The header used to carry "Claude Code
                 Haha" and swap to this below ~230px of title region, which meant
                 the app answered to two names depending on how the sidebar was

@@ -25,7 +25,7 @@ import { useWorkspaceContentStore } from '../stores/workspaceContentStore'
 import { useTranslation } from '../i18n'
 import { LoadingState } from '@/components/ui/LoadingState'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { BrandSeal } from '@/components/composite/BrandSeal'
+import { OrionMark } from '@/components/composite/OrionMark'
 import { MessageList } from '../components/chat/MessageList'
 import { ChatInput } from '../components/chat/ChatInput'
 import {
@@ -811,7 +811,7 @@ export function ActiveSession() {
               ].join(' ')}
             >
               <div className="flex max-w-[420px] flex-col items-center gap-[13px] text-center">
-                <BrandSeal size={compactEmptyHero ? 'lg' : 'xl'} />
+                <OrionMark size={compactEmptyHero ? 'lg' : 'xl'} />
                 <h1
                   className={`text-2xl font-semibold tracking-tight text-[var(--color-text-primary)]`}
                   style={{ fontFamily: 'var(--font-headline)' }}

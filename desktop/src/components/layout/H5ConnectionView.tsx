@@ -4,7 +4,7 @@ import { readStoredH5Connection, saveAndVerifyH5Connection } from '../../lib/des
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
-import { BrandSeal } from '@/components/composite/BrandSeal'
+import { OrionMark } from '@/components/composite/OrionMark'
 import { useTranslation } from '../../i18n'
 
 type H5ConnectionViewProps = {
@@ -54,7 +54,7 @@ export function H5ConnectionView({
         className="w-full max-w-md"
       >
         <div className="mb-5 flex flex-col items-center gap-3 text-center">
-          <BrandSeal size="lg" />
+          <OrionMark size="lg" />
           <h1
             className="text-[21px] font-semibold tracking-tight text-[var(--color-text-primary)]"
             style={{ fontFamily: 'var(--font-headline)' }}

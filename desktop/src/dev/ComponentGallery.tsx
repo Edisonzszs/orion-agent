@@ -23,7 +23,7 @@ import { Spinner } from '@/components/ui/Spinner'
 import { Switch } from '@/components/ui/Switch'
 import { TextArea } from '@/components/ui/TextArea'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { BrandSeal } from '@/components/composite/BrandSeal'
+import { OrionMark } from '@/components/composite/OrionMark'
 import { useTeamStore } from '@/stores/teamStore'
 import { THEME_MODES } from '@/types/settings'
 import type {
@@ -638,12 +638,12 @@ export function ComponentGallery() {
         </div>
       </Section>
 
-      <Section title="BrandSeal" note="The cc-haha mark, a vector rebuild of the app icon. It sheds parts as it shrinks — sparkles only at xl, cursor drops at sm — so check each size against its neighbours.">
+      <Section title="OrionMark" note="The Orion Agent placeholder mark — a ring with Orion's belt. Stars only render at xl.">
         <div className="flex flex-wrap items-end gap-4">
-          <BrandSeal size="sm" />
-          <BrandSeal size="md" />
-          <BrandSeal size="lg" />
-          <BrandSeal size="xl" />
+          <OrionMark size="sm" />
+          <OrionMark size="md" />
+          <OrionMark size="lg" />
+          <OrionMark size="xl" />
         </div>
       </Section>
 
