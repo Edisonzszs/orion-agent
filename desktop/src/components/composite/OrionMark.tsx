@@ -1,16 +1,11 @@
 import { cx } from '@/lib/cx'
 
 /**
- * The Orion Agent mark — a ring (the "O") with Orion's three-star belt.
- *
- * Placeholder geometry until the official logo lands (branding/ in batch 4
- * regenerates all icon sizes from one source). Two rules carried over from
- * the mark it replaced:
- *
- * 1. Recolor. Every stroke takes `var(--color-text-primary)` and the stars
- *    take `var(--color-brand)`, so each of the six palettes repaints it.
- * 2. Shrink. Below ~38px a star is under 2px across and reads as dirt, so
- *    the stars only render at `xl`; the ring survives every size.
+ * The Orion Agent mark — three interlocked modules (orchestration,
+ * autonomy, coordination) from the official brand kit, rendered as a
+ * single monochrome unit: the brand guide's preferred form at UI sizes.
+ * Geometry is the kit's symbol-black variant with fills re-bound to the
+ * text token so each of the six palettes repaints it.
  */
 export type OrionMarkSize = 'sm' | 'md' | 'lg' | 'xl'
 
@@ -26,41 +21,24 @@ const SIZES: Record<OrionMarkSize, { box: string }> = {
   xl: { box: 'h-20 w-20' },
 }
 
-// A four-pointed star centered at (cx, cy) with radius r.
-function star(cx: number, cy: number, r: number, key: string) {
-  const inner = r * 0.28
-  return (
-    <path
-      key={key}
-      fill="var(--color-brand)"
-      d={`M ${cx} ${cy - r} L ${cx + inner} ${cy - inner} L ${cx + r} ${cy} L ${cx + inner} ${cy + inner} L ${cx} ${cy + r} L ${cx - inner} ${cy + inner} L ${cx - r} ${cy} L ${cx - inner} ${cy - inner} Z`}
-    />
-  )
-}
+// Paths copied verbatim from orion-agent_symbol-black.svg (viewBox 0 0 512 512).
+const MODULE_PATHS = [
+  'M92 170 Q92 138 119 122 L178 88 Q198 76 219 88 L268 116 L214 148 L177 127 Q168 122 159 127 L132 143 Q123 149 123 160 L123 247 Q123 258 133 264 L163 281 L163 325 L119 300 Q92 284 92 252 Z',
+  'M206 71 Q222 43 254 43 Q268 43 281 50 L393 115 Q421 131 421 163 L421 260 Q421 285 399 298 L374 313 Q357 323 341 313 Q326 304 326 285 L326 195 Q326 182 314 175 L238 131 Q226 124 214 131 L177 152 L157 117 Z',
+  'M236 210 Q249 187 276 187 Q289 187 301 194 L326 208 L326 252 L300 237 Q289 231 279 237 L263 246 Q252 252 252 265 L252 300 Q252 313 263 319 L360 375 Q388 391 388 423 Q388 438 380 451 Q364 478 332 478 Q318 478 305 471 L210 416 Q182 400 182 368 L182 284 Q182 259 204 246 Z',
+]
 
 export function OrionMark({ size = 'md', className }: OrionMarkProps) {
   return (
     <svg
       aria-hidden="true"
-      viewBox="96 96 832 832"
-      className={cx(SIZES[size].box, className)}
+      viewBox="0 0 512 512"
+      className={cx('flex-shrink-0', SIZES[size].box, className)}
       role="presentation"
     >
-      <circle
-        cx="512"
-        cy="512"
-        r="322"
-        fill="none"
-        stroke="var(--color-text-primary)"
-        strokeWidth="96"
-      />
-      {size === 'xl' && (
-        <>
-          {star(512, 430, 44, 'belt-nw')}
-          {star(586, 512, 36, 'belt-e')}
-          {star(470, 596, 40, 'belt-sw')}
-        </>
-      )}
+      {MODULE_PATHS.map((d) => (
+        <path key={d.slice(0, 24)} d={d} fill="var(--color-text-primary)" />
+      ))}
     </svg>
   )
 }

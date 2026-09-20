@@ -534,8 +534,9 @@ describe('Sidebar', () => {
 
     const region = screen.getByTestId('sidebar-title-region')
 
-    expect(region).toHaveTextContent('Orion')
+    expect(region).toHaveTextContent('orion agent')
     expect(region).not.toHaveTextContent('Orion Agent')
+    expect(within(region).getByText('agent')).toHaveClass('text-[var(--color-brand)]')
   })
 
   it('groups sessions by project and expands overflow rows', () => {
@@ -2063,7 +2064,7 @@ describe('Sidebar', () => {
 
     // Scope to the wordmark's own row — the GitHub link in the same header is
     // also an svg and would answer a looser query.
-    const brandRow = () => screen.getByText('ion').closest('div')
+    const brandRow = () => screen.getByText('agent').closest('div')
 
     // Expanded, the name carries the brand and the mark beside it is clutter.
     expect(brandRow()?.querySelector('svg')).toBeNull()

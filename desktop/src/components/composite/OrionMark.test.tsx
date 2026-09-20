@@ -6,39 +6,34 @@ import { OrionMark } from './OrionMark'
 
 const SIZES = ['sm', 'md', 'lg', 'xl'] as const
 
+// The official mark: three interlocked modules, rendered as a single
+// monochrome unit (the brand guide's preferred form at UI sizes).
+const MODULE_COUNT = 3
+
 describe('OrionMark', () => {
   it('is decorative and hidden from assistive tech', () => {
     const { container } = render(<OrionMark />)
     expect(container.firstElementChild).toHaveAttribute('aria-hidden', 'true')
   })
 
-  it('renders at every size with the ring intact', () => {
+  it('renders all three modules at every size', () => {
     for (const size of SIZES) {
       const { container, unmount } = render(<OrionMark size={size} />)
-      const ring = container.querySelector('circle[stroke="var(--color-text-primary)"]')
-      expect(ring).not.toBeNull()
+      expect(container.querySelectorAll('path').length, size).toBe(MODULE_COUNT)
       unmount()
     }
   })
 
-  it('paints from tokens so all six palettes recolor it', () => {
+  it('paints from the text token so all six palettes recolor it', () => {
     const { container } = render(<OrionMark size="xl" />)
     const svg = container.firstElementChild!
-    expect(svg.querySelector('[stroke="var(--color-text-primary)"]')).not.toBeNull()
-    expect(svg.querySelector('[fill="var(--color-brand)"]')).not.toBeNull()
+    const fills = [...svg.querySelectorAll('path')].map((p) => p.getAttribute('fill'))
+    expect(fills.every((f) => f === 'var(--color-text-primary)')).toBe(true)
     expect(svg.innerHTML).not.toMatch(/#[0-9a-f]{3,8}\b/i)
   })
 
-  it('sheds the stars as it shrinks instead of turning to mush', () => {
-    const starCount = (size: (typeof SIZES)[number]) => {
-      const { container, unmount } = render(<OrionMark size={size} />)
-      const filled = container.querySelectorAll('path[fill="var(--color-brand)"]').length
-      unmount()
-      return filled
-    }
-    expect(starCount('xl')).toBe(3) // Orion belt: three stars
-    expect(starCount('lg')).toBe(0)
-    expect(starCount('md')).toBe(0)
-    expect(starCount('sm')).toBe(0) // ring only
+  it('does not shrink inside flex containers', () => {
+    const { container } = render(<OrionMark />)
+    expect(container.firstElementChild).toHaveClass('flex-shrink-0')
   })
 })
