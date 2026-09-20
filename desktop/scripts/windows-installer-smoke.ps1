@@ -111,7 +111,7 @@ function Test-IsProcessElevated {
 # process carrying one -- whoever started it -- reads as "the app is still
 # running". Keep this in sync with installer.nsh.
 $installerFallbackImageNames = @(
-  'Claude Code Haha.exe',
+  'Orion Agent.exe',
   'claude-sidecar-x86_64-pc-windows-msvc.exe',
   'claude-sidecar-aarch64-pc-windows-msvc.exe',
   'claude-sidecar.exe',

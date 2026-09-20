@@ -7,7 +7,7 @@ order: 5
 
 # Code signing policy
 
-本政策适用于 Orion Agent 的正式 Windows 发布包。项目正在申请 SignPath Foundation 免费代码签名；接入完成前，Windows 下载页会继续明确标注安装包尚未签名。接入完成后，只有符合本政策的构建产物才会提交签名。
+本政策适用于 Orion Agent 的正式 Windows 发布包。本仓库尚未配置代码签名。接入完成前，Windows 下载页会继续明确标注安装包尚未签名。接入完成后，只有符合本政策的构建产物才会提交签名。
 
 Free code signing provided by SignPath.io, certificate by SignPath Foundation.
 

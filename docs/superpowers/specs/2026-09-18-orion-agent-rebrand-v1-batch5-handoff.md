@@ -97,8 +97,9 @@ Class: **K** = permanent keeper · **I** = internal identifier (de-branding phas
 | 26 | QA-doc live identifiers mirroring #10/#11 | `docs/internals/computer-use-native-manual-qa.md:30/34/39/45/177/179` | K(while #10 lives) | The manual-QA doc must keep naming the real bundle/signing identifiers; moves together with #10/#11 only |
 | 27 | Codex evidence-source anchor path `…/claude-code-haha/.claude/worktrees/…` | `docs/internals/computer-use-codex-redesign.md:426` | H | Provenance of the analysis (analyst's original machine path); rewriting falsifies the evidence chain |
 | 28 | Site-internal names: npm package `claude-code-haha-site` (`site/package.json:2` + lockfile), vite plugin `claude-code-haha-docs-manifest` (`site/vite.config.js:19`), locale key `cch-locale` (`site/index.html:26`, `site/src/lib/locale.js:15`, drift-pinned by check-docs) | `site/` | I | Internal identifiers (plan Global Constraints); locale key is check-docs-pinned — rename touches the drift guard |
+| 29 | desktop/scripts + desktop/build internal names (e2e fixtures, cc-haha-processes.csv, ps1 internals, install-macos-unsigned.sh pre-fix) | `desktop/scripts/`, `desktop/build/` | I/L | 去标记 phase must re-grep the whole tree; the 28 rows are a category map, not an enumeration |
 
-Everything in §4's greps maps to a row above; rows 1–28 are the complete 去标记 backlog input.
+Everything in §4's greps maps to a row above; rows 1–29 are the 去标记 backlog input.
 
 ## 6. Remaining risk
 
@@ -113,6 +114,6 @@ Everything in §4's greps maps to a row above; rows 1–28 are the complete 去�
 
 ## 7. User next actions
 
-1. **Push `main` to `Edisonzszs/orion-agent`** → first real CI run. This clears the accumulated POSIX/symlink debt: the `unixOnly` launcher-cleanup tests execute for the first time, Linux-path lanes (computer-use `/tmp` pair, chat-contract `/tmp` case) get a native host, and the win32 doctor test's ownership settles. Watch the first run of `release-desktop.yml`'s signing preflight — expect `::warning::Missing … secrets` and unsigned artifacts unless secrets are configured.
+1. **Push `main` to `Edisonzszs/orion-agent`** → first real CI run. This clears the accumulated POSIX/symlink debt: the `unixOnly` launcher-cleanup tests execute for the first time, Linux-path lanes (computer-use `/tmp` pair, chat-contract `/tmp` case) get a native host, and the win32 doctor test's ownership settles. Watch the first run of `release-desktop.yml`'s signing preflight — expect `::warning::Missing … secrets` and unsigned artifacts unless secrets are configured. Also watch the first `build-desktop-dev.yml` windows-installer-smoke run (the no-CLR fallback-image scenario now mirrors `Orion Agent.exe`) and the first `deploy-docs.yml` Pages deploy (asset URLs must resolve under the `/orion-agent/` `VITE_BASE` subpath).
 2. **Manual `electron:dev` visual pass** if not yet done (batch-4 §6 checklist: taskbar/window icon, About page + empty-session heroes rendering the official mark across themes, sidebar wordmark `orion agent` with accent).
 3. **Tag `v0.1.0`** when ready to release — `scripts/release.ts` will pick up `release-notes/v0.1.0.md` (desktop version is 0.1.0). Decide FUNDING/CODEOWNERS (§5 rows 20–21) before publicizing.

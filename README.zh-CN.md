@@ -27,7 +27,7 @@ bun run orion
 
 ## 功能亮点
 
-- **多会话工作区**：项目历史、全局搜索（Ctrl+K）、分支 / Worktree 启动
+- **多会话工作区**：项目历史、全局搜索（Cmd/Ctrl+K）、分支 / Worktree 启动
 - **逐文件审查每次编辑**，可整轮撤销
 - **自带模型**：官方账号、第三方 API、或本地 LM Studio / Ollama
 - **子智能体与 Agent Teams**：并行工作、可视化编排
@@ -37,7 +37,7 @@ bun run orion
 
 ## 文档
 
-完整文档见 [docs/](docs/)，从 [docs/en/start/index.md](docs/en/start/index.md) 开始。内部架构：[桌面架构](docs/en/internals/desktop.md)、[多智能体](docs/en/internals/agent.md)、[本地服务](docs/en/internals/server.md)。
+完整文档见 [docs/](docs/)，从 [docs/start/index.md](docs/start/index.md)（中文）或 [docs/en/start/index.md](docs/en/start/index.md)（English）开始。内部架构：[桌面架构](docs/en/internals/desktop.md)、[多智能体](docs/en/internals/agent.md)、[本地服务](docs/en/internals/server.md)。
 
 ## 技术栈
 

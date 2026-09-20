@@ -27,7 +27,7 @@ Requires [Bun](https://bun.sh) 1.3+.
 
 ## Highlights
 
-- **Multi-session workspace** with per-project history, global search (Ctrl+K), and branch/worktree launch
+- **Multi-session workspace** with per-project history, global search (Cmd/Ctrl+K), and branch/worktree launch
 - **Review every edit** — file-by-file diffs, undo a whole turn
 - **Bring your own model** — official accounts, third-party APIs, or LM Studio / Ollama locally
 - **Subagents & Agent Teams** — parallel workers, visual orchestration

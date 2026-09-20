@@ -7,7 +7,7 @@ order: 5
 
 # Code signing policy
 
-This policy applies to official Windows releases of Orion Agent. The project is applying for free code signing through the SignPath Foundation. Until onboarding is complete, the Windows download page will continue to identify installers as unsigned. After onboarding, only artifacts that comply with this policy will be submitted for signing.
+This policy applies to official Windows releases of Orion Agent. Code signing is not yet configured for this repository. Until onboarding is complete, the Windows download page will continue to identify installers as unsigned. After onboarding, only artifacts that comply with this policy will be submitted for signing.
 
 Free code signing provided by SignPath.io, certificate by SignPath Foundation.
 

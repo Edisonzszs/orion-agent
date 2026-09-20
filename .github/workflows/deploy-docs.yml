@@ -43,6 +43,8 @@ jobs:
 
       - name: Build React site
         run: npm --prefix site run build
+        env:
+          VITE_BASE: /orion-agent/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
