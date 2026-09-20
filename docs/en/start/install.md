@@ -15,12 +15,12 @@ Everything lives on [GitHub Releases](https://github.com/Edisonzszs/orion-agent/
 
 | Your system | Download |
 |---|---|
-| macOS, Apple Silicon | `Claude-Code-Haha-<version>-mac-arm64.dmg` |
-| macOS, Intel | `Claude-Code-Haha-<version>-mac-x64.dmg` |
-| Windows x64 | `Claude-Code-Haha-<version>-win-x64.exe` |
-| Windows ARM64 | `Claude-Code-Haha-<version>-win-arm64.exe` |
-| Linux x64 | `Claude-Code-Haha-<version>-linux-x86_64.AppImage` or `-linux-amd64.deb` |
-| Linux ARM64 | `Claude-Code-Haha-<version>-linux-arm64.AppImage` or `-linux-arm64.deb` |
+| macOS, Apple Silicon | `Orion-Agent-<version>-mac-arm64.dmg` |
+| macOS, Intel | `Orion-Agent-<version>-mac-x64.dmg` |
+| Windows x64 | `Orion-Agent-<version>-win-x64.exe` |
+| Windows ARM64 | `Orion-Agent-<version>-win-arm64.exe` |
+| Linux x64 | `Orion-Agent-<version>-linux-x86_64.AppImage` or `-linux-amd64.deb` |
+| Linux ARM64 | `Orion-Agent-<version>-linux-arm64.AppImage` or `-linux-arm64.deb` |
 
 Not sure which architecture you have? On macOS check the chip listed in "About This Mac"; on Windows check the system type under Settings → System → About. Don't guess from the brand of the machine.
 
@@ -72,8 +72,8 @@ When upgrading in place, the installer inspects user data in the old install dir
 **AppImage** (no installation, just run it):
 
 ```bash
-chmod +x Claude-Code-Haha-<version>-linux-x86_64.AppImage
-./Claude-Code-Haha-<version>-linux-x86_64.AppImage
+chmod +x Orion-Agent-<version>-linux-x86_64.AppImage
+./Orion-Agent-<version>-linux-x86_64.AppImage
 ```
 
 If it fails with a FUSE-related error, install the runtime: `sudo apt install libfuse2` on Ubuntu 22.04 and earlier, `libfuse2t64` on 24.04 and later.
@@ -81,7 +81,7 @@ If it fails with a FUSE-related error, install the runtime: `sudo apt install li
 **deb** (installs into your application menu):
 
 ```bash
-sudo apt install ./Claude-Code-Haha-<version>-linux-amd64.deb
+sudo apt install ./Orion-Agent-<version>-linux-amd64.deb
 ```
 
 On ARM64 machines, use the corresponding `linux-arm64` file.

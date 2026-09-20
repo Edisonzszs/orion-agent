@@ -15,12 +15,12 @@ order: 1
 
 | 你的系统 | 下载 |
 |---|---|
-| macOS，M 系列芯片 | `Claude-Code-Haha-<版本>-mac-arm64.dmg` |
-| macOS，Intel 芯片 | `Claude-Code-Haha-<版本>-mac-x64.dmg` |
-| Windows x64 | `Claude-Code-Haha-<版本>-win-x64.exe` |
-| Windows ARM64 | `Claude-Code-Haha-<版本>-win-arm64.exe` |
-| Linux x64 | `Claude-Code-Haha-<版本>-linux-x86_64.AppImage` 或 `-linux-amd64.deb` |
-| Linux ARM64 | `Claude-Code-Haha-<版本>-linux-arm64.AppImage` 或 `-linux-arm64.deb` |
+| macOS，M 系列芯片 | `Orion-Agent-<版本>-mac-arm64.dmg` |
+| macOS，Intel 芯片 | `Orion-Agent-<版本>-mac-x64.dmg` |
+| Windows x64 | `Orion-Agent-<版本>-win-x64.exe` |
+| Windows ARM64 | `Orion-Agent-<版本>-win-arm64.exe` |
+| Linux x64 | `Orion-Agent-<版本>-linux-x86_64.AppImage` 或 `-linux-amd64.deb` |
+| Linux ARM64 | `Orion-Agent-<版本>-linux-arm64.AppImage` 或 `-linux-arm64.deb` |
 
 不确定自己是哪种架构：macOS 看「关于本机」里的芯片型号，Windows 看「设置 → 系统 → 系统信息」里的系统类型。别只凭机器牌子猜。
 
@@ -72,8 +72,8 @@ xattr -dr com.apple.quarantine "/Applications/Orion Agent.app"
 **AppImage**（免安装，下载即用）：
 
 ```bash
-chmod +x Claude-Code-Haha-<版本>-linux-x86_64.AppImage
-./Claude-Code-Haha-<版本>-linux-x86_64.AppImage
+chmod +x Orion-Agent-<版本>-linux-x86_64.AppImage
+./Orion-Agent-<版本>-linux-x86_64.AppImage
 ```
 
 启动失败并提示 FUSE 相关错误时，装一下运行库：Ubuntu 22.04 及更早用 `sudo apt install libfuse2`，24.04 及以后用 `libfuse2t64`。
@@ -81,7 +81,7 @@ chmod +x Claude-Code-Haha-<版本>-linux-x86_64.AppImage
 **deb**（装进系统菜单）：
 
 ```bash
-sudo apt install ./Claude-Code-Haha-<版本>-linux-amd64.deb
+sudo apt install ./Orion-Agent-<版本>-linux-amd64.deb
 ```
 
 ARM64 机器换成对应的 `linux-arm64` 文件。
