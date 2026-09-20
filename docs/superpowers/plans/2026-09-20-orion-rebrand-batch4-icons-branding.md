@@ -145,16 +145,20 @@ describe('branding icon generator', () => {
     const icns = readFileSync(ICONS('icon.icns'))
     expect(icns.subarray(0, 4).toString('ascii')).toBe('icns')
     expect(icns.readUInt32BE(4)).toBe(icns.length)
-    const expectedTypes = ['ic07', 'ic08', 'ic09', 'ic10', 'ic11', 'ic12', 'ic13', 'ic14']
+    const types: string[] = []
     let offset = 8
-    for (const type of expectedTypes) {
-      expect(icns.subarray(offset, offset + 4).toString('ascii')).toBe(type)
+    while (offset < icns.length) {
+      const type = icns.subarray(offset, offset + 4).toString('ascii')
       const length = icns.readUInt32BE(offset + 4)
       expect(length).toBeGreaterThan(8)
       expect(icns.subarray(offset + 8, offset + 12).readUInt32BE(0)).toBe(0x89504e47)
+      types.push(type)
       offset += length
     }
     expect(offset).toBe(icns.length)
+    expect([...types].sort()).toEqual(
+      ['ic07', 'ic08', 'ic09', 'ic10', 'ic11', 'ic12', 'ic13', 'ic14'],
+    )
   })
 
   test('copies the vector assets and emits the 1024 raster sources', async () => {
