@@ -87,10 +87,11 @@ async function main() {
     if (!existsSync(file)) throw new Error(`missing branding source: ${file}`)
   }
 
-  const iconsDir = path.join(out, 'desktop', 'src-tauri', 'icons')
+  const srcTauriDir = path.join(out, 'desktop', 'src-tauri')
+  const iconsDir = path.join(srcTauriDir, 'icons')
   const publicDir = path.join(out, 'desktop', 'public')
   const markDir = path.join(out, 'desktop', 'src', 'assets', 'brand')
-  for (const dir of [iconsDir, publicDir, markDir]) mkdirSync(dir, { recursive: true })
+  for (const dir of [srcTauriDir, iconsDir, publicDir, markDir]) mkdirSync(dir, { recursive: true })
 
   const written: string[] = []
   for (const [name, size] of SQUARE_PNGS) {
@@ -115,11 +116,15 @@ async function main() {
   writeFileSync(path.join(iconsDir, 'icon.icns'), icns)
   written.push('desktop/src-tauri/icons/icon.icns')
 
-  await sharp(srcPng).resize(1024, 1024, { fit: 'contain' }).png().toFile(path.join(publicDir, 'app-icon.png'))
+  // One buffer feeds both copies so the canonical source pair can never drift
+  // (desktop/icon-assets.test.ts pins them byte-identical).
+  const appIconPng = await sharp(srcPng).resize(1024, 1024, { fit: 'contain' }).png().toBuffer()
+  writeFileSync(path.join(publicDir, 'app-icon.png'), appIconPng)
+  writeFileSync(path.join(srcTauriDir, 'app-icon.png'), appIconPng)
   copyFileSync(srcAppSvg, path.join(publicDir, 'app-icon.svg'))
   copyFileSync(srcSvg, path.join(markDir, 'orion-mark.svg'))
   await sharp(srcPng).resize(1024, 1024, { fit: 'contain' }).png().toFile(path.join(src, 'logo-1024.png'))
-  written.push('desktop/public/app-icon.png', 'desktop/public/app-icon.svg', 'desktop/src/assets/brand/orion-mark.svg', 'branding/logo-1024.png')
+  written.push('desktop/public/app-icon.png', 'desktop/src-tauri/app-icon.png', 'desktop/public/app-icon.svg', 'desktop/src/assets/brand/orion-mark.svg', 'branding/logo-1024.png')
 
   // The Tauri-era Android mipmaps are dead weight in the Electron build.
   const androidDir = path.join(iconsDir, 'android')

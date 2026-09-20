@@ -93,6 +93,8 @@ describe('branding icon generator', () => {
     expect(existsSync(path.join(outRoot, 'desktop', 'src', 'assets', 'brand', 'orion-mark.svg'))).toBe(true)
     const meta = await dims(path.join(outRoot, 'desktop', 'public', 'app-icon.png'))
     expect(meta.width).toBe(1024)
+    const srcTauri = await dims(path.join(outRoot, 'desktop', 'src-tauri', 'app-icon.png'))
+    expect(srcTauri.width).toBe(1024)
     const logo = await dims(path.join(srcDir, 'logo-1024.png'))
     expect(logo.width).toBe(1024)
   })
