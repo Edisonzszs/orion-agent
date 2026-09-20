@@ -4,7 +4,7 @@ import path from 'node:path'
 import { generateDocsManifest, paths } from './generate-docs-manifest.mjs'
 
 const distDir = path.join(paths.siteDir, 'dist')
-const expectedCustomDomain = 'cchaha.ai'
+const expectedCustomDomain = process.env.DOCS_CUSTOM_DOMAIN ?? ''
 
 async function pathExists(targetPath) {
   return fs.access(targetPath).then(() => true, () => false)
@@ -131,18 +131,25 @@ function escapeHtml(value) {
 function shellForRoute(shell, meta) {
   if (!meta) return shell
 
-  const origin = `https://${expectedCustomDomain}`
+  // DOCS_CUSTOM_DOMAIN 未设置时没有可用的绝对源，canonical / hreflang / og:url 整组跳过。
+  const origin = expectedCustomDomain ? `https://${expectedCustomDomain}` : null
   const isEnglish = meta.path === '/en' || meta.path.startsWith('/en/')
-  const canonical = `${origin}${meta.path}`
-  const alternate = meta.alternate ? `${origin}${meta.alternate}` : null
+  const canonical = origin ? `${origin}${meta.path}` : null
+  const alternate = origin && meta.alternate ? `${origin}${meta.alternate}` : null
 
   const head = [
-    `<link rel="canonical" href="${escapeHtml(canonical)}">`,
-    `<link rel="alternate" hreflang="${isEnglish ? 'en' : 'zh-Hans'}" href="${escapeHtml(canonical)}">`,
+    canonical
+      ? `<link rel="canonical" href="${escapeHtml(canonical)}">`
+      : '',
+    canonical
+      ? `<link rel="alternate" hreflang="${isEnglish ? 'en' : 'zh-Hans'}" href="${escapeHtml(canonical)}">`
+      : '',
     alternate
       ? `<link rel="alternate" hreflang="${isEnglish ? 'zh-Hans' : 'en'}" href="${escapeHtml(alternate)}">`
       : '',
-    `<meta property="og:url" content="${escapeHtml(canonical)}">`
+    canonical
+      ? `<meta property="og:url" content="${escapeHtml(canonical)}">`
+      : ''
   ].filter(Boolean).join('\n    ')
 
   return shell
@@ -181,20 +188,25 @@ function alternateFor(record, records) {
 }
 
 async function writeSitemap(records) {
-  const origin = `https://${expectedCustomDomain}`
-  const urls = ['/', '/en', ...records.map((record) => record.path)]
-  const body = urls
-    .map((url) => `  <url><loc>${origin}${url}</loc><changefreq>weekly</changefreq></url>`)
-    .join('\n')
+  const origin = expectedCustomDomain ? `https://${expectedCustomDomain}` : null
 
-  await fs.writeFile(
-    path.join(distDir, 'sitemap.xml'),
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`
-  )
+  if (origin) {
+    const urls = ['/', '/en', ...records.map((record) => record.path)]
+    const body = urls
+      .map((url) => `  <url><loc>${origin}${url}</loc><changefreq>weekly</changefreq></url>`)
+      .join('\n')
+
+    await fs.writeFile(
+      path.join(distDir, 'sitemap.xml'),
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`
+    )
+  }
 
   await fs.writeFile(
     path.join(distDir, 'robots.txt'),
-    `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`
+    origin
+      ? `User-agent: *\nAllow: /\n\nSitemap: ${origin}/sitemap.xml\n`
+      : 'User-agent: *\nAllow: /\n'
   )
 }
 
@@ -223,9 +235,12 @@ async function main() {
   await copyReferencedDocImages(records)
   await copySiteReferencedImages()
 
-  const customDomain = (await fs.readFile(path.join(distDir, 'CNAME'), 'utf8')).trim()
-  if (customDomain !== expectedCustomDomain) {
-    throw new Error(`Expected CNAME to contain ${expectedCustomDomain}, received ${customDomain || 'an empty value'}.`)
+  // 自定义域名是可选的：DOCS_CUSTOM_DOMAIN 为空时仓库里也不该有 CNAME，跳过校验。
+  if (expectedCustomDomain) {
+    const customDomain = (await fs.readFile(path.join(distDir, 'CNAME'), 'utf8')).trim()
+    if (customDomain !== expectedCustomDomain) {
+      throw new Error(`Expected CNAME to contain ${expectedCustomDomain}, received ${customDomain || 'an empty value'}.`)
+    }
   }
 
   for (const record of records) {
@@ -233,7 +248,7 @@ async function main() {
       alternate: alternateFor(record, records),
       description: record.description,
       path: record.path,
-      title: `${record.title} · Claude Code Haha`
+      title: `${record.title} · Orion Agent`
     })
   }
 
@@ -241,7 +256,7 @@ async function main() {
     alternate: '/',
     description: 'A local-first desktop client for Claude Code. Sessions, diffs, agents and scheduled runs all sit in the open.',
     path: '/en',
-    title: 'Claude Code Haha — a local-first desktop client for Claude Code'
+    title: 'Orion Agent — a local-first desktop AI agent workbench'
   })
 
   for (const legacy of legacyRoutes) {

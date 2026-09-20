@@ -6,7 +6,7 @@ These rules apply to the public landing page and documentation experience under 
 
 - Keep the site independently installable with `npm ci` and buildable with `npm run build`.
 - Keep `npm run check` deterministic, offline, and responsible for site-specific validation beyond compilation.
-- Preserve the GitHub Pages custom-domain contract; production assets and routes must work from the root of `cchaha.ai`. `scripts/prepare-static-output.mjs` hard-fails when the CNAME drifts.
+- Preserve the docs-site deployment contract: by default the site builds for a GitHub Pages base path (`VITE_BASE` at build time, `/` locally). A custom domain is opt-in via `DOCS_CUSTOM_DOMAIN` (plus `VITE_SITE_ORIGIN` for the SPA's absolute URLs); when it is set, `scripts/prepare-static-output.mjs` requires `docs/public/CNAME` to match, and when it is empty the CNAME check, canonical/hreflang tags, and sitemap are skipped.
 - Treat files under `docs/` as the source of truth for long-form Chinese and English documentation. Keep paired public routes aligned when both languages exist.
 - Do not copy private user state, credentials, local filesystem paths, or unredacted product screenshots into the site.
 - Run `bun run check:docs` after site or docs changes and include desktop plus narrow-mobile browser evidence for user-visible layout changes.

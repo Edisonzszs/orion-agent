@@ -1,4 +1,6 @@
-const SITE_ORIGIN = 'https://cchaha.ai'
+// 部署在自定义域名时由 CI 传入 VITE_SITE_ORIGIN=https://…；
+// 未设置（如 GitHub Pages 子路径部署）则跳过 canonical / hreflang / og:url。
+const SITE_ORIGIN = import.meta.env.VITE_SITE_ORIGIN ?? ''
 
 function upsert(selector, create) {
   let node = document.head.querySelector(selector)
@@ -46,16 +48,18 @@ export function setPageMeta({ alternate, canonical, description, lang, title }) 
   document.title = title
   document.documentElement.lang = lang
 
+  const absolute = SITE_ORIGIN ? (sitePath) => `${SITE_ORIGIN}${sitePath}` : () => null
+
   setMetaContent('name', 'description', description)
   setMetaContent('property', 'og:title', title)
   setMetaContent('property', 'og:description', description)
-  setMetaContent('property', 'og:url', canonical ? `${SITE_ORIGIN}${canonical}` : null)
+  setMetaContent('property', 'og:url', canonical ? absolute(canonical) : null)
 
-  setLink('canonical', canonical ? `${SITE_ORIGIN}${canonical}` : null)
+  setLink('canonical', canonical ? absolute(canonical) : null)
 
   if (canonical) {
     const isEnglish = canonical === '/en' || canonical.startsWith('/en/')
-    setLink('alternate', `${SITE_ORIGIN}${canonical}`, isEnglish ? 'en' : 'zh-Hans')
-    setLink('alternate', alternate ? `${SITE_ORIGIN}${alternate}` : null, isEnglish ? 'zh-Hans' : 'en')
+    setLink('alternate', absolute(canonical), isEnglish ? 'en' : 'zh-Hans')
+    setLink('alternate', alternate ? absolute(alternate) : null, isEnglish ? 'zh-Hans' : 'en')
   }
 }

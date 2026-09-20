@@ -60,6 +60,8 @@ function docsManifestPlugin() {
 }
 
 export default defineConfig({
+  // GitHub Pages 子路径部署时 CI 传 VITE_BASE=/orion-agent/（spec §8）。
+  base: process.env.VITE_BASE ?? '/',
   plugins: [docsManifestPlugin()],
   build: {
     outDir: 'dist',
