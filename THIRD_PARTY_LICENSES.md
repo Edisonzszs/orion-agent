@@ -2,6 +2,12 @@
 
 This project includes code and binaries from the following open source projects.
 
+## cc-haha
+
+- Project: cc-haha (https://github.com/NanmiCoder/cc-haha)
+- Relation: this repository is a derivative work of cc-haha (MIT), rebranded and modified as Orion Agent
+- License: MIT — see LICENSE
+
 ## ripgrep
 
 - Project: ripgrep (https://github.com/BurntSushi/ripgrep)
