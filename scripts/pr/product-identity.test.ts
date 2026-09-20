@@ -82,4 +82,15 @@ describe('desktop/package.json stays in sync with product.json', () => {
     expect(desktop.version).toBe('0.1.0')
     expect(desktop.description).toBe('Desktop coding agent workbench for Orion Agent.')
   })
+
+  test('every boundary module binds product.json directly', () => {
+    const read = (p: string) => readFileSync(join(root, p), 'utf8')
+    expect(read('src/constants/orionProduct.ts')).toMatch(/import product from '\.\.\/\.\.\/product\.json'/)
+    expect(read('desktop/electron/services/appIdentity.ts')).toMatch(/import product from '\.\.\/\.\.\/\.\.\/product\.json'/)
+    expect(read('desktop/src/lib/product.ts')).toMatch(/import product from '\.\.\/\.\.\/\.\.\/product\.json'/)
+  })
+
+  test('author email is the noreply address', () => {
+    expect(desktop.author.email).toBe(`${product.github.owner}@users.noreply.github.com`)
+  })
 })
