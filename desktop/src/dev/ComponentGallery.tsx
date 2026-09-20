@@ -638,7 +638,7 @@ export function ComponentGallery() {
         </div>
       </Section>
 
-      <Section title="OrionMark" note="The Orion Agent placeholder mark — a ring with Orion's belt. Stars only render at xl.">
+      <Section title="OrionMark" note="The official Orion Agent mark — three interlocked modules in monochrome, token-painted.">
         <div className="flex flex-wrap items-end gap-4">
           <OrionMark size="sm" />
           <OrionMark size="md" />
