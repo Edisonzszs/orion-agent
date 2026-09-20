@@ -58,7 +58,7 @@
 
 - [ ] **Step 1: 重写 README.md**（全文替换为下述内容，逐字）
 
-```markdown
+````markdown
 # Orion Agent
 
 <div align="center">
@@ -111,11 +111,11 @@ Orion Agent is based on [cc-haha](https://github.com/NanmiCoder/cc-haha) (MIT), 
 ## License
 
 [MIT](LICENSE)
-```
+````
 
 - [ ] **Step 2: 重写 README.zh-CN.md**（同结构中文镜像，逐字）
 
-```markdown
+````markdown
 # Orion Agent
 
 <div align="center">
@@ -168,7 +168,7 @@ Orion Agent 基于 [cc-haha](https://github.com/NanmiCoder/cc-haha)（MIT）构�
 ## 许可
 
 [MIT](LICENSE)
-```
+````
 
 - [ ] **Step 3: LICENSE 双版权 + THIRD_PARTY 条目**
 
