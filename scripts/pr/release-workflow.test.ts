@@ -230,7 +230,7 @@ describe('release desktop workflow', () => {
     expect(signedBuildStep).toContain('xcrun stapler staple "$app_path"')
     expect(signedBuildStep).toContain('xcrun stapler validate "$app_path"')
     expect(signedBuildStep).toContain('spctl -a -vv -t execute "$app_path"')
-    expect(signedBuildStep).toContain('app_path="build-artifacts/electron/${{ matrix.app_bundle_dir }}/Claude Code Haha.app"')
+    expect(signedBuildStep).toContain('app_path="build-artifacts/electron/${{ matrix.app_bundle_dir }}/Orion Agent.app"')
     expect(signedBuildStep).toContain('package_args=( ${{ matrix.builder_args }} --prepackaged "$app_path" --publish never -c.mac.notarize=false )')
     expect(signedBuildStep).toContain('find build-artifacts/electron -maxdepth 1 -type f -delete')
     expect(signedBuildStep).toContain('Signed electron-builder timed out')
@@ -280,7 +280,7 @@ describe('release desktop workflow', () => {
     )
   })
 
-  test('release workflow requires signed macOS Computer Use and preserves SignPath draft policy', () => {
+  test('release workflow treats signing as optional and warns instead of refusing', () => {
     const workflow = readReleaseWorkflow()
     const signingJob = workflow.match(
       /signing-preflight:[\s\S]*?(?:\n {2}[a-zA-Z0-9_-]+:|$)/,
@@ -312,29 +312,30 @@ describe('release desktop workflow', () => {
       expect(signingJob).toContain(setting)
     }
     expect(signingJob).toContain('Missing macOS signing/notarization secrets')
-    expect(signingJob).toContain('refusing to build a macOS release whose Computer Use runtime cannot pass client attestation')
-    expect(signingJob).toContain("RELEASE_DRAFT: ${{ github.event_name == 'workflow_dispatch' && inputs.draft == true }}")
+    expect(signingJob).toContain('building an unsigned macOS release; Computer Use client attestation and Gatekeeper approval will not pass until the secrets are configured')
     expect(signingJob).toContain('macos_signed=false')
     expect(signingJob).toContain('macos_signed=true')
     expect(signingJob).toContain('SignPath configuration missing')
     expect(signingJob).toContain('windows_signed=false')
     expect(signingJob).toContain('windows_signed=true')
-    expect(signingJob).toContain('Refusing to publish a non-draft desktop release without SignPath Windows signing.')
     expect(signingJob).toContain("inputs.draft == true && vars.SIGNPATH_TEST_SIGNING_POLICY_SLUG || vars.SIGNPATH_RELEASE_SIGNING_POLICY_SLUG")
 
-    const macRequiredBlock = signingJob?.match(
-      /missing=\(\)[\s\S]*?# Drafts may remain unsigned/,
+    // Signing is optional: missing secrets downgrade the build to unsigned
+    // instead of failing the release.
+    expect(signingJob).not.toContain('RELEASE_DRAFT')
+    expect(signingJob).not.toContain('Refusing to publish a non-draft desktop release without SignPath Windows signing.')
+    const macOptionalBlock = signingJob?.match(
+      /missing=\(\)[\s\S]*?# A maintainer can explicitly/,
     )?.[0]
-    expect(macRequiredBlock).not.toContain('if [ "$RELEASE_DRAFT" != "true" ]; then')
-    expect(macRequiredBlock).toContain('exit 1')
-    expect(signingJob).toContain('if [ "$RELEASE_DRAFT" != "true" ]; then')
-    expect(signingJob).toContain('exit 1')
+    expect(macOptionalBlock).toContain('macos_signed=false')
+    expect(macOptionalBlock).not.toContain('exit 1')
+    expect(signingJob).not.toContain('exit 1')
     expect(buildJob).toContain('- signing-preflight')
     expect(workflow.indexOf('signing-preflight:')).toBeLessThan(workflow.indexOf('build:'))
     expect(workflow.indexOf('signing-preflight:')).toBeLessThan(workflow.indexOf('Upload release artifacts for final publish'))
   })
 
-  test('an explicit manual Windows signing skip preserves macOS and default release requirements', async () => {
+  test('signing preflight skips Windows signing on demand and never fails the release', async () => {
     const workflow = parse(readReleaseWorkflow())
     expect(workflow.on.workflow_dispatch.inputs.skip_windows_signing).toEqual({
       description: 'Build unsigned Windows artifacts while SignPath onboarding is pending',
@@ -351,9 +352,9 @@ describe('release desktop workflow', () => {
       { name: 'configured release', env: {}, code: 0, outputs: 'macos_signed=true\nwindows_signed=true\n' },
       { name: 'explicit skip with configured SignPath', env: { SKIP_WINDOWS_SIGNING: 'true' }, code: 0, outputs: 'macos_signed=true\nwindows_signed=false\n' },
       { name: 'explicit skip without SignPath', env: { SKIP_WINDOWS_SIGNING: 'true', SIGNPATH_API_TOKEN: '' }, code: 0, outputs: 'macos_signed=true\nwindows_signed=false\n' },
-      { name: 'release missing SignPath without skip', env: { SIGNPATH_API_TOKEN: '' }, code: 1, outputs: 'macos_signed=true\nwindows_signed=false\n' },
-      { name: 'draft missing SignPath', env: { RELEASE_DRAFT: 'true', SIGNPATH_API_TOKEN: '' }, code: 0, outputs: 'macos_signed=true\nwindows_signed=false\n' },
-      { name: 'explicit skip still requires macOS credentials', env: { SKIP_WINDOWS_SIGNING: 'true', CSC_LINK: '' }, code: 1, outputs: 'macos_signed=false\n' },
+      { name: 'missing SignPath without skip builds unsigned', env: { SIGNPATH_API_TOKEN: '' }, code: 0, outputs: 'macos_signed=true\nwindows_signed=false\n' },
+      { name: 'fully unconfigured release builds unsigned', env: { CSC_LINK: '', CSC_KEY_PASSWORD: '', APPLE_ID: '', APPLE_APP_SPECIFIC_PASSWORD: '', APPLE_TEAM_ID: '', SIGNPATH_API_TOKEN: '' }, code: 0, outputs: 'macos_signed=false\nwindows_signed=false\n' },
+      { name: 'explicit skip with missing macOS credentials still completes', env: { SKIP_WINDOWS_SIGNING: 'true', CSC_LINK: '' }, code: 0, outputs: 'macos_signed=false\nwindows_signed=false\n' },
     ]
     try {
       for (const [index, scenario] of cases.entries()) {
@@ -363,7 +364,6 @@ describe('release desktop workflow', () => {
         const result = Bun.spawn(['bash', '-e', '-c', 'exec > "$PREFLIGHT_LOG" 2>&1\n' + preflight.run], {
           env: {
             ...configured,
-            RELEASE_DRAFT: 'false',
             SKIP_WINDOWS_SIGNING: 'false',
             ...scenario.env,
             PATH: process.env.PATH,
@@ -420,7 +420,7 @@ describe('release desktop workflow', () => {
     expect(workflow.indexOf('Verify Windows updater config before SignPath')).toBeLessThan(
       workflow.indexOf('Stage project-owned Windows application executables'),
     )
-    expect(stageApplicationStep).toContain('Claude Code Haha.exe')
+    expect(stageApplicationStep).toContain('Orion Agent.exe')
     expect(stageApplicationStep).toContain('claude-sidecar-${{ matrix.target_triple }}.exe')
     expect(stageApplicationStep).not.toContain('rg.exe')
     expect(stageApplicationStep).not.toContain('node-pty')
@@ -438,10 +438,10 @@ describe('release desktop workflow', () => {
     expect(restoreInstallerStep).toContain('A trusted production signature is required')
     expect(refreshMetadataStep).toContain('scripts/refresh-windows-update-metadata.ts')
     expect(refreshMetadataStep).toContain('desktop/build-artifacts/electron/latest.yml')
-    expect(applicationConfiguration).toContain('<pe-file path="Claude Code Haha.exe">')
+    expect(applicationConfiguration).toContain('<pe-file path="Orion Agent.exe">')
     expect(applicationConfiguration).toContain('<pe-file path="claude-sidecar-*.exe">')
     expect(applicationConfiguration).not.toContain('rg.exe')
-    expect(installerConfiguration).toContain('<pe-file path="Claude-Code-Haha-*-win-*.exe">')
+    expect(installerConfiguration).toContain('<pe-file path="Orion-Agent-*-win-*.exe">')
     expect(workflow).not.toContain('WINDOWS_CERTIFICATE')
     expect(workflow).not.toContain('WINDOWS_CERTIFICATE_PASSWORD')
     expect(workflow.indexOf('Restore and verify signed Windows application executables')).toBeLessThan(workflow.indexOf('Package NSIS installer from signed Windows application'))
@@ -472,7 +472,7 @@ describe('release desktop workflow', () => {
     expect(buildJob).toContain('builder_args: --win nsis --arm64')
     expect(buildJob).toContain('builder_args: --linux AppImage deb rpm --x64')
     expect(buildJob).toContain('builder_args: --linux AppImage deb rpm --arm64')
-    expect(buildJob).toContain('Claude-Code-Haha-${APP_VERSION}-win-arm64.exe')
+    expect(buildJob).toContain('Orion-Agent-${APP_VERSION}-win-arm64.exe')
     expect(buildJob).toContain('Upload release artifacts for final publish')
     expect(buildJob).toContain('actions/upload-artifact@v4')
     expect(buildJob).toContain('name: desktop-release-artifacts-${{ matrix.label }}')
@@ -614,20 +614,20 @@ describe('release desktop workflow', () => {
     const buildJob = extractJob(workflow, 'build')
     const publishJob = extractJob(workflow, 'publish-release')
     const expectedFiles = [
-      'Claude-Code-Haha-${APP_VERSION}-mac-arm64.dmg',
-      'Claude-Code-Haha-${APP_VERSION}-mac-arm64.zip',
-      'Claude-Code-Haha-${APP_VERSION}-mac-x64.dmg',
-      'Claude-Code-Haha-${APP_VERSION}-mac-x64.zip',
-      'Claude-Code-Haha-${APP_VERSION}-linux-x86_64.AppImage',
-      'Claude-Code-Haha-${APP_VERSION}-linux-amd64.deb',
-      'Claude-Code-Haha-${APP_VERSION}-linux-x86_64.rpm',
-      'Claude-Code-Haha-${APP_VERSION}-linux-arm64.AppImage',
-      'Claude-Code-Haha-${APP_VERSION}-linux-arm64.deb',
-      'Claude-Code-Haha-${APP_VERSION}-linux-aarch64.rpm',
-      'Claude-Code-Haha-${APP_VERSION}-win-x64.exe',
-      'Claude-Code-Haha-${APP_VERSION}-win-x64.exe.blockmap',
-      'Claude-Code-Haha-${APP_VERSION}-win-arm64.exe',
-      'Claude-Code-Haha-${APP_VERSION}-win-arm64.exe.blockmap',
+      'Orion-Agent-${APP_VERSION}-mac-arm64.dmg',
+      'Orion-Agent-${APP_VERSION}-mac-arm64.zip',
+      'Orion-Agent-${APP_VERSION}-mac-x64.dmg',
+      'Orion-Agent-${APP_VERSION}-mac-x64.zip',
+      'Orion-Agent-${APP_VERSION}-linux-x86_64.AppImage',
+      'Orion-Agent-${APP_VERSION}-linux-amd64.deb',
+      'Orion-Agent-${APP_VERSION}-linux-x86_64.rpm',
+      'Orion-Agent-${APP_VERSION}-linux-arm64.AppImage',
+      'Orion-Agent-${APP_VERSION}-linux-arm64.deb',
+      'Orion-Agent-${APP_VERSION}-linux-aarch64.rpm',
+      'Orion-Agent-${APP_VERSION}-win-x64.exe',
+      'Orion-Agent-${APP_VERSION}-win-x64.exe.blockmap',
+      'Orion-Agent-${APP_VERSION}-win-arm64.exe',
+      'Orion-Agent-${APP_VERSION}-win-arm64.exe.blockmap',
     ]
 
     for (const file of expectedFiles) {

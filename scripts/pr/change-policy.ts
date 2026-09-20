@@ -190,7 +190,6 @@ const docsExactPaths = new Set([
 
 const releaseExactPaths = new Set([
   '.github/workflows/pr-quality.yml',
-  '.github/workflows/pr-triage.yml',
   '.github/workflows/release-desktop.yml',
   '.github/workflows/build-desktop-dev.yml',
   'scripts/pr/change-policy.ts',
