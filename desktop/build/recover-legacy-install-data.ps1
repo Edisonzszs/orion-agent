@@ -376,7 +376,7 @@ function Get-UnsafeLegacySource {
       if (Test-PathMayBeDeleted -InstallDir $installDir -Candidate $active) {
         $activeInsideInstall = $true
         if ($ActiveConfigManaged -ne '1') {
-          throw "Active CLAUDE_CONFIG_DIR is managed outside Claude Code Haha and points inside an application install directory. Move or remove that environment variable before upgrading: $active"
+          throw "Active CLAUDE_CONFIG_DIR is managed outside Orion Agent and points inside an application install directory. Move or remove that environment variable before upgrading: $active"
         }
         if (Test-SamePath -Left $installDir -Right $active) {
           throw "The active data directory is the application install root itself: $active"
@@ -885,7 +885,7 @@ function Run-SelfTest {
         -RecoveryRoot (Join-Path $testRoot 'unmanaged recovery') -ProcessName $ProcessName `
         -ActiveConfigDir $managedLegacy -ActiveConfigManaged '' -SkipProcessCheck | Out-Null
     } catch {
-      $unmanagedFailed = $_.Exception.Message.Contains('managed outside Claude Code Haha')
+      $unmanagedFailed = $_.Exception.Message.Contains('managed outside Orion Agent')
     }
     Assert-SelfTest -Condition $unmanagedFailed -Message 'unsafe external CLAUDE_CONFIG_DIR did not fail closed'
 

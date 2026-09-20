@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'bun:test'
-import { chmod, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { chmod, mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 
@@ -7,11 +7,22 @@ import {
   buildWindowsLauncherWrapper,
   ensureDesktopCliLauncherInstalled,
   getDesktopCliCommandName,
+  removeLegacyWindowsLaunchers,
   upsertManagedPathBlock,
 } from '../services/desktopCliLauncherService.js'
 
 const isWindows = process.platform === 'win32'
 const unixOnly = isWindows ? it.skip : it
+const windowsOnly = isWindows ? it : it.skip
+
+async function pathExists(filePath: string) {
+  try {
+    await stat(filePath)
+    return true
+  } catch {
+    return false
+  }
+}
 
 const ORIGINAL_HOME = process.env.HOME
 const ORIGINAL_USERPROFILE = process.env.USERPROFILE
@@ -150,5 +161,38 @@ describe('ensureDesktopCliLauncherInstalled', () => {
     const updated = upsertManagedPathBlock(legacyBlock, '# >>> Orion Agent PATH >>>\nexport PATH="$HOME/.local/bin:$PATH"\n# <<< Orion Agent PATH <<<\n')
     expect(updated).not.toContain('Claude Code Haha')
     expect(updated.match(/>>> Orion Agent PATH >>>/g)).toHaveLength(1)
+  })
+
+  windowsOnly('removes stale pre-rename claude-haha launchers without touching orion ones', async () => {
+    const binDir = join(tempHome, '.local', 'bin')
+    await mkdir(binDir, { recursive: true })
+    const targetPath = join(binDir, 'orion.cmd')
+    await writeFile(targetPath, '@echo off\r\n', 'utf8')
+    await writeFile(join(binDir, 'orion.exe'), 'unrelated-current-name-exe', 'utf8')
+    await writeFile(join(binDir, 'claude-haha.exe'), 'stale-exe', 'utf8')
+    await writeFile(join(binDir, 'claude-haha.cmd'), 'stale-cmd', 'utf8')
+
+    await removeLegacyWindowsLaunchers(targetPath)
+
+    expect(await pathExists(join(binDir, 'claude-haha.exe'))).toBe(false)
+    expect(await pathExists(join(binDir, 'claude-haha.cmd'))).toBe(false)
+    expect(await pathExists(join(binDir, 'orion.exe'))).toBe(true)
+    expect(await pathExists(targetPath)).toBe(true)
+  })
+
+  unixOnly('removes the stale pre-rename claude-haha wrapper when installing', async () => {
+    const sourcePath = join(tempSourceDir, 'claude-sidecar')
+    await writeFile(sourcePath, '#!/bin/sh\necho desktop-sidecar\n', 'utf8')
+    await chmod(sourcePath, 0o755)
+    process.env.CLAUDE_CLI_PATH = sourcePath
+
+    const binDir = join(tempHome, '.local', 'bin')
+    await mkdir(binDir, { recursive: true })
+    await writeFile(join(binDir, 'claude-haha'), '#!/bin/sh\nold wrapper\n', 'utf8')
+
+    await ensureDesktopCliLauncherInstalled()
+
+    expect(await pathExists(join(binDir, 'claude-haha'))).toBe(false)
+    expect(await pathExists(join(binDir, 'orion'))).toBe(true)
   })
 })

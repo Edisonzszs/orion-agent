@@ -16,7 +16,9 @@ import { getShellConfigPaths } from '../../utils/shellConfig.js'
 import { getUserBinDir } from '../../utils/xdg.js'
 
 const DESKTOP_CLI_NAME = 'orion'
-const DESKTOP_CLI_WINDOWS_LEGACY_EXE = `${DESKTOP_CLI_NAME}.exe`
+// Pre-rename installs wrote claude-haha launchers (bare wrapper, .cmd, and the
+// older .exe form); cleanup must target the legacy name, never the current one.
+const LEGACY_DESKTOP_CLI_NAME = 'claude-haha'
 const PATH_BLOCK_START = '# >>> Orion Agent PATH >>>'
 const PATH_BLOCK_END = '# <<< Orion Agent PATH <<<'
 // Blocks written before the Orion rename still carry the Claude Code Haha
@@ -250,11 +252,12 @@ async function syncLauncher(sourcePath: string, targetPath: string) {
 
   if (process.platform !== 'win32') {
     await syncUnixLauncherWrapper(sourcePath, targetPath)
+    await removeLegacyUnixLauncher(targetPath)
     return
   }
 
   await syncWindowsLauncherWrapper(sourcePath, targetPath)
-  await removeLegacyWindowsBinaryLauncher(targetPath)
+  await removeLegacyWindowsLaunchers(targetPath)
 }
 
 async function syncUnixLauncherWrapper(sourcePath: string, targetPath: string) {
@@ -379,30 +382,45 @@ async function replaceFile(tempPath: string, targetPath: string) {
   await unlink(backupPath).catch(() => undefined)
 }
 
-async function removeLegacyWindowsBinaryLauncher(targetPath: string) {
-  const legacyPath = join(dirname(targetPath), DESKTOP_CLI_WINDOWS_LEGACY_EXE)
-  if (legacyPath === targetPath) return
+export async function removeLegacyWindowsLaunchers(targetPath: string) {
+  const legacyNames = [
+    `${LEGACY_DESKTOP_CLI_NAME}.exe`,
+    `${LEGACY_DESKTOP_CLI_NAME}.cmd`,
+  ]
+  for (const legacyName of legacyNames) {
+    const legacyPath = join(dirname(targetPath), legacyName)
+    if (legacyPath === targetPath) continue
+    await removeLauncherFile(legacyPath, 'legacy Windows launcher')
+  }
+}
 
+async function removeLegacyUnixLauncher(targetPath: string) {
+  const legacyPath = join(dirname(targetPath), LEGACY_DESKTOP_CLI_NAME)
+  if (legacyPath === targetPath) return
+  await removeLauncherFile(legacyPath, 'legacy launcher')
+}
+
+async function removeLauncherFile(filePath: string, description: string) {
   try {
-    const legacyStats = await stat(legacyPath)
+    const legacyStats = await stat(filePath)
     if (!legacyStats.isFile()) return
   } catch {
     return
   }
 
   try {
-    await unlink(legacyPath)
+    await unlink(filePath)
     return
   } catch {
-    // Retry below by renaming the stale executable out of PATHEXT lookup.
+    // Retry below by renaming the stale file out of PATH lookup.
   }
 
-  const backupPath = `${legacyPath}.old.${Date.now()}`
+  const backupPath = `${filePath}.old.${Date.now()}`
   try {
-    await rename(legacyPath, backupPath)
+    await rename(filePath, backupPath)
   } catch (error) {
     throw new Error(
-      `failed to remove legacy Windows launcher ${legacyPath}: ${
+      `failed to remove ${description} ${filePath}: ${
         error instanceof Error ? error.message : String(error)
       }`,
     )
