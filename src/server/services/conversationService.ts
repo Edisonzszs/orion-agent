@@ -1891,9 +1891,9 @@ export class ConversationService {
 
     const configDir =
       process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude')
-    const ccHahaDir = path.join(configDir, PRODUCT_DATA_DIR_NAME)
-    const providersIndexPath = path.join(ccHahaDir, 'providers.json')
-    const settingsPath = path.join(ccHahaDir, 'settings.json')
+    const productDataDir = path.join(configDir, PRODUCT_DATA_DIR_NAME)
+    const providersIndexPath = path.join(productDataDir, 'providers.json')
+    const settingsPath = path.join(productDataDir, 'settings.json')
 
     if (fs.existsSync(providersIndexPath)) {
       return true

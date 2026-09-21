@@ -381,10 +381,10 @@ describe('ConversationService', () => {
   )
 
   test('strips inherited provider env when desktop provider config exists', async () => {
-    const ccHahaDir = path.join(tmpDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tmpDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'providers.json'),
+      path.join(productDataDir, 'providers.json'),
       JSON.stringify({ activeId: null, providers: [] }),
       'utf-8',
     )
@@ -612,10 +612,10 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv injects CLAUDE_CODE_OAUTH_TOKEN when official mode + haha oauth token exists', async () => {
-    const ccHahaDir = path.join(tmpDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tmpDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'settings.json'),
+      path.join(productDataDir, 'settings.json'),
       JSON.stringify({ env: {} }),
       'utf-8',
     )
@@ -976,10 +976,10 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv does NOT inject CLAUDE_CODE_OAUTH_TOKEN when not official mode', async () => {
-    const ccHahaDir = path.join(tmpDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tmpDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'settings.json'),
+      path.join(productDataDir, 'settings.json'),
       JSON.stringify({ env: { ANTHROPIC_AUTH_TOKEN: 'custom-provider-token' } }),
       'utf-8',
     )
@@ -1227,10 +1227,10 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv can force official auth even when a custom default provider exists', async () => {
-    const ccHahaDir = path.join(tmpDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tmpDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'settings.json'),
+      path.join(productDataDir, 'settings.json'),
       JSON.stringify({ env: { ANTHROPIC_AUTH_TOKEN: 'custom-provider-token' } }),
       'utf-8',
     )
@@ -1336,10 +1336,10 @@ describe('ConversationService', () => {
   })
 
   test('buildChildEnv does not leak inherited CLAUDE_CODE_OAUTH_TOKEN when official token is unavailable', async () => {
-    const ccHahaDir = path.join(tmpDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tmpDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'settings.json'),
+      path.join(productDataDir, 'settings.json'),
       JSON.stringify({ env: {} }),
       'utf-8',
     )

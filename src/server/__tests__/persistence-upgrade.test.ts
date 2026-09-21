@@ -57,10 +57,10 @@ describe('persistent storage upgrade migrations', () => {
   })
 
   test('migrates legacy providers index and writes a backup before changing it', async () => {
-    const ccHahaDir = path.join(tempDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tempDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'providers.json'),
+      path.join(productDataDir, 'providers.json'),
       JSON.stringify({
         activeProviderId: 'provider-1',
         rootFutureField: { keep: true },
@@ -82,7 +82,7 @@ describe('persistent storage upgrade migrations', () => {
     expect(report.failures).toEqual([])
     expect(report.migratedEntries).toContain('orion/providers.json')
 
-    const migrated = JSON.parse(await fs.readFile(path.join(ccHahaDir, 'providers.json'), 'utf-8')) as {
+    const migrated = JSON.parse(await fs.readFile(path.join(productDataDir, 'providers.json'), 'utf-8')) as {
       schemaVersion?: number
       activeId?: string | null
       activeProviderId?: string
@@ -97,7 +97,7 @@ describe('persistent storage upgrade migrations', () => {
     expect(migrated.rootFutureField).toEqual({ keep: true })
     expect(migrated.providers?.[0]?.extraFutureField).toBe('keep-me')
 
-    const backups = (await listFiles(ccHahaDir)).filter((file) => file.startsWith('providers.json.bak-before-migration-'))
+    const backups = (await listFiles(productDataDir)).filter((file) => file.startsWith('providers.json.bak-before-migration-'))
     expect(backups.length).toBe(1)
 
     const service = new ProviderService()
@@ -106,7 +106,7 @@ describe('persistent storage upgrade migrations', () => {
     expect(activeId).toBe('provider-1')
 
     await service.updateProvider('provider-1', { name: 'Renamed Provider' })
-    const rewritten = JSON.parse(await fs.readFile(path.join(ccHahaDir, 'providers.json'), 'utf-8')) as {
+    const rewritten = JSON.parse(await fs.readFile(path.join(productDataDir, 'providers.json'), 'utf-8')) as {
       rootFutureField?: unknown
       providers?: Array<Record<string, unknown>>
     }
@@ -115,10 +115,10 @@ describe('persistent storage upgrade migrations', () => {
   })
 
   test('upgrades a version 2 provider fixture without inventing image credentials', async () => {
-    const ccHahaDir = path.join(tempDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tempDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'providers.json'),
+      path.join(productDataDir, 'providers.json'),
       JSON.stringify({
         schemaVersion: 2,
         activeId: 'provider-v2',
@@ -146,7 +146,7 @@ describe('persistent storage upgrade migrations', () => {
 
     expect(report.failures).toEqual([])
     const migrated = JSON.parse(
-      await fs.readFile(path.join(ccHahaDir, 'providers.json'), 'utf-8'),
+      await fs.readFile(path.join(productDataDir, 'providers.json'), 'utf-8'),
     ) as { schemaVersion: number; providers: Array<Record<string, unknown>> }
     expect(migrated.schemaVersion).toBe(CURRENT_PROVIDER_INDEX_SCHEMA_VERSION)
     expect(migrated.providers[0]?.imageGeneration).toBeUndefined()
@@ -154,10 +154,10 @@ describe('persistent storage upgrade migrations', () => {
   })
 
   test('turns legacy default Tool Search on into a safe opt-out during upgrade', async () => {
-    const ccHahaDir = path.join(tempDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tempDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'providers.json'),
+      path.join(productDataDir, 'providers.json'),
       JSON.stringify({
         schemaVersion: 3,
         activeId: 'provider-v3',
@@ -187,7 +187,7 @@ describe('persistent storage upgrade migrations', () => {
     expect(report.failures).toEqual([])
     expect(report.migratedEntries).toContain('orion/providers.json')
     const migrated = JSON.parse(
-      await fs.readFile(path.join(ccHahaDir, 'providers.json'), 'utf-8'),
+      await fs.readFile(path.join(productDataDir, 'providers.json'), 'utf-8'),
     ) as { schemaVersion: number; providers: Array<Record<string, unknown>> }
     expect(migrated.schemaVersion).toBe(CURRENT_PROVIDER_INDEX_SCHEMA_VERSION)
     expect(migrated.providers[0]?.toolSearchEnabled).toBe(false)
@@ -195,10 +195,10 @@ describe('persistent storage upgrade migrations', () => {
   })
 
   test('preserves Tool Search after explicit opt-in on the current provider schema', async () => {
-    const ccHahaDir = path.join(tempDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tempDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'providers.json'),
+      path.join(productDataDir, 'providers.json'),
       JSON.stringify({
         schemaVersion: CURRENT_PROVIDER_INDEX_SCHEMA_VERSION,
         activeId: 'provider-current',
@@ -227,7 +227,7 @@ describe('persistent storage upgrade migrations', () => {
     expect(report.failures).toEqual([])
     expect(report.migratedEntries).not.toContain('orion/providers.json')
     const current = JSON.parse(
-      await fs.readFile(path.join(ccHahaDir, 'providers.json'), 'utf-8'),
+      await fs.readFile(path.join(productDataDir, 'providers.json'), 'utf-8'),
     ) as { providers: Array<Record<string, unknown>> }
     expect(current.providers[0]?.toolSearchEnabled).toBe(true)
   })
@@ -308,8 +308,8 @@ describe('persistent storage upgrade migrations', () => {
   })
 
   test('does not overwrite current orion provider storage with a legacy root config', async () => {
-    const ccHahaDir = path.join(tempDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tempDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
       path.join(tempDir, 'providers.json'),
       JSON.stringify({
@@ -327,7 +327,7 @@ describe('persistent storage upgrade migrations', () => {
       'utf-8',
     )
     await fs.writeFile(
-      path.join(ccHahaDir, 'providers.json'),
+      path.join(productDataDir, 'providers.json'),
       JSON.stringify({
         schemaVersion: CURRENT_PROVIDER_INDEX_SCHEMA_VERSION,
         activeId: null,
@@ -340,7 +340,7 @@ describe('persistent storage upgrade migrations', () => {
 
     expect(report.failures).toEqual([])
     expect(report.migratedEntries).not.toContain('providers.json -> orion/providers.json')
-    const current = JSON.parse(await fs.readFile(path.join(ccHahaDir, 'providers.json'), 'utf-8')) as {
+    const current = JSON.parse(await fs.readFile(path.join(productDataDir, 'providers.json'), 'utf-8')) as {
       activeId?: string | null
       providerOrder?: string[]
       providers?: unknown[]
@@ -369,24 +369,24 @@ describe('persistent storage upgrade migrations', () => {
   })
 
   test('quarantines malformed managed settings instead of blocking startup', async () => {
-    const ccHahaDir = path.join(tempDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
-    await fs.writeFile(path.join(ccHahaDir, 'settings.json'), '{"env":', 'utf-8')
+    const productDataDir = path.join(tempDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
+    await fs.writeFile(path.join(productDataDir, 'settings.json'), '{"env":', 'utf-8')
 
     const report = await ensurePersistentStorageUpgraded()
 
     expect(report.failures).toEqual([])
     expect(report.migratedEntries).toContain('orion/settings.json')
-    expect(JSON.parse(await fs.readFile(path.join(ccHahaDir, 'settings.json'), 'utf-8'))).toEqual({})
-    const quarantined = (await listFiles(ccHahaDir)).filter((file) => file.startsWith('settings.json.invalid-'))
+    expect(JSON.parse(await fs.readFile(path.join(productDataDir, 'settings.json'), 'utf-8'))).toEqual({})
+    const quarantined = (await listFiles(productDataDir)).filter((file) => file.startsWith('settings.json.invalid-'))
     expect(quarantined.length).toBe(1)
   })
 
   test('upgrades existing DeepSeek managed env to follow global thinking settings', async () => {
-    const ccHahaDir = path.join(tempDir, 'orion')
-    await fs.mkdir(ccHahaDir, { recursive: true })
+    const productDataDir = path.join(tempDir, 'orion')
+    await fs.mkdir(productDataDir, { recursive: true })
     await fs.writeFile(
-      path.join(ccHahaDir, 'settings.json'),
+      path.join(productDataDir, 'settings.json'),
       JSON.stringify({
         env: {
           ANTHROPIC_BASE_URL: 'https://api.deepseek.com/anthropic',
@@ -407,7 +407,7 @@ describe('persistent storage upgrade migrations', () => {
     expect(report.failures).toEqual([])
     expect(report.migratedEntries).toContain('orion/settings.json')
 
-    const migrated = JSON.parse(await fs.readFile(path.join(ccHahaDir, 'settings.json'), 'utf-8')) as {
+    const migrated = JSON.parse(await fs.readFile(path.join(productDataDir, 'settings.json'), 'utf-8')) as {
       env?: Record<string, string>
     }
     expect(migrated.env?.CC_HAHA_SEND_DISABLED_THINKING).toBeUndefined()
@@ -422,7 +422,7 @@ describe('persistent storage upgrade migrations', () => {
     )
     expect(migrated.env?.USER_CUSTOM_ENV).toBe('keep-me')
 
-    const backups = (await listFiles(ccHahaDir)).filter((file) => file.startsWith('settings.json.bak-before-migration-'))
+    const backups = (await listFiles(productDataDir)).filter((file) => file.startsWith('settings.json.bak-before-migration-'))
     expect(backups.length).toBe(1)
   })
   test('upgrades v4 providers to automatic defaults with a backup and preserves unknown fields', async () => {

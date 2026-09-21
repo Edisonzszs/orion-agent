@@ -914,13 +914,13 @@ export class CronScheduler {
       return true
     }
 
-    const ccHahaDir = path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME)
-    if (existsSync(path.join(ccHahaDir, 'providers.json'))) {
+    const productDataDir = path.join(this.getConfigDir(), PRODUCT_DATA_DIR_NAME)
+    if (existsSync(path.join(productDataDir, 'providers.json'))) {
       return true
     }
 
     try {
-      const raw = readFileSync(path.join(ccHahaDir, 'settings.json'), 'utf-8')
+      const raw = readFileSync(path.join(productDataDir, 'settings.json'), 'utf-8')
       const parsed = JSON.parse(raw) as { env?: Record<string, string> }
       const env = parsed.env ?? {}
       return Object.entries(env).some(
