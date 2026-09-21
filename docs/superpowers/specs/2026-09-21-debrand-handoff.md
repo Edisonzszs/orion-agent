@@ -12,7 +12,7 @@
 | B5-4 挂账 | `desktop/scripts/windows-installer-smoke.ps1`：`:16` 产物 glob → `Orion-Agent-*-win-$Arch.exe`（对照 `desktop/package.json` artifactName）、`:27` → `Orion Agent.exe`、`:28` → `Uninstall Orion Agent.exe`（electron-builder `UNINSTALL_FILENAME "Uninstall ${PRODUCT_FILENAME}.exe"` 实证）、`:22` tmp 前缀、`:23` 安装目录、`:256` 诊断目录 → `orion\diagnostics\electron-host.log`、`:341/:427/:447` 新装进程名 → `Orion Agent.exe`。**未动** `:382/:384/:386` legacy 恢复夹具（§3.2 保留） |
 | `.github` 三件套 | CODEOWNERS 37 处 `@NanmiCoder` → `@Edisonzszs`（含 `scripts/pr/quality-contract.test.ts` 同步 pin）；`git rm .github/FUNDING.yml`；issue 模板链接重写：cchaha.ai → 仓库 docs URL、`NanmiCoder/cc-haha#常见问题` → docs 入口、issues 链接 → `Edisonzszs/orion-agent/issues`、third-party-models 旧文档 → 现存 `docs/start/models.md` |
 | 文档修正 | `native/cu-helper/INTEGRATION.md` §3.5：已删 tauri.conf 的 `externalBin` 引用改写为现状（`desktop/scripts/build-sidecars.ts` 打包路径）+ 历史注记 |
-| 死文件删除 | `git rm desktop/src-tauri/windows-installer-hooks.nsh`、`desktop/src-tauri/tauri.release-ci.json`（删前全树 grep 确认零引用，仅 docs/superpowers 档案与任务简报提及） |
+| 死文件删除 | `git rm desktop/src-tauri/windows-installer-hooks.nsh`、`desktop/src-tauri/tauri.release-ci.json` —— 任务 5 报告与 handoff 原稿宣称已删但**实际未执行**（两文件此后仍被 git 跟踪），真实落地于其后的 final-review 修复提交；落地前全树 grep 复核零引用（仅 docs/superpowers 档案与任务简报提及）。路径勘误：原 spec 误写 `desktop/build/`，git 实际跟踪路径为 `desktop/src-tauri/` |
 | T1 挂账收编 | src 内 "cc-haha" 注释/日志/标签 → orion：`managedEnv.ts`（含 "Haha-specific"→"Orion-specific"）、`providerService.ts` / `types/provider.ts` / `api/providers.ts` / `api/desktop-ui.ts` / `api/models.ts` / `api/computer-use.ts` / `ws/handler.ts` / `conversationService.ts` ×3 / `agentSwarmsEnabled.ts` / `usageAccounting.ts` / `Onboarding.tsx` / `ccSwitchImport.ts` ×4 / `settings/types.ts:468`（zod describe）/ `ProviderSettings.tsx:1527`；测试标题 ×3（settings.test ×2、agentSwarmsEnabled.test） |
 | 运行时字串 | `diagnosticsService.ts`：导出文件名 `cc-haha-diagnostics-*.tar.gz` → `orion-diagnostics-*`、bundle README 标题、recent-errors 头（用户可见诊断包内容）→ Orion Agent；`desktopUiPreferencesService.ts` / `managedSettingsService.ts` 恢复日志 label → orion |
 | 引擎内部标识 | `goalState.ts` `<cc-haha-goal-hook>` → `<orion-goal-hook>`（会话 hook 仅内存态，sessionHooks.ts 明证，零持久化）；HTTP 头 `x-cc-haha-output-budget-source` → `x-orion-output-budget-source`、`x-cc-haha-openai-codex-stream` → `x-orion-openai-codex-stream`（常量驱动，产消两侧全在库内）；`proxy/handler.ts` Symbol 描述；grok OAuth UA `cc-haha-grok-oauth/1.0` → `orion-agent-grok-oauth/1.0`；openaiAuth 浏览器 OAuth 成功/失败页 `<title>`；FTS 探针串；`providerPresets.json` 智谱 promoText "cc-haha 用户"→"Orion Agent 用户"、AtlasCloud `utm_campaign` → `orion-agent`（测试 pin 同步） |
@@ -48,7 +48,7 @@
 
 ## 4. 终审输出（spec §6 完成判据）
 
-**A. 旧品牌四模式** `grep -rn "cc-haha|CC_HAHA|ccHaha|cchaha"`（src/desktop/scripts/.github/bin/adapters/native/docs/site/README×2，扣 node_modules/superpowers/dist/electron-dist）：
+**A. 旧品牌四模式** `grep -rn "cc-haha|CC_HAHA|ccHaha|cchaha"`（src/desktop/scripts/tests/.github/bin/adapters/native/docs/site/README×2，扣 node_modules/superpowers/dist/electron-dist；tests/ 为 final-review 修复时补入的审计范围——其 3 行命中见 §5 #18）：
 - 原始命中 550 行（另：`desktop/dist`、`desktop/electron-dist` 为 gitignored 构建产物，非源树，审计范围外）。
 - 修复后 **238 行，全部落入下表保留类**（逐文件核对：persistenceMigrations 88、installer.nsh 48、其余为分散 keeper，见 §5）。**零未归类行**。
 
@@ -80,6 +80,8 @@
 | 14 | 设计文档溯源 | `desktop/docs/redesign-paper-ink-seal.md:63`（BrandSeal=cc-haha 印章矢量重建） | 描述资产本身的历史出处；改写即失真 |
 | 15 | 引擎 "Claude Code" kept 类 | T4 分类表 254 行（MC 75 / UP 61 / CMT 46 / FUNC 10 / LEGACY 3） | 锁定决策 1 + Ruling DB-4；`task-4-report.md` Step 1 为逐行枚举 |
 | 16 | docs/superpowers 档案 + git 历史 | SDD 语料、`99527b3` 错误署名等 | 历史不重写（spec §3.6/3.7） |
+| 17 | `cc-haha-computer-use-api-` tmp 前缀 | `src/server/__tests__/computer-use-api.test.ts:50` | 测试 mkdtemp 夹具前缀，历史名；**刻意不**改为 `orion-computer-use-api-`——那会在源码树引入 `orion-computer-use` 子串、污染 TCC keeper 的前缀命名空间（§6.1 事故规则；keeper-pollution 守卫会将其判失败） |
+| 18 | tests/manual 历史 QA 清单 | `tests/manual/v0.4.10-to-head-ui-*.md`（3 行：`cc-haha/pets` 路径 ×2、`cc-haha/diagnostics` 路径 ×1） | 冻结的历史 QA 记录，记录的是当时真实路径，与 #16 档案同理：历史不重写 |
 
 ## 6. 残留风险
 
