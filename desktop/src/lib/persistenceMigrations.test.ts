@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test } from 'vitest'
 import {
   CURRENT_DESKTOP_PERSISTENCE_SCHEMA_VERSION,
   DESKTOP_PERSISTENCE_VERSION_KEY,
+  migrateLegacyDesktopStorageKeys,
   runDesktopPersistenceMigrations,
 } from './persistenceMigrations'
 import { WORKSPACE_STORAGE_VERSION } from './workspace/storageKey'
@@ -20,8 +21,8 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha-open-tabs')
-    expect(JSON.parse(window.localStorage.getItem('cc-haha-open-tabs') || '{}')).toEqual({
+    expect(report.migratedKeys).toContain('orion-open-tabs')
+    expect(JSON.parse(window.localStorage.getItem('orion-open-tabs') || '{}')).toEqual({
       openTabs: [{ sessionId: 'session-1', title: 'Old tab', type: 'session' }],
       activeTabId: 'session-1',
     })
@@ -44,9 +45,9 @@ describe('desktop persistence migrations', () => {
       ],
       activeTabId: '__market__',
     }
-    expect(JSON.parse(window.localStorage.getItem('cc-haha-open-tabs')!)).toEqual(expected)
+    expect(JSON.parse(window.localStorage.getItem('orion-open-tabs')!)).toEqual(expected)
     runDesktopPersistenceMigrations()
-    expect(JSON.parse(window.localStorage.getItem('cc-haha-open-tabs')!)).toEqual(expected)
+    expect(JSON.parse(window.localStorage.getItem('orion-open-tabs')!)).toEqual(expected)
   })
 
   test('preserves persisted market tabs during startup migration', () => {
@@ -60,8 +61,8 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha-open-tabs')
-    expect(JSON.parse(window.localStorage.getItem('cc-haha-open-tabs') || '{}')).toEqual({
+    expect(report.migratedKeys).toContain('orion-open-tabs')
+    expect(JSON.parse(window.localStorage.getItem('orion-open-tabs') || '{}')).toEqual({
       openTabs: [
         { sessionId: '__market__', title: 'Market', type: 'market' },
         { sessionId: '__traces__', title: 'Traces', type: 'traces' },
@@ -81,7 +82,7 @@ describe('desktop persistence migrations', () => {
 
     runDesktopPersistenceMigrations()
 
-    expect(JSON.parse(window.localStorage.getItem('cc-haha-open-tabs') || '{}')).toEqual({
+    expect(JSON.parse(window.localStorage.getItem('orion-open-tabs') || '{}')).toEqual({
       openTabs: [
         { sessionId: '__settings__', title: 'Settings', type: 'settings' },
         { sessionId: '__market__', title: 'Skills', type: 'market' },
@@ -100,7 +101,7 @@ describe('desktop persistence migrations', () => {
 
     runDesktopPersistenceMigrations()
 
-    expect(JSON.parse(window.localStorage.getItem('cc-haha-session-runtime') || '{}')).toEqual({
+    expect(JSON.parse(window.localStorage.getItem('orion-session-runtime') || '{}')).toEqual({
       alsoGood: { providerId: 'openai-official', modelId: 'gpt-5.6-sol', effortLevel: 'xhigh' },
       good: { providerId: null, modelId: 'claude-sonnet' },
     })
@@ -113,10 +114,10 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha-open-tabs')
-    expect(report.migratedKeys).toContain('cc-haha-theme')
-    expect(window.localStorage.getItem('cc-haha-open-tabs')).toBeNull()
-    expect(window.localStorage.getItem('cc-haha-theme')).toBeNull()
+    expect(report.migratedKeys).toContain('orion-open-tabs')
+    expect(report.migratedKeys).toContain('orion-theme')
+    expect(window.localStorage.getItem('orion-open-tabs')).toBeNull()
+    expect(window.localStorage.getItem('orion-theme')).toBeNull()
   })
 
   test('preserves the pure white theme as a valid persisted theme', () => {
@@ -124,8 +125,8 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).not.toContain('cc-haha-theme')
-    expect(window.localStorage.getItem('cc-haha-theme')).toBe('white')
+    expect(report.migratedKeys).not.toContain('orion-theme')
+    expect(window.localStorage.getItem('orion-theme')).toBe('white')
   })
 
   test('renames the retired light theme to warm-classic instead of resetting it', () => {
@@ -136,8 +137,8 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha-theme')
-    expect(window.localStorage.getItem('cc-haha-theme')).toBe('warm-classic')
+    expect(report.migratedKeys).toContain('orion-theme')
+    expect(window.localStorage.getItem('orion-theme')).toBe('warm-classic')
   })
 
   test('applies the same rename to the light half of follow-the-system', () => {
@@ -147,18 +148,21 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha-light-theme')
-    expect(window.localStorage.getItem('cc-haha-light-theme')).toBe('warm-classic')
+    expect(report.migratedKeys).toContain('orion-light-theme')
+    expect(window.localStorage.getItem('orion-light-theme')).toBe('warm-classic')
   })
 
   test('preserves every palette introduced by the redesign', () => {
+    // Later iterations write the live orion key directly: the never-overwrite
+    // migration keeps the first iteration's copied value, so re-seeding the
+    // legacy key would leave a stale palette under the orion name.
     for (const theme of ['white', 'paper', 'warm-classic', 'celadon', 'dark', 'ink-blue']) {
-      window.localStorage.setItem('cc-haha-theme', theme)
+      window.localStorage.setItem('orion-theme', theme)
 
       const report = runDesktopPersistenceMigrations()
 
-      expect(report.migratedKeys, `${theme} should survive startup migration`).not.toContain('cc-haha-theme')
-      expect(window.localStorage.getItem('cc-haha-theme')).toBe(theme)
+      expect(report.migratedKeys, `${theme} should survive startup migration`).not.toContain('orion-theme')
+      expect(window.localStorage.getItem('orion-theme')).toBe(theme)
     }
   })
 
@@ -172,12 +176,12 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha-follow-system-theme')
-    expect(report.migratedKeys).toContain('cc-haha-light-theme')
-    expect(report.migratedKeys).toContain('cc-haha-dark-theme')
-    expect(window.localStorage.getItem('cc-haha-follow-system-theme')).toBeNull()
-    expect(window.localStorage.getItem('cc-haha-light-theme')).toBeNull()
-    expect(window.localStorage.getItem('cc-haha-dark-theme')).toBeNull()
+    expect(report.migratedKeys).toContain('orion-follow-system-theme')
+    expect(report.migratedKeys).toContain('orion-light-theme')
+    expect(report.migratedKeys).toContain('orion-dark-theme')
+    expect(window.localStorage.getItem('orion-follow-system-theme')).toBeNull()
+    expect(window.localStorage.getItem('orion-light-theme')).toBeNull()
+    expect(window.localStorage.getItem('orion-dark-theme')).toBeNull()
   })
 
   test('preserves a valid follow-the-system flag and both ground preferences', () => {
@@ -187,22 +191,24 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).not.toContain('cc-haha-follow-system-theme')
-    expect(report.migratedKeys).not.toContain('cc-haha-light-theme')
-    expect(report.migratedKeys).not.toContain('cc-haha-dark-theme')
-    expect(window.localStorage.getItem('cc-haha-follow-system-theme')).toBe('1')
-    expect(window.localStorage.getItem('cc-haha-light-theme')).toBe('celadon')
-    expect(window.localStorage.getItem('cc-haha-dark-theme')).toBe('ink-blue')
+    expect(report.migratedKeys).not.toContain('orion-follow-system-theme')
+    expect(report.migratedKeys).not.toContain('orion-light-theme')
+    expect(report.migratedKeys).not.toContain('orion-dark-theme')
+    expect(window.localStorage.getItem('orion-follow-system-theme')).toBe('1')
+    expect(window.localStorage.getItem('orion-light-theme')).toBe('celadon')
+    expect(window.localStorage.getItem('orion-dark-theme')).toBe('ink-blue')
   })
 
   test('preserves every supported locale during startup migration', () => {
+    // Later iterations write the live orion key directly, matching the
+    // palette loop above: the copied value from iteration one wins otherwise.
     for (const locale of ['en', 'zh', 'zh-TW', 'jp', 'kr']) {
-      window.localStorage.setItem('cc-haha-locale', locale)
+      window.localStorage.setItem('orion-locale', locale)
 
       const report = runDesktopPersistenceMigrations()
 
-      expect(report.migratedKeys).not.toContain('cc-haha-locale')
-      expect(window.localStorage.getItem('cc-haha-locale')).toBe(locale)
+      expect(report.migratedKeys).not.toContain('orion-locale')
+      expect(window.localStorage.getItem('orion-locale')).toBe(locale)
     }
   })
 
@@ -211,15 +217,18 @@ describe('desktop persistence migrations', () => {
 
     const validReport = runDesktopPersistenceMigrations()
 
-    expect(validReport.migratedKeys).not.toContain('cc-haha-app-zoom')
-    expect(window.localStorage.getItem('cc-haha-app-zoom')).toBe('1.2')
+    expect(validReport.migratedKeys).not.toContain('orion-app-zoom')
+    expect(window.localStorage.getItem('orion-app-zoom')).toBe('1.2')
 
-    window.localStorage.setItem('cc-haha-app-zoom', '4')
+    // The invalid value is what a post-migration install holds on the live
+    // key; the never-overwrite copy would keep '1.2' if this re-seeded the
+    // legacy key instead.
+    window.localStorage.setItem('orion-app-zoom', '4')
 
     const invalidReport = runDesktopPersistenceMigrations()
 
-    expect(invalidReport.migratedKeys).toContain('cc-haha-app-zoom')
-    expect(window.localStorage.getItem('cc-haha-app-zoom')).toBeNull()
+    expect(invalidReport.migratedKeys).toContain('orion-app-zoom')
+    expect(window.localStorage.getItem('orion-app-zoom')).toBeNull()
   })
 
   test('migrates the legacy UI zoom key into app zoom storage', () => {
@@ -228,11 +237,11 @@ describe('desktop persistence migrations', () => {
     const report = runDesktopPersistenceMigrations()
 
     expect(report.migratedKeys).toEqual(expect.arrayContaining([
-      'cc-haha-app-zoom',
-      'cc-haha-ui-zoom',
+      'orion-app-zoom',
+      'orion-ui-zoom',
     ]))
-    expect(window.localStorage.getItem('cc-haha-app-zoom')).toBe('1.25')
-    expect(window.localStorage.getItem('cc-haha-ui-zoom')).toBeNull()
+    expect(window.localStorage.getItem('orion-app-zoom')).toBe('1.25')
+    expect(window.localStorage.getItem('orion-ui-zoom')).toBeNull()
   })
 
   test('does not throw if schema version persistence is blocked', () => {
@@ -267,11 +276,11 @@ describe('desktop persistence migrations', () => {
     const report = runDesktopPersistenceMigrations(storage)
 
     expect(report.migratedKeys).toEqual(expect.arrayContaining([
-      'cc-haha-open-tabs',
-      'cc-haha-session-runtime',
-      'cc-haha-theme',
-      'cc-haha-locale',
-      'cc-haha-app-zoom',
+      'orion-open-tabs',
+      'orion-session-runtime',
+      'orion-theme',
+      'orion-locale',
+      'orion-app-zoom',
       DESKTOP_PERSISTENCE_VERSION_KEY,
     ]))
   })
@@ -284,11 +293,12 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).not.toContain('cc-haha.workspace')
-    expect(window.localStorage.getItem('cc-haha.workspace')).toBeNull()
-    // The schema-1 keys a v0.6.2 install carries must survive untouched.
-    expect(window.localStorage.getItem('cc-haha-theme')).toBe('ink-blue')
-    expect(JSON.parse(window.localStorage.getItem('cc-haha-open-tabs')!).openTabs).toHaveLength(1)
+    expect(report.migratedKeys).not.toContain('orion.workspace')
+    expect(window.localStorage.getItem('orion.workspace')).toBeNull()
+    // The schema-1 keys a v0.6.2 install carries must survive the de-brand
+    // copy — now under the orion names the app reads.
+    expect(window.localStorage.getItem('orion-theme')).toBe('ink-blue')
+    expect(JSON.parse(window.localStorage.getItem('orion-open-tabs')!).openTabs).toHaveLength(1)
     expect(window.localStorage.getItem(DESKTOP_PERSISTENCE_VERSION_KEY)).toBe(String(CURRENT_DESKTOP_PERSISTENCE_SCHEMA_VERSION))
   })
 
@@ -303,9 +313,10 @@ describe('desktop persistence migrations', () => {
 
     // The hydrator already refuses an unknown version. Deleting it here would
     // mean a single downgrade launch permanently discards the workspace the
-    // newer build is still using.
-    expect(report.migratedKeys).not.toContain('cc-haha.workspace')
-    expect(window.localStorage.getItem('cc-haha.workspace')).toBe(future)
+    // newer build is still using. The de-brand copy moves the value verbatim,
+    // so "untouched" still holds under the orion key.
+    expect(report.migratedKeys).not.toContain('orion.workspace')
+    expect(window.localStorage.getItem('orion.workspace')).toBe(future)
   })
 
   test('upgrades workspace v1 without losing the Files launcher, turns, or unknown metadata', () => {
@@ -327,7 +338,7 @@ describe('desktop persistence migrations', () => {
     }))
 
     runDesktopPersistenceMigrations()
-    const stored = JSON.parse(window.localStorage.getItem('cc-haha.workspace')!)
+    const stored = JSON.parse(window.localStorage.getItem('orion.workspace')!)
     expect(stored).toMatchObject({
       version: WORKSPACE_STORAGE_VERSION,
       futureMetadata: { keep: true },
@@ -345,9 +356,9 @@ describe('desktop persistence migrations', () => {
     })
     expect(window.localStorage.getItem(DESKTOP_PERSISTENCE_VERSION_KEY))
       .toBe(String(CURRENT_DESKTOP_PERSISTENCE_SCHEMA_VERSION))
-    const once = window.localStorage.getItem('cc-haha.workspace')
+    const once = window.localStorage.getItem('orion.workspace')
     runDesktopPersistenceMigrations()
-    expect(window.localStorage.getItem('cc-haha.workspace')).toBe(once)
+    expect(window.localStorage.getItem('orion.workspace')).toBe(once)
   })
 
   test('strips tab entries that name a host resource the previous run owned', () => {
@@ -373,8 +384,8 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha.workspace')
-    const stored = JSON.parse(window.localStorage.getItem('cc-haha.workspace')!)
+    expect(report.migratedKeys).toContain('orion.workspace')
+    const stored = JSON.parse(window.localStorage.getItem('orion.workspace')!)
     expect(stored.sessions.s1.tabs.map((tab: { id: string }) => tab.id)).toEqual(['f1'])
   })
 
@@ -383,10 +394,95 @@ describe('desktop persistence migrations', () => {
 
     const report = runDesktopPersistenceMigrations()
 
-    expect(report.migratedKeys).toContain('cc-haha.workspace')
-    expect(window.localStorage.getItem('cc-haha.workspace')).toBeNull()
+    expect(report.migratedKeys).toContain('orion.workspace')
+    expect(window.localStorage.getItem('orion.workspace')).toBeNull()
   })
 
+})
+
+describe('cc-haha → orion localStorage migration', () => {
+  // The pre-rebrand user-state keys. Ephemeral window/smoke keys and Electron
+  // partition values were renamed without migration, so they stay absent here.
+  const MIGRATED_KEYS = [
+    'cc-haha-active-settings-tab',
+    'cc-haha-app-zoom',
+    'cc-haha-dark-theme',
+    'cc-haha-dismissed-update-version',
+    'cc-haha-follow-system-theme',
+    'cc-haha-h5-server-url',
+    'cc-haha-h5-token',
+    'cc-haha-light-theme',
+    'cc-haha-locale',
+    'cc-haha-market-disclaimer-dismissed',
+    'cc-haha-open-tabs',
+    'cc-haha-open-target-preferences',
+    'cc-haha-session-runtime',
+    'cc-haha-sidebar-hidden-projects',
+    'cc-haha-sidebar-pinned-projects',
+    'cc-haha-sidebar-project-order',
+    'cc-haha-sidebar-project-organization',
+    'cc-haha-sidebar-project-sort',
+    'cc-haha-sidebar-width',
+    'cc-haha-theme',
+    'cc-haha-ui-zoom',
+    'cc-haha.notifiedDesktopTaskRuns.v1',
+    'cc-haha.persistence.schemaVersion',
+    'cc-haha.scheduledTaskNotificationScan.v1',
+    'cc-haha.workspace',
+  ]
+
+  beforeEach(() => {
+    window.localStorage.clear()
+  })
+
+  it('copies user-state values to orion keys when the orion key is absent', () => {
+    for (const key of MIGRATED_KEYS) window.localStorage.setItem(key, `v:${key}`)
+
+    const migrated = migrateLegacyDesktopStorageKeys(window.localStorage)
+
+    for (const key of MIGRATED_KEYS) {
+      expect(window.localStorage.getItem(key.replace(/^cc-haha/, 'orion'))).toBe(`v:${key}`)
+      // Legacy keys are removed after the copy, matching the infra's
+      // legacy-key convention (see normalizeAppZoomKey).
+      expect(window.localStorage.getItem(key)).toBeNull()
+    }
+    expect(migrated).toEqual(MIGRATED_KEYS)
+  })
+
+  it('never overwrites an existing orion key', () => {
+    window.localStorage.setItem('cc-haha-theme', 'old')
+    window.localStorage.setItem('orion-theme', 'mine')
+
+    migrateLegacyDesktopStorageKeys(window.localStorage)
+
+    expect(window.localStorage.getItem('orion-theme')).toBe('mine')
+    expect(window.localStorage.getItem('cc-haha-theme')).toBeNull()
+  })
+
+  it('is idempotent', () => {
+    for (const key of MIGRATED_KEYS) window.localStorage.setItem(key, 'x')
+
+    migrateLegacyDesktopStorageKeys(window.localStorage)
+    migrateLegacyDesktopStorageKeys(window.localStorage)
+
+    expect(window.localStorage.getItem('orion-theme')).toBe('x')
+    expect(migrateLegacyDesktopStorageKeys(window.localStorage)).toEqual([])
+  })
+
+  it('runs before the schema chain so legacy values still drive it', () => {
+    window.localStorage.setItem('cc-haha-theme', 'light')
+    window.localStorage.setItem('cc-haha.persistence.schemaVersion', '2')
+
+    const report = runDesktopPersistenceMigrations()
+
+    // The de-brand copy lands first, then the theme-rename schema step below
+    // consumes the copied value — proof of the ordering, not just the copy.
+    expect(window.localStorage.getItem('orion-theme')).toBe('warm-classic')
+    expect(window.localStorage.getItem('cc-haha-theme')).toBeNull()
+    expect(report.migratedKeys).toContain('cc-haha-theme')
+    expect(window.localStorage.getItem(DESKTOP_PERSISTENCE_VERSION_KEY))
+      .toBe(String(CURRENT_DESKTOP_PERSISTENCE_SCHEMA_VERSION))
+  })
 })
 
 test('merges legacy connector and skill market tabs while preserving the active market and unrelated user state', () => {
@@ -399,7 +495,7 @@ test('merges legacy connector and skill market tabs while preserving the active 
     { sessionId: '__connectors__', title: 'Connectors', type: 'connectors' },
   ], activeTabId: '__connectors__' }))
   runDesktopPersistenceMigrations()
-  expect(JSON.parse(localStorage.getItem('cc-haha-open-tabs')!)).toEqual({ openTabs: [
+  expect(JSON.parse(localStorage.getItem('orion-open-tabs')!)).toEqual({ openTabs: [
     { sessionId: 'session-1', title: 'Work', type: 'session' },
     { sessionId: '__market__', title: 'Skills', type: 'market' },
   ], activeTabId: '__market__' })

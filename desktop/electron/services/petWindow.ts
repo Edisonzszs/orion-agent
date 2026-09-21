@@ -21,7 +21,7 @@ import { PRODUCT_DATA_DIR_NAME } from './appIdentity'
 export const PET_WINDOW_WIDTH = 384
 export const PET_WINDOW_HEIGHT = 400
 export const PET_WINDOW_MARGIN = 24
-export const PET_WINDOW_PARTITION = 'cc-haha-pet'
+export const PET_WINDOW_PARTITION = 'orion-pet'
 export const PET_WINDOW_STATE_FILE = 'pet-window.json'
 
 const MAX_ABSOLUTE_SCREEN_COORDINATE = 1_000_000

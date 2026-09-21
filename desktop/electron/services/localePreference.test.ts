@@ -14,7 +14,7 @@ describe('locale preference persistence', () => {
   let app: { getPath(name: 'userData'): string }
 
   beforeEach(() => {
-    root = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-haha-locale-preference-'))
+    root = fs.mkdtempSync(path.join(os.tmpdir(), 'orion-locale-preference-'))
     app = { getPath: () => root }
   })
 

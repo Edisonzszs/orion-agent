@@ -52,11 +52,11 @@ const isWindows = typeof navigator !== 'undefined' && /Win/.test(navigator.platf
 const SESSION_LIST_AUTO_REFRESH_MS = 30_000
 const SESSION_LIST_BUILDING_REFRESH_MS = 1_500
 const SESSION_LIST_FOCUS_REFRESH_MIN_MS = 5_000
-const PROJECT_ORDER_STORAGE_KEY = 'cc-haha-sidebar-project-order'
-const PROJECT_PINNED_STORAGE_KEY = 'cc-haha-sidebar-pinned-projects'
-const PROJECT_HIDDEN_STORAGE_KEY = 'cc-haha-sidebar-hidden-projects'
-const PROJECT_ORGANIZATION_STORAGE_KEY = 'cc-haha-sidebar-project-organization'
-const PROJECT_SORT_STORAGE_KEY = 'cc-haha-sidebar-project-sort'
+const PROJECT_ORDER_STORAGE_KEY = 'orion-sidebar-project-order'
+const PROJECT_PINNED_STORAGE_KEY = 'orion-sidebar-pinned-projects'
+const PROJECT_HIDDEN_STORAGE_KEY = 'orion-sidebar-hidden-projects'
+const PROJECT_ORGANIZATION_STORAGE_KEY = 'orion-sidebar-project-organization'
+const PROJECT_SORT_STORAGE_KEY = 'orion-sidebar-project-sort'
 const PROJECT_GROUP_VISIBLE_COUNT = 6
 
 type SidebarProjectOrganization = 'project' | 'recentProject' | 'time'

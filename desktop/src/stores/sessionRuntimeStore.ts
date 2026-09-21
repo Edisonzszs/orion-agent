@@ -8,7 +8,7 @@ import {
 } from '../constants/grokOfficialProvider'
 import { normalizeRuntimeSelection } from '../lib/runtimeSelection'
 
-const STORAGE_KEY = 'cc-haha-session-runtime'
+const STORAGE_KEY = 'orion-session-runtime'
 const RETIRED_GROK_MODEL_IDS = new Set([
   'grok-build',
   'grok-build-0.1',

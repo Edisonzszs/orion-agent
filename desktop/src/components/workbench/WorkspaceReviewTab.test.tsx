@@ -417,14 +417,14 @@ describe('stale writes', () => {
 
   it('points at the recoverable copy a discard left behind', async () => {
     await renderReview()
-    reviewApi.revert.mockResolvedValue(writeResult({ backupDir: '/tmp/cc-haha-backup-1' }))
+    reviewApi.revert.mockResolvedValue(writeResult({ backupDir: '/tmp/orion-backup-1' }))
 
     fireEvent.click(await screen.findByTestId('workspace-review-revert-all'))
     fireEvent.click(
       within(screen.getByRole('dialog')).getByRole('button', { name: 'Discard changes' }),
     )
 
-    expect(await screen.findByText(/\/tmp\/cc-haha-backup-1/)).toBeInTheDocument()
+    expect(await screen.findByText(/\/tmp\/orion-backup-1/)).toBeInTheDocument()
   })
 })
 

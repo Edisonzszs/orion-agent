@@ -1163,7 +1163,7 @@ export const kr: Record<TranslationKey, string> = {
   'settings.diagnostics.doctorTitle': 'Doctor',
   'settings.diagnostics.doctorDescription': '보호된 사용자 및 프로젝트 상태를 변경하지 않고 확인합니다.',
   'settings.diagnostics.doctorProtectedData': '채팅 기록, 모델 구성, 스킬, MCP, IM, OAuth는 항상 보호됩니다.',
-  'settings.diagnostics.doctorSafeKeys': '재설정 시 다음 항목만 제거합니다: cc-haha-open-tabs, cc-haha-session-runtime, cc-haha-theme, cc-haha-locale, cc-haha-app-zoom, cc-haha-ui-zoom, cc-haha.persistence.schemaVersion.',
+  'settings.diagnostics.doctorSafeKeys': '재설정 시 다음 항목만 제거합니다: orion-open-tabs, orion-session-runtime, orion-theme, orion-locale, orion-app-zoom, orion-ui-zoom, orion.persistence.schemaVersion.',
   'settings.diagnostics.runDoctor': 'Doctor 실행',
   'settings.diagnostics.resetSafeUiState': '안전한 UI 상태 재설정',
   'settings.diagnostics.confirmResetSafeUiState': '위에 나열된 재생성 가능한 데스크톱 UI 키만 재설정할까요? 보호된 사용자 및 프로젝트 데이터는 변경되지 않습니다.',

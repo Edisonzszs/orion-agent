@@ -73,10 +73,10 @@ function seedStorage(stored: {
   darkTheme?: string
 }) {
   window.localStorage.clear()
-  if (stored.theme !== undefined) window.localStorage.setItem('cc-haha-theme', stored.theme)
-  if (stored.follow !== undefined) window.localStorage.setItem('cc-haha-follow-system-theme', stored.follow)
-  if (stored.lightTheme !== undefined) window.localStorage.setItem('cc-haha-light-theme', stored.lightTheme)
-  if (stored.darkTheme !== undefined) window.localStorage.setItem('cc-haha-dark-theme', stored.darkTheme)
+  if (stored.theme !== undefined) window.localStorage.setItem('orion-theme', stored.theme)
+  if (stored.follow !== undefined) window.localStorage.setItem('orion-follow-system-theme', stored.follow)
+  if (stored.lightTheme !== undefined) window.localStorage.setItem('orion-light-theme', stored.lightTheme)
+  if (stored.darkTheme !== undefined) window.localStorage.setItem('orion-dark-theme', stored.darkTheme)
 }
 
 /** What the app bundle would land on for the same stored state. */

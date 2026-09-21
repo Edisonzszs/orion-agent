@@ -80,20 +80,20 @@
             if (meta && BACKGROUND[value]) meta.setAttribute('content', BACKGROUND[value])
           }
 
-          var stored = read('cc-haha-theme')
+          var stored = read('orion-theme')
           var theme = (has(LIGHT, stored) || isDark(stored)) ? stored : 'white'
 
-          var followRaw = read('cc-haha-follow-system-theme')
+          var followRaw = read('orion-follow-system-theme')
           // Unset means: new install follows the system, existing install
           // (recognised by having a stored theme) keeps its fixed pick.
           var follow = followRaw === '1' || (followRaw !== '0' && stored === null)
 
           if (follow) {
-            var storedLight = read('cc-haha-light-theme')
+            var storedLight = read('orion-light-theme')
             var lightTheme = has(LIGHT, storedLight)
               ? storedLight
               : (has(LIGHT, theme) ? theme : 'white')
-            var storedDark = read('cc-haha-dark-theme')
+            var storedDark = read('orion-dark-theme')
             var darkTheme = isDark(storedDark) ? storedDark : (isDark(theme) ? theme : 'dark')
             var prefersDark = false
             try {

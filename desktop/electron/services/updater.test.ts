@@ -85,7 +85,7 @@ describe('Electron updater service', () => {
 
   it('skips electron-updater when packaged update config is absent', async () => {
     const localUpdater = fakeUpdater()
-    const tempDir = mkdtempSync(join(tmpdir(), 'cc-haha-updater-'))
+    const tempDir = mkdtempSync(join(tmpdir(), 'orion-updater-'))
     try {
       const service = new ElectronUpdaterService(localUpdater, undefined, {
         updateConfigPath: join(tempDir, 'app-update.yml'),
@@ -191,9 +191,9 @@ describe('Electron updater service', () => {
     await service.downloadUpdate(() => {})
 
     const env: NodeJS.ProcessEnv = {
-      CLAUDE_CONFIG_DIR: 'E:\\cc-haha-data',
+      CLAUDE_CONFIG_DIR: 'E:\\orion-data',
       ORION_APP_PORTABLE_DIR: '1',
-      WEBVIEW2_USER_DATA_FOLDER: 'E:\\cc-haha-data\\EBWebView',
+      WEBVIEW2_USER_DATA_FOLDER: 'E:\\orion-data\\EBWebView',
       APPDATA: 'C:\\Users\\someone\\AppData\\Roaming',
     }
     service.quitAndInstallDownloadedUpdate(env)

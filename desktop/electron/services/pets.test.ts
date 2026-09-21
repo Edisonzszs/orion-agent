@@ -21,7 +21,7 @@ import {
 const tempDirs: string[] = []
 
 function makeTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-haha-pets-'))
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'orion-pets-'))
   tempDirs.push(dir)
   return dir
 }

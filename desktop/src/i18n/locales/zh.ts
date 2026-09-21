@@ -1161,7 +1161,7 @@ export const zh: Record<TranslationKey, string> = {
   'settings.diagnostics.doctorTitle': 'Doctor',
   'settings.diagnostics.doctorDescription': '检查受保护的用户与项目状态，不会进行修改。',
   'settings.diagnostics.doctorProtectedData': '聊天历史、模型配置、Skills、MCP、IM 和 OAuth 始终受保护。',
-  'settings.diagnostics.doctorSafeKeys': '重置只会移除：cc-haha-open-tabs、cc-haha-session-runtime、cc-haha-theme、cc-haha-locale、cc-haha-app-zoom、cc-haha-ui-zoom 和 cc-haha.persistence.schemaVersion。',
+  'settings.diagnostics.doctorSafeKeys': '重置只会移除：orion-open-tabs、orion-session-runtime、orion-theme、orion-locale、orion-app-zoom、orion-ui-zoom 和 orion.persistence.schemaVersion。',
   'settings.diagnostics.runDoctor': '运行 Doctor',
   'settings.diagnostics.resetSafeUiState': '重置安全 UI 状态',
   'settings.diagnostics.confirmResetSafeUiState': '仅重置上面列出的可再生桌面 UI 键？受保护的用户与项目数据不会被修改。',

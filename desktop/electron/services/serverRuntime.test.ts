@@ -92,7 +92,7 @@ async function waitForMockCalls(mock: ReturnType<typeof vi.fn>, count: number): 
 
 describe('ElectronServerRuntime', () => {
   beforeEach(() => {
-    isolatedConfigDir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-runtime-'))
+    isolatedConfigDir = mkdtempSync(path.join(tmpdir(), 'orion-electron-runtime-'))
     sidecarMocks.nextPort = 49321
     sidecarMocks.spawnError = null
     sidecarMocks.serverChildren.length = 0
@@ -237,7 +237,7 @@ describe('ElectronServerRuntime', () => {
   })
 
   it('waits for real server shutdown cleanup before the first restart attempt', async () => {
-    const root = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-restart-'))
+    const root = mkdtempSync(path.join(tmpdir(), 'orion-electron-restart-'))
     const activeTurn = path.join(root, 'active-turn')
     const children: ChildProcess[] = []
     const readyFiles: string[] = []

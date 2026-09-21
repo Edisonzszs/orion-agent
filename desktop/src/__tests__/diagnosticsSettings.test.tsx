@@ -195,8 +195,8 @@ describe('Settings > Diagnostics tab', () => {
     })
     diagnosticsApiMock.exportBundle.mockResolvedValue({
       bundle: {
-        path: '/tmp/claude/cc-haha/diagnostics/exports/cc-haha-diagnostics.tar.gz',
-        fileName: 'cc-haha-diagnostics.tar.gz',
+        path: '/tmp/claude/cc-haha/diagnostics/exports/orion-diagnostics.tar.gz',
+        fileName: 'orion-diagnostics.tar.gz',
         bytes: 1024,
       },
     })
@@ -580,7 +580,7 @@ describe('Settings > Diagnostics tab', () => {
     await waitFor(() => {
       expect(diagnosticsApiMock.exportBundle).toHaveBeenCalled()
     })
-    expect(await screen.findByText('/tmp/claude/cc-haha/diagnostics/exports/cc-haha-diagnostics.tar.gz')).toBeInTheDocument()
+    expect(await screen.findByText('/tmp/claude/cc-haha/diagnostics/exports/orion-diagnostics.tar.gz')).toBeInTheDocument()
   })
 
   it('asks with the shared confirm dialog before clearing diagnostics', async () => {
@@ -758,7 +758,7 @@ describe('Settings > Diagnostics tab', () => {
     for (const key of SAFE_DOCTOR_STORAGE_KEYS) {
       window.localStorage.setItem(key, `${key}-value`)
     }
-    window.localStorage.setItem('cc-haha-chat-history', 'keep')
+    window.localStorage.setItem('orion-chat-history', 'keep')
 
     render(<Settings />)
 
@@ -768,18 +768,18 @@ describe('Settings > Diagnostics tab', () => {
     await waitFor(() => {
       expect(doctorApiMock.report).toHaveBeenCalledWith('/workspace/project')
     })
-    expect(window.localStorage.getItem('cc-haha-theme')).toBe('cc-haha-theme-value')
+    expect(window.localStorage.getItem('orion-theme')).toBe('orion-theme-value')
     expect(screen.getByText('~/.claude/orion/providers.json')).toBeInTheDocument()
     expect(screen.getByText(/Invalid schema/i)).toBeInTheDocument()
     expect(screen.getByText(/User and active project/i)).toBeInTheDocument()
     expect(screen.getByText('Healthy: 1 · Not configured: 0 · Missing: 0 · Invalid: 1')).toBeInTheDocument()
     expect(screen.queryByText('<project>/.claude/skills')).not.toBeInTheDocument()
-    expect(screen.getByText(/cc-haha-app-zoom/)).toBeInTheDocument()
-    expect(screen.getByText(/cc-haha-ui-zoom/)).toBeInTheDocument()
+    expect(screen.getByText(/orion-app-zoom/)).toBeInTheDocument()
+    expect(screen.getByText(/orion-ui-zoom/)).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: /Reset safe UI state/i }))
     const dialog = await screen.findByRole('dialog', { name: 'Reset safe UI state' })
-    expect(window.localStorage.getItem('cc-haha-theme')).toBe('cc-haha-theme-value')
+    expect(window.localStorage.getItem('orion-theme')).toBe('orion-theme-value')
     fireEvent.click(within(dialog).getByRole('button', { name: /Reset safe UI state/i }))
 
     await waitFor(() => {
@@ -788,8 +788,8 @@ describe('Settings > Diagnostics tab', () => {
     for (const key of SAFE_DOCTOR_STORAGE_KEYS) {
       expect(window.localStorage.getItem(key)).toBeNull()
     }
-    expect(window.localStorage.getItem('cc-haha-chat-history')).toBe('keep')
-    expect(screen.getByText(/Removed keys:.*cc-haha-app-zoom/)).toBeInTheDocument()
+    expect(window.localStorage.getItem('orion-chat-history')).toBe('keep')
+    expect(screen.getByText(/Removed keys:.*orion-app-zoom/)).toBeInTheDocument()
   })
 
   it('counts not-configured optional checks separately and excludes them from findings', async () => {
@@ -954,7 +954,7 @@ describe('Settings > Diagnostics tab', () => {
     const dialog = await screen.findByRole('dialog', { name: 'Reset safe UI state' })
     fireEvent.click(within(dialog).getByRole('button', { name: /Reset safe UI state/i }))
 
-    expect(await screen.findByText(/Removed keys:.*cc-haha-app-zoom/)).toBeInTheDocument()
+    expect(await screen.findByText(/Removed keys:.*orion-app-zoom/)).toBeInTheDocument()
     expect(screen.getByText('Failed keys: None')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Reset safe UI state/i })).toBeDisabled()
 
@@ -973,7 +973,7 @@ describe('Settings > Diagnostics tab', () => {
       }))
     })
 
-    expect(screen.getByText(/Removed keys:.*cc-haha-app-zoom/)).toBeInTheDocument()
+    expect(screen.getByText(/Removed keys:.*orion-app-zoom/)).toBeInTheDocument()
     expect(screen.getByText('Failed keys: None')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Reset safe UI state/i })).not.toBeDisabled()
 

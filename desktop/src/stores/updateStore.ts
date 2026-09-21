@@ -20,7 +20,7 @@ type CheckOptions = {
   autoDownload?: boolean
 }
 
-const DISMISSED_UPDATE_VERSION_KEY = 'cc-haha-dismissed-update-version'
+const DISMISSED_UPDATE_VERSION_KEY = 'orion-dismissed-update-version'
 const RELAUNCH_WATCHDOG_MS = 15_000
 
 type UpdateStore = {

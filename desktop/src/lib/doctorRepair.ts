@@ -9,15 +9,15 @@ import { DESKTOP_PERSISTENCE_VERSION_KEY } from './persistenceMigrations'
 import { WORKSPACE_STORAGE_KEY } from './workspace/storageKey'
 
 export const SAFE_DOCTOR_STORAGE_KEYS = [
-  'cc-haha-open-tabs',
-  'cc-haha-session-runtime',
+  'orion-open-tabs',
+  'orion-session-runtime',
   THEME_STORAGE_KEY,
   // The theme is three keys, not one: dropping only the applied theme would
   // leave the switch and the light half behind, so a reset would not actually
   // return the appearance to its out-of-the-box state.
   FOLLOW_SYSTEM_THEME_STORAGE_KEY,
   LIGHT_THEME_STORAGE_KEY,
-  'cc-haha-locale',
+  'orion-locale',
   APP_ZOOM_STORAGE_KEY,
   LEGACY_UI_ZOOM_STORAGE_KEY,
   // Regenerable by the same standard as the open-tab list: it holds panel

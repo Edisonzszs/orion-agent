@@ -11,7 +11,7 @@ import {
 } from './appZoom'
 
 export const CURRENT_DESKTOP_PERSISTENCE_SCHEMA_VERSION = 4
-export const DESKTOP_PERSISTENCE_VERSION_KEY = 'cc-haha.persistence.schemaVersion'
+export const DESKTOP_PERSISTENCE_VERSION_KEY = 'orion.persistence.schemaVersion'
 
 type DesktopMigrationReport = {
   migratedKeys: string[]
@@ -19,13 +19,13 @@ type DesktopMigrationReport = {
 
 type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
 
-const TAB_STORAGE_KEY = 'cc-haha-open-tabs'
-const SESSION_RUNTIME_STORAGE_KEY = 'cc-haha-session-runtime'
-const THEME_STORAGE_KEY = 'cc-haha-theme'
-const FOLLOW_SYSTEM_THEME_STORAGE_KEY = 'cc-haha-follow-system-theme'
-const LIGHT_THEME_STORAGE_KEY = 'cc-haha-light-theme'
-const DARK_THEME_STORAGE_KEY = 'cc-haha-dark-theme'
-const LOCALE_STORAGE_KEY = 'cc-haha-locale'
+const TAB_STORAGE_KEY = 'orion-open-tabs'
+const SESSION_RUNTIME_STORAGE_KEY = 'orion-session-runtime'
+const THEME_STORAGE_KEY = 'orion-theme'
+const FOLLOW_SYSTEM_THEME_STORAGE_KEY = 'orion-follow-system-theme'
+const LIGHT_THEME_STORAGE_KEY = 'orion-light-theme'
+const DARK_THEME_STORAGE_KEY = 'orion-dark-theme'
+const LOCALE_STORAGE_KEY = 'orion-locale'
 const EFFORT_LEVELS = ['low', 'medium', 'high', 'xhigh', 'max']
 const PERSISTED_SPECIAL_TAB_TYPES = ['settings', 'scheduled', 'market', 'connectors', 'traces'] as const
 const PERSISTED_SPECIAL_TAB_IDS: Record<(typeof PERSISTED_SPECIAL_TAB_TYPES)[number], string> = {
@@ -37,6 +37,45 @@ const PERSISTED_SPECIAL_TAB_IDS: Record<(typeof PERSISTED_SPECIAL_TAB_TYPES)[num
 }
 const SUPPORTED_LOCALES = ['en', 'zh', 'zh-TW', 'jp', 'kr']
 const WORKSPACE_PERSISTED_TAB_KINDS = ['file', 'browser', 'review', 'terminal']
+
+/**
+ * Pre-rebrand user-state keys, still holding values written by `cc-haha`
+ * builds. This table is the only place those literals may live: it was
+ * written after the code-wide `cc-haha` → `orion` rename and is deliberately
+ * exempt from it.
+ *
+ * Ephemeral window/smoke keys and Electron partition values are absent on
+ * purpose — they were renamed without a migration because their state resets
+ * (pet/preview/browser partitions) or never outlives a session (smoke and
+ * diagnostics keys).
+ */
+const LEGACY_DESKTOP_STORAGE_KEYS = [
+  'cc-haha-active-settings-tab',
+  'cc-haha-app-zoom',
+  'cc-haha-dark-theme',
+  'cc-haha-dismissed-update-version',
+  'cc-haha-follow-system-theme',
+  'cc-haha-h5-server-url',
+  'cc-haha-h5-token',
+  'cc-haha-light-theme',
+  'cc-haha-locale',
+  'cc-haha-market-disclaimer-dismissed',
+  'cc-haha-open-tabs',
+  'cc-haha-open-target-preferences',
+  'cc-haha-session-runtime',
+  'cc-haha-sidebar-hidden-projects',
+  'cc-haha-sidebar-pinned-projects',
+  'cc-haha-sidebar-project-order',
+  'cc-haha-sidebar-project-organization',
+  'cc-haha-sidebar-project-sort',
+  'cc-haha-sidebar-width',
+  'cc-haha-theme',
+  'cc-haha-ui-zoom',
+  'cc-haha.notifiedDesktopTaskRuns.v1',
+  'cc-haha.persistence.schemaVersion',
+  'cc-haha.scheduledTaskNotificationScan.v1',
+  'cc-haha.workspace',
+] as const
 
 function readJson(storage: StorageLike, key: string): unknown {
   const raw = storage.getItem(key)
@@ -307,9 +346,45 @@ function getDefaultStorage(): StorageLike | null {
   }
 }
 
+/**
+ * One-shot forward migration from the pre-rebrand `cc-haha` keys to their
+ * `orion` twins. Follows normalizeAppZoomKey's legacy-key convention: copy a
+ * value only when its orion key is absent (never overwrite what a newer
+ * build already wrote), then remove the legacy key — the removal is what
+ * makes the pass idempotent and leaves no brand-named residue behind.
+ */
+export function migrateLegacyDesktopStorageKeys(storage: StorageLike): string[] {
+  const migrated: string[] = []
+  for (const legacyKey of LEGACY_DESKTOP_STORAGE_KEYS) {
+    try {
+      const value = storage.getItem(legacyKey)
+      if (value === null) continue
+      // Every target is the uniform prefix rewrite the code rename applied
+      // (`cc-haha-…` → `orion-…`, `cc-haha.…` → `orion.…`).
+      const orionKey = legacyKey.replace(/^cc-haha/, 'orion')
+      if (storage.getItem(orionKey) === null) {
+        storage.setItem(orionKey, value)
+      }
+      storage.removeItem(legacyKey)
+      migrated.push(legacyKey)
+    } catch {
+      migrated.push(legacyKey)
+    }
+  }
+  return migrated
+}
+
 export function runDesktopPersistenceMigrations(storage: StorageLike | null = getDefaultStorage()): DesktopMigrationReport {
   const report: DesktopMigrationReport = { migratedKeys: [] }
   if (!storage) return report
+
+  // The de-brand key migration runs before every other step: the schema chain
+  // below — and the version stamp it writes — must read the orion keys from
+  // the first post-rename launch onward, with the legacy schema version
+  // (copied verbatim) still driving the schema steps.
+  for (const legacyKey of migrateLegacyDesktopStorageKeys(storage)) {
+    report.migratedKeys.push(legacyKey)
+  }
 
   runMigrationStep(report, TAB_STORAGE_KEY, () => migrateTabs(storage, report))
   runMigrationStep(report, SESSION_RUNTIME_STORAGE_KEY, () => migrateSessionRuntime(storage, report))

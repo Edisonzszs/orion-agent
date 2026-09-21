@@ -179,7 +179,7 @@ describe('Electron pet window service', () => {
   })
 
   it('persists position only in the app-owned product config root', () => {
-    const root = mkdtempSync(path.join(tmpdir(), 'cc-haha-pet-position-'))
+    const root = mkdtempSync(path.join(tmpdir(), 'orion-pet-position-'))
     const configDir = path.join(root, 'portable')
     const env = {
       CLAUDE_CONFIG_DIR: configDir,
@@ -200,7 +200,7 @@ describe('Electron pet window service', () => {
   })
 
   it('persists the mascot box with the position and tolerates state without one', () => {
-    const root = mkdtempSync(path.join(tmpdir(), 'cc-haha-pet-region-'))
+    const root = mkdtempSync(path.join(tmpdir(), 'orion-pet-region-'))
     const env = { CLAUDE_CONFIG_DIR: path.join(root, 'portable') }
     try {
       writePetWindowPosition(
@@ -270,7 +270,7 @@ describe('Electron pet window service', () => {
       webPreferences: {
         contextIsolation: true,
         nodeIntegration: false,
-        partition: 'cc-haha-pet',
+        partition: 'orion-pet',
         preload: '/app/electron-dist/preload.cjs',
         sandbox: true,
       },

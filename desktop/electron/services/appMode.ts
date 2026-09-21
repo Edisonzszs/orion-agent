@@ -46,7 +46,7 @@ function writeAppModeConfig(configDir: string, config: PersistedAppModeConfig): 
 function assertWritableDataDir(configDir: string): void {
   try {
     fs.mkdirSync(configDir, { recursive: true })
-    const probeDir = fs.mkdtempSync(path.join(configDir, '.cc-haha-write-test-'))
+    const probeDir = fs.mkdtempSync(path.join(configDir, '.orion-write-test-'))
     try {
       fs.writeFileSync(path.join(probeDir, 'probe'), '')
     } finally {

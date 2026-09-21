@@ -76,7 +76,7 @@ function close(server: http.Server): Promise<void> {
 
 describe('Electron sidecar manager', () => {
   it('places the Electron host log in the active server diagnostics directory', () => {
-    const portableDir = path.join(tmpdir(), 'cc-haha-portable-diagnostics')
+    const portableDir = path.join(tmpdir(), 'orion-portable-diagnostics')
 
     expect(electronHostDiagnosticsFile(
       { CLAUDE_CONFIG_DIR: portableDir },
@@ -141,7 +141,7 @@ describe('Electron sidecar manager', () => {
   })
 
   it('passes the packaged ripgrep path to the server and its CLI children', () => {
-    const desktopRoot = mkdtempSync(path.join(tmpdir(), 'cc-haha-ripgrep-plan-'))
+    const desktopRoot = mkdtempSync(path.join(tmpdir(), 'orion-ripgrep-plan-'))
     try {
       const bundledRipgrep = resolveBundledRipgrepExecutable(desktopRoot)
       mkdirSync(path.dirname(bundledRipgrep), { recursive: true })
@@ -175,7 +175,7 @@ describe('Electron sidecar manager', () => {
   })
 
   it('preserves an explicit ripgrep override', () => {
-    const customDir = mkdtempSync(path.join(tmpdir(), 'cc-haha-custom-ripgrep-'))
+    const customDir = mkdtempSync(path.join(tmpdir(), 'orion-custom-ripgrep-'))
     try {
       const customRipgrep = path.join(customDir, 'rg')
       writeFileSync(customRipgrep, 'fixture')
@@ -194,7 +194,7 @@ describe('Electron sidecar manager', () => {
   })
 
   it('passes portable config and adapter server URL through the sidecar env', () => {
-    const configDir = mkdtempSync(path.join(tmpdir(), 'cc-haha-config-'))
+    const configDir = mkdtempSync(path.join(tmpdir(), 'orion-config-'))
     try {
       const env = buildSidecarEnv({ CLAUDE_CONFIG_DIR: configDir }, '/app/dist')
       expect(env.CLAUDE_CONFIG_DIR).toBe(configDir)
@@ -334,7 +334,7 @@ describe('Electron sidecar manager', () => {
   })
 
   it('appends only a bounded sanitized Electron host-log tail', () => {
-    const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-'))
+    const dir = mkdtempSync(path.join(tmpdir(), 'orion-electron-host-'))
     const logPath = path.join(dir, 'electron-host.log')
     const homeDir = path.join(dir, 'private-home')
     try {
@@ -375,7 +375,7 @@ describe('Electron sidecar manager', () => {
 
   it('creates the Electron diagnostics directory with private permissions', () => {
     if (process.platform === 'win32') return
-    const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-mode-'))
+    const dir = mkdtempSync(path.join(tmpdir(), 'orion-electron-host-mode-'))
     const diagnosticsDir = path.join(dir, 'orion', 'diagnostics')
     const logPath = path.join(diagnosticsDir, 'electron-host.log')
     try {
@@ -390,7 +390,7 @@ describe('Electron sidecar manager', () => {
 
   it('rejects a symlinked Electron diagnostics directory without changing its target', () => {
     if (process.platform === 'win32') return
-    const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-symlink-dir-'))
+    const dir = mkdtempSync(path.join(tmpdir(), 'orion-electron-host-symlink-dir-'))
     const diagnosticsDir = path.join(dir, 'orion', 'diagnostics')
     const unrelatedDir = path.join(dir, 'unrelated')
     const unrelatedLog = path.join(unrelatedDir, 'electron-host.log')
@@ -415,7 +415,7 @@ describe('Electron sidecar manager', () => {
 
   it('rejects an ancestor symlink before creating Electron diagnostics outside the config root', () => {
     if (process.platform === 'win32') return
-    const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-symlink-parent-'))
+    const dir = mkdtempSync(path.join(tmpdir(), 'orion-electron-host-symlink-parent-'))
     const configDir = path.join(dir, 'config')
     const unrelatedDir = path.join(dir, 'unrelated')
     const diagnosticsDir = path.join(configDir, 'orion', 'diagnostics')
@@ -439,7 +439,7 @@ describe('Electron sidecar manager', () => {
 
   it('rejects a symlinked Electron diagnostics file without copying its target', () => {
     if (process.platform === 'win32') return
-    const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-symlink-file-'))
+    const dir = mkdtempSync(path.join(tmpdir(), 'orion-electron-host-symlink-file-'))
     const diagnosticsDir = path.join(dir, 'orion', 'diagnostics')
     const logPath = path.join(diagnosticsDir, 'electron-host.log')
     const unrelatedLog = path.join(dir, 'unrelated.log')
@@ -463,7 +463,7 @@ describe('Electron sidecar manager', () => {
   })
 
   it('bounds and re-sanitizes an oversized pre-existing host diagnostics file', () => {
-    const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-existing-'))
+    const dir = mkdtempSync(path.join(tmpdir(), 'orion-electron-host-existing-'))
     const logPath = path.join(dir, 'electron-host.log')
     const homeDir = path.join(dir, 'private-home')
     try {
@@ -488,7 +488,7 @@ describe('Electron sidecar manager', () => {
   })
 
   it('does not crash Electron when the host diagnostics destination cannot be written', () => {
-    const dir = mkdtempSync(path.join(tmpdir(), 'cc-haha-electron-host-failure-'))
+    const dir = mkdtempSync(path.join(tmpdir(), 'orion-electron-host-failure-'))
     const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined)
     try {
       expect(() => appendHostDiagnostic(dir, 'sidecar failed')).not.toThrow()

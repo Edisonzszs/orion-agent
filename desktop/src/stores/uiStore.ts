@@ -24,8 +24,8 @@ import {
   subscribeThemeStorageChanges,
 } from '../theme/systemAppearance'
 
-const ACTIVE_SETTINGS_TAB_STORAGE_KEY = 'cc-haha-active-settings-tab'
-const SIDEBAR_WIDTH_STORAGE_KEY = 'cc-haha-sidebar-width'
+const ACTIVE_SETTINGS_TAB_STORAGE_KEY = 'orion-active-settings-tab'
+const SIDEBAR_WIDTH_STORAGE_KEY = 'orion-sidebar-width'
 
 export const SIDEBAR_MIN_WIDTH = 240
 export const SIDEBAR_MAX_WIDTH = 480

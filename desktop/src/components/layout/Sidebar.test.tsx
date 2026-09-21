@@ -243,11 +243,11 @@ import {
 import type { SessionListItem } from '../../types/session'
 import type { PerSessionState } from '../../stores/chatStore'
 
-const PROJECT_ORDER_STORAGE_KEY = 'cc-haha-sidebar-project-order'
-const PROJECT_PINNED_STORAGE_KEY = 'cc-haha-sidebar-pinned-projects'
-const PROJECT_HIDDEN_STORAGE_KEY = 'cc-haha-sidebar-hidden-projects'
-const PROJECT_ORGANIZATION_STORAGE_KEY = 'cc-haha-sidebar-project-organization'
-const PROJECT_SORT_STORAGE_KEY = 'cc-haha-sidebar-project-sort'
+const PROJECT_ORDER_STORAGE_KEY = 'orion-sidebar-project-order'
+const PROJECT_PINNED_STORAGE_KEY = 'orion-sidebar-pinned-projects'
+const PROJECT_HIDDEN_STORAGE_KEY = 'orion-sidebar-hidden-projects'
+const PROJECT_ORGANIZATION_STORAGE_KEY = 'orion-sidebar-project-organization'
+const PROJECT_SORT_STORAGE_KEY = 'orion-sidebar-project-sort'
 const realCreateSession = useSessionStore.getInitialState().createSession
 const realFetchSessions = useSessionStore.getInitialState().fetchSessions
 

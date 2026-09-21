@@ -1160,7 +1160,7 @@ Row 9, all 8 cells: continuing from straight down, turning left through lower-le
   'settings.diagnostics.doctorTitle': 'Doctor',
   'settings.diagnostics.doctorDescription': 'Check protected user and project state without changing it.',
   'settings.diagnostics.doctorProtectedData': 'Chat history, model config, skills, MCP, IM, and OAuth remain protected.',
-  'settings.diagnostics.doctorSafeKeys': 'Reset removes only: cc-haha-open-tabs, cc-haha-session-runtime, cc-haha-theme, cc-haha-locale, cc-haha-app-zoom, cc-haha-ui-zoom, and cc-haha.persistence.schemaVersion.',
+  'settings.diagnostics.doctorSafeKeys': 'Reset removes only: orion-open-tabs, orion-session-runtime, orion-theme, orion-locale, orion-app-zoom, orion-ui-zoom, and orion.persistence.schemaVersion.',
   'settings.diagnostics.runDoctor': 'Run Doctor',
   'settings.diagnostics.resetSafeUiState': 'Reset safe UI state',
   'settings.diagnostics.confirmResetSafeUiState': 'Reset only the listed regenerable desktop UI keys? Protected user and project data will not be changed.',
