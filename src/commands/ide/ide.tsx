@@ -150,7 +150,7 @@ function IDEScreen(t0) {
   }
   let t7;
   if ($[24] !== availableIDEs) {
-    t7 = availableIDEs.length !== 0 && availableIDEs.some(_temp2) && <Box marginTop={1}><Text color="warning">Note: Only one Claude Code instance can be connected to VS Code at a time.</Text></Box>;
+    t7 = availableIDEs.length !== 0 && availableIDEs.some(_temp2) && <Box marginTop={1}><Text color="warning">Note: Only one Orion Agent instance can be connected to VS Code at a time.</Text></Box>;
     $[24] = availableIDEs;
     $[25] = t7;
   } else {

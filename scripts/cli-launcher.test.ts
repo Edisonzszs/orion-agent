@@ -28,7 +28,7 @@ test('source CLI launcher runs through Bun without requiring Bash', async () => 
     ])
 
     expect(exitCode, stderr).toBe(0)
-    expect(stdout).toContain('(Claude Code)')
+    expect(stdout).toContain('(Orion Agent)')
   } finally {
     await rm(configDir, { recursive: true, force: true })
   }

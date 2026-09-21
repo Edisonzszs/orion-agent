@@ -643,7 +643,7 @@ export function startServer(port = PORT, host = HOST) {
     )
   })
 
-  console.log(`[Server] Claude Code API server running at http://${host}:${serverPort}`)
+  console.log(`[Server] Orion Agent API server running at http://${host}:${serverPort}`)
   return server
 }
 
