@@ -68,7 +68,7 @@ function controlledSidecarEnvironment(
     ...env,
     HOME: homeDir,
     CLAUDE_CONFIG_DIR: configDir,
-    CC_HAHA_LOCAL_ACCESS_TOKEN: localAccessToken,
+    ORION_LOCAL_ACCESS_TOKEN: localAccessToken,
     NODE_ENV: 'test',
     NO_PROXY: '127.0.0.1,localhost,::1',
     no_proxy: '127.0.0.1,localhost,::1',
@@ -379,7 +379,7 @@ describe('build-sidecars Windows x64 target mapping', () => {
     const rootPackage = readJson(path.resolve(import.meta.dirname, '../../package.json'))
 
     expect(desktopPackage.scripts?.['test:compiled-sidecar-smoke']).toContain(
-      'CC_HAHA_RUN_COMPILED_SIDECAR_SMOKE=1',
+      'ORION_RUN_COMPILED_SIDECAR_SMOKE=1',
     )
     expect(desktopPackage.scripts?.['test:compiled-sidecar-smoke']).toContain(
       'scripts/image-processor-packaging.test.ts',
@@ -467,8 +467,8 @@ describe('build-sidecars Windows x64 target mapping', () => {
     const originalEnvironment = {
       HOME: process.env.HOME,
       CLAUDE_CONFIG_DIR: process.env.CLAUDE_CONFIG_DIR,
-      CC_HAHA_LOCAL_INDEX: process.env.CC_HAHA_LOCAL_INDEX,
-      CC_HAHA_LOCAL_ACCESS_TOKEN: process.env.CC_HAHA_LOCAL_ACCESS_TOKEN,
+      ORION_LOCAL_INDEX: process.env.ORION_LOCAL_INDEX,
+      ORION_LOCAL_ACCESS_TOKEN: process.env.ORION_LOCAL_ACCESS_TOKEN,
     }
     const rootDir = await mkdtemp(joinPath(tmpdir(), 'cc-haha-hung-sidecar-smoke-'))
     const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], {
@@ -539,17 +539,17 @@ describe('build-sidecars Windows x64 target mapping', () => {
     expect(await stat(rootDir).then(() => true, () => false)).toBe(false)
     expect(process.env.HOME).toBe(originalEnvironment.HOME)
     expect(process.env.CLAUDE_CONFIG_DIR).toBe(originalEnvironment.CLAUDE_CONFIG_DIR)
-    expect(process.env.CC_HAHA_LOCAL_INDEX).toBe(originalEnvironment.CC_HAHA_LOCAL_INDEX)
-    expect(process.env.CC_HAHA_LOCAL_ACCESS_TOKEN).toBe(
-      originalEnvironment.CC_HAHA_LOCAL_ACCESS_TOKEN,
+    expect(process.env.ORION_LOCAL_INDEX).toBe(originalEnvironment.ORION_LOCAL_INDEX)
+    expect(process.env.ORION_LOCAL_ACCESS_TOKEN).toBe(
+      originalEnvironment.ORION_LOCAL_ACCESS_TOKEN,
     )
   })
 })
 
 const compiledSidecarSmokeEnabled =
-  process.env.CC_HAHA_RUN_COMPILED_SIDECAR_SMOKE === '1'
+  process.env.ORION_RUN_COMPILED_SIDECAR_SMOKE === '1'
 const configuredCompiledSidecarStarts = Number.parseInt(
-  process.env.CC_HAHA_COMPILED_SIDECAR_SMOKE_STARTS ?? '',
+  process.env.ORION_COMPILED_SIDECAR_SMOKE_STARTS ?? '',
   10,
 )
 const compiledSidecarSmokeStarts = Number.isInteger(configuredCompiledSidecarStarts)

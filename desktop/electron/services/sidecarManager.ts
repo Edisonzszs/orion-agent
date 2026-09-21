@@ -31,8 +31,8 @@ export const SERVER_STARTUP_TIMEOUT_MS = 30_000
 export const SERVER_STARTUP_LOG_LIMIT = 80
 export const HOST_DIAGNOSTICS_LINE_LIMIT = 80
 export const HOST_DIAGNOSTICS_BYTE_LIMIT = 256 * 1024
-export const ELECTRON_DIAGNOSTICS_FILE_ENV = 'CC_HAHA_ELECTRON_DIAGNOSTICS_FILE'
-export const RIPGREP_PATH_ENV = 'CC_HAHA_RIPGREP_PATH'
+export const ELECTRON_DIAGNOSTICS_FILE_ENV = 'ORION_ELECTRON_DIAGNOSTICS_FILE'
+export const RIPGREP_PATH_ENV = 'ORION_RIPGREP_PATH'
 const HOST_DIAGNOSTICS_LINE_BYTE_LIMIT = 4096
 // Shared with the Tauri shell (src-tauri/src/lib.rs) so both desktop builds
 // reuse the same sticky port across restarts (issue #767).
@@ -63,8 +63,8 @@ const PROXY_ENV_KEYS = [
   'ALL_PROXY',
   'all_proxy',
 ] as const
-export const SYSTEM_PROXY_BRIDGE_ENV = 'CC_HAHA_SYSTEM_PROXY_URL'
-export const SYSTEM_PROXY_ERROR_ENV = 'CC_HAHA_SYSTEM_PROXY_ERROR'
+export const SYSTEM_PROXY_BRIDGE_ENV = 'ORION_SYSTEM_PROXY_URL'
+export const SYSTEM_PROXY_ERROR_ENV = 'ORION_SYSTEM_PROXY_ERROR'
 const LOOPBACK_NO_PROXY_ENTRIES = ['localhost', '127.0.0.1', '::1'] as const
 
 export function resolveHostTriple(platform = process.platform, arch = process.arch): string {

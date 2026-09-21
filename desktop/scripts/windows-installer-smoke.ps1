@@ -33,7 +33,7 @@ $installProcess = $null
 $bundledHelperProcess = $null
 
 $savedEnvironment = @{}
-foreach ($name in @('APPDATA', 'LOCALAPPDATA', 'USERPROFILE', 'CLAUDE_CONFIG_DIR', 'CC_HAHA_APP_PORTABLE_DIR', 'COMPLUS_Version')) {
+foreach ($name in @('APPDATA', 'LOCALAPPDATA', 'USERPROFILE', 'CLAUDE_CONFIG_DIR', 'ORION_APP_PORTABLE_DIR', 'COMPLUS_Version')) {
   $savedEnvironment[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
 }
 
@@ -256,7 +256,7 @@ function Invoke-InstalledApplicationSmoke {
   $hostDiagnostics = Join-Path $configDir 'cc-haha\diagnostics\electron-host.log'
   $smokeEnvironmentNames = @(
     'CLAUDE_CONFIG_DIR',
-    'CC_HAHA_ELECTRON_WINDOW_SMOKE_LOG',
+    'ORION_ELECTRON_WINDOW_SMOKE_LOG',
     'HOME',
     'CI',
     'NO_PROXY',
@@ -271,7 +271,7 @@ function Invoke-InstalledApplicationSmoke {
   try {
     New-Item -ItemType Directory -Path $configDir -Force | Out-Null
     $env:CLAUDE_CONFIG_DIR = $configDir
-    $env:CC_HAHA_ELECTRON_WINDOW_SMOKE_LOG = $windowLog
+    $env:ORION_ELECTRON_WINDOW_SMOKE_LOG = $windowLog
     $env:HOME = $IsolatedUserProfile
     Remove-Item Env:CI -ErrorAction SilentlyContinue
     $env:NO_PROXY = '127.0.0.1,localhost,::1'
@@ -406,7 +406,7 @@ try {
   $env:LOCALAPPDATA = $localAppData
   $env:USERPROFILE = $userProfile
   Remove-Item Env:CLAUDE_CONFIG_DIR -ErrorAction SilentlyContinue
-  Remove-Item Env:CC_HAHA_APP_PORTABLE_DIR -ErrorAction SilentlyContinue
+  Remove-Item Env:ORION_APP_PORTABLE_DIR -ErrorAction SilentlyContinue
 
   # Baseline before anything here starts a process. Whatever this prints was put
   # there by earlier steps of the job or by the runner image, and it is exactly

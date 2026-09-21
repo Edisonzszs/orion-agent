@@ -44,7 +44,7 @@ export const LIVE_PASSTHROUGH_ENV_NAMES = [
   'QUALITY_GATE_PROVIDER_AUTH_STRATEGY',
   'QUALITY_GATE_PROVIDER_BASE_URL',
   'QUALITY_GATE_PROVIDER_MODEL',
-  'CC_HAHA_SYSTEM_PROXY_URL',
+  'ORION_SYSTEM_PROXY_URL',
 ] as const
 
 export type UserStateFingerprint = Record<string, string>

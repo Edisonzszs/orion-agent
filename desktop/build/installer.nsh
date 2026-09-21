@@ -213,7 +213,7 @@ Function CcHahaRecoverLegacy
   ReadEnvStr $2 APPDATA
   ReadEnvStr $3 USERPROFILE
   ReadEnvStr $6 CLAUDE_CONFIG_DIR
-  ReadEnvStr $7 CC_HAHA_APP_PORTABLE_DIR
+  ReadEnvStr $7 ORION_APP_PORTABLE_DIR
   ${If} $2 == ""
     StrCpy $0 "21"
     StrCpy $1 "missing current-user APPDATA"

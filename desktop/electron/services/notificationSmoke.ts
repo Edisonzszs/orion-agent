@@ -73,7 +73,7 @@ export function appendNotificationSmokeLog(logPath: string, event: NotificationS
 }
 
 export function logNotificationSmokeRendererAck(env: NodeJS.ProcessEnv, payload: unknown): boolean {
-  const logPath = env.CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_LOG?.trim()
+  const logPath = env.ORION_ELECTRON_NOTIFICATION_SMOKE_LOG?.trim()
   if (!logPath) return false
   appendNotificationSmokeLog(logPath, {
     event: 'renderer_ack',
@@ -96,14 +96,14 @@ export function scheduleNotificationSmoke({
   setTimer?: NotificationSmokeTimer
   writeLog?: NotificationSmokeLogWriter
 }): boolean {
-  const sessionId = env.CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_SESSION_ID?.trim()
+  const sessionId = env.ORION_ELECTRON_NOTIFICATION_SMOKE_SESSION_ID?.trim()
   if (!sessionId) return false
 
-  const title = env.CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_TITLE?.trim() || `${PRODUCT_NAME} notification smoke`
-  const body = env.CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_BODY?.trim() || 'Click to return to the target session.'
-  const delayMs = parseNotificationSmokeDelay(env.CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_DELAY_MS)
-  const triggerSyntheticAction = shouldTriggerSyntheticAction(env.CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_TRIGGER_ACTION)
-  const logPath = env.CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_LOG?.trim()
+  const title = env.ORION_ELECTRON_NOTIFICATION_SMOKE_TITLE?.trim() || `${PRODUCT_NAME} notification smoke`
+  const body = env.ORION_ELECTRON_NOTIFICATION_SMOKE_BODY?.trim() || 'Click to return to the target session.'
+  const delayMs = parseNotificationSmokeDelay(env.ORION_ELECTRON_NOTIFICATION_SMOKE_DELAY_MS)
+  const triggerSyntheticAction = shouldTriggerSyntheticAction(env.ORION_ELECTRON_NOTIFICATION_SMOKE_TRIGGER_ACTION)
+  const logPath = env.ORION_ELECTRON_NOTIFICATION_SMOKE_LOG?.trim()
   const log: NotificationSmokeLogWriter = (event) => {
     if (writeLog) {
       writeLog(event)

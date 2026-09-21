@@ -22,7 +22,7 @@ fn main() {
             "CLAUDE_CONFIG_DIR",
             portable_dir.to_string_lossy().to_string(),
         );
-        std::env::set_var("CC_HAHA_APP_PORTABLE_DIR", "1");
+        std::env::set_var("ORION_APP_PORTABLE_DIR", "1");
     }
 
     // If CLAUDE_CONFIG_DIR is set (either from env or from our startup logic above),

@@ -21,7 +21,7 @@ describe('offline test environment', () => {
       ANTHROPIC_API_KEY: 'real-key',
       ANTHROPIC_BASE_URL: 'https://provider.example',
       CLAUDE_CLI_PATH: '/real/claude',
-      CC_HAHA_TRACE_PROVIDER_ID: 'real-provider',
+      ORION_TRACE_PROVIDER_ID: 'real-provider',
       Home: '/real/home',
       HTTP_PROXY: 'http://proxy.example',
       SSH_AUTH_SOCK: '/tmp/real-agent.sock',
@@ -39,7 +39,7 @@ describe('offline test environment', () => {
     expect(environment.ANTHROPIC_API_KEY).toBeUndefined()
     expect(environment.ANTHROPIC_BASE_URL).toBeUndefined()
     expect(environment.CLAUDE_CLI_PATH).toBeUndefined()
-    expect(environment.CC_HAHA_TRACE_PROVIDER_ID).toBeUndefined()
+    expect(environment.ORION_TRACE_PROVIDER_ID).toBeUndefined()
     expect(environment.HTTP_PROXY).toBeUndefined()
     expect(environment.SSH_AUTH_SOCK).toBeUndefined()
   })
@@ -72,7 +72,7 @@ describe('offline test environment', () => {
     mkdirSync(workspace)
     writeFileSync(
       join(workspace, '.env'),
-      'CC_HAHA_DESCENDANT_DOTENV_SENTINEL=leaked\n',
+      'ORION_DESCENDANT_DOTENV_SENTINEL=leaked\n',
       'utf8',
     )
 
@@ -81,7 +81,7 @@ describe('offline test environment', () => {
         [
           'bun',
           '-e',
-          'process.stdout.write(process.env.CC_HAHA_DESCENDANT_DOTENV_SENTINEL ?? "clean")',
+          'process.stdout.write(process.env.ORION_DESCENDANT_DOTENV_SENTINEL ?? "clean")',
         ],
         {
           cwd: workspace,

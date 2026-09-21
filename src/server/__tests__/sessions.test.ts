@@ -4439,8 +4439,8 @@ describe('Sessions API', () => {
     git(workDir, 'config', 'core.fsmonitor', fsmonitorPath)
 
     const { sessionId } = await sessionService.createSession(workDir)
-    const oldTimeout = process.env.CC_HAHA_GIT_INFO_TIMEOUT_MS
-    process.env.CC_HAHA_GIT_INFO_TIMEOUT_MS = '80'
+    const oldTimeout = process.env.ORION_GIT_INFO_TIMEOUT_MS
+    process.env.ORION_GIT_INFO_TIMEOUT_MS = '80'
 
     try {
       const startedAt = Date.now()
@@ -4463,9 +4463,9 @@ describe('Sessions API', () => {
       expect(body.changedFiles).toBe(0)
     } finally {
       if (oldTimeout === undefined) {
-        delete process.env.CC_HAHA_GIT_INFO_TIMEOUT_MS
+        delete process.env.ORION_GIT_INFO_TIMEOUT_MS
       } else {
-        process.env.CC_HAHA_GIT_INFO_TIMEOUT_MS = oldTimeout
+        process.env.ORION_GIT_INFO_TIMEOUT_MS = oldTimeout
       }
     }
   })

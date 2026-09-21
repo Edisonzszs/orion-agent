@@ -7,19 +7,19 @@ import { applyConfigEnvironmentVariables, applySafeConfigEnvironmentVariables } 
 
 let tmpDir: string
 const originalEnv = {
-  CC_HAHA_AGENT_TEAMS_ENABLED: process.env.CC_HAHA_AGENT_TEAMS_ENABLED,
-  CC_HAHA_AGENT_TEAMS_DEFAULT: process.env.CC_HAHA_AGENT_TEAMS_DEFAULT,
+  ORION_AGENT_TEAMS_ENABLED: process.env.ORION_AGENT_TEAMS_ENABLED,
+  ORION_AGENT_TEAMS_DEFAULT: process.env.ORION_AGENT_TEAMS_DEFAULT,
   CLAUDE_CODE_ENTRYPOINT: process.env.CLAUDE_CODE_ENTRYPOINT,
   CLAUDE_CONFIG_DIR: process.env.CLAUDE_CONFIG_DIR,
   CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST: process.env.CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST,
-  CC_HAHA_LOCAL_ACCESS_TOKEN: process.env.CC_HAHA_LOCAL_ACCESS_TOKEN,
+  ORION_LOCAL_ACCESS_TOKEN: process.env.ORION_LOCAL_ACCESS_TOKEN,
   ANTHROPIC_BASE_URL: process.env.ANTHROPIC_BASE_URL,
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
   ANTHROPIC_AUTH_TOKEN: process.env.ANTHROPIC_AUTH_TOKEN,
   ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL,
-  CC_HAHA_IMAGE_PROVIDER_KIND: process.env.CC_HAHA_IMAGE_PROVIDER_KIND,
-  CC_HAHA_IMAGE_PROVIDER_ID: process.env.CC_HAHA_IMAGE_PROVIDER_ID,
-  CC_HAHA_IMAGE_MODEL: process.env.CC_HAHA_IMAGE_MODEL,
+  ORION_IMAGE_PROVIDER_KIND: process.env.ORION_IMAGE_PROVIDER_KIND,
+  ORION_IMAGE_PROVIDER_ID: process.env.ORION_IMAGE_PROVIDER_ID,
+  ORION_IMAGE_MODEL: process.env.ORION_IMAGE_MODEL,
   CLAUDE_CODE_PROVIDER_MAX_OUTPUT_TOKENS: process.env.CLAUDE_CODE_PROVIDER_MAX_OUTPUT_TOKENS,
 }
 
@@ -42,17 +42,17 @@ describe('managedEnv', () => {
     tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'managed-env-'))
     process.env.CLAUDE_CONFIG_DIR = tmpDir
     delete process.env.CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST
-    delete process.env.CC_HAHA_AGENT_TEAMS_ENABLED
-    delete process.env.CC_HAHA_AGENT_TEAMS_DEFAULT
+    delete process.env.ORION_AGENT_TEAMS_ENABLED
+    delete process.env.ORION_AGENT_TEAMS_DEFAULT
     process.env.CLAUDE_CODE_ENTRYPOINT = 'sdk-cli'
-    delete process.env.CC_HAHA_LOCAL_ACCESS_TOKEN
+    delete process.env.ORION_LOCAL_ACCESS_TOKEN
     delete process.env.ANTHROPIC_BASE_URL
     delete process.env.ANTHROPIC_API_KEY
     delete process.env.ANTHROPIC_AUTH_TOKEN
     delete process.env.ANTHROPIC_MODEL
-    delete process.env.CC_HAHA_IMAGE_PROVIDER_KIND
-    delete process.env.CC_HAHA_IMAGE_PROVIDER_ID
-    delete process.env.CC_HAHA_IMAGE_MODEL
+    delete process.env.ORION_IMAGE_PROVIDER_KIND
+    delete process.env.ORION_IMAGE_PROVIDER_ID
+    delete process.env.ORION_IMAGE_MODEL
     delete process.env.CLAUDE_CODE_PROVIDER_MAX_OUTPUT_TOKENS
   })
 
@@ -63,38 +63,38 @@ describe('managedEnv', () => {
     await fs.rm(tmpDir, { recursive: true, force: true })
     restoreEnv('CLAUDE_CONFIG_DIR')
     restoreEnv('CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST')
-    restoreEnv('CC_HAHA_LOCAL_ACCESS_TOKEN')
-    restoreEnv('CC_HAHA_AGENT_TEAMS_ENABLED')
-    restoreEnv('CC_HAHA_AGENT_TEAMS_DEFAULT')
+    restoreEnv('ORION_LOCAL_ACCESS_TOKEN')
+    restoreEnv('ORION_AGENT_TEAMS_ENABLED')
+    restoreEnv('ORION_AGENT_TEAMS_DEFAULT')
     restoreEnv('CLAUDE_CODE_ENTRYPOINT')
     restoreEnv('ANTHROPIC_BASE_URL')
     restoreEnv('ANTHROPIC_API_KEY')
     restoreEnv('ANTHROPIC_AUTH_TOKEN')
     restoreEnv('ANTHROPIC_MODEL')
-    restoreEnv('CC_HAHA_IMAGE_PROVIDER_KIND')
-    restoreEnv('CC_HAHA_IMAGE_PROVIDER_ID')
-    restoreEnv('CC_HAHA_IMAGE_MODEL')
+    restoreEnv('ORION_IMAGE_PROVIDER_KIND')
+    restoreEnv('ORION_IMAGE_PROVIDER_ID')
+    restoreEnv('ORION_IMAGE_MODEL')
     restoreEnv('CLAUDE_CODE_PROVIDER_MAX_OUTPUT_TOKENS')
   })
 
   test.each(['0', '1', undefined])('protects the General team preference %j through settings application', async (enabled) => {
     await writeJson(path.join(tmpDir, 'orion', 'settings.json'), {
       env: {
-        CC_HAHA_AGENT_TEAMS_ENABLED: enabled === '1' ? '0' : '1',
-        CC_HAHA_AGENT_TEAMS_DEFAULT: '0',
+        ORION_AGENT_TEAMS_ENABLED: enabled === '1' ? '0' : '1',
+        ORION_AGENT_TEAMS_DEFAULT: '0',
       },
     })
-    if (enabled !== undefined) process.env.CC_HAHA_AGENT_TEAMS_ENABLED = enabled
-    process.env.CC_HAHA_AGENT_TEAMS_DEFAULT = '1'
+    if (enabled !== undefined) process.env.ORION_AGENT_TEAMS_ENABLED = enabled
+    process.env.ORION_AGENT_TEAMS_DEFAULT = '1'
 
     // OAuth and cron sessions can use sdk-cli without host-owned provider routing.
     // Both the pre-trust and post-trust settings paths must preserve the choice.
     applySafeConfigEnvironmentVariables()
-    expect(process.env.CC_HAHA_AGENT_TEAMS_ENABLED).toBe(enabled)
-    expect(process.env.CC_HAHA_AGENT_TEAMS_DEFAULT).toBe('1')
+    expect(process.env.ORION_AGENT_TEAMS_ENABLED).toBe(enabled)
+    expect(process.env.ORION_AGENT_TEAMS_DEFAULT).toBe('1')
     applyConfigEnvironmentVariables()
-    expect(process.env.CC_HAHA_AGENT_TEAMS_ENABLED).toBe(enabled)
-    expect(process.env.CC_HAHA_AGENT_TEAMS_DEFAULT).toBe('1')
+    expect(process.env.ORION_AGENT_TEAMS_ENABLED).toBe(enabled)
+    expect(process.env.ORION_AGENT_TEAMS_DEFAULT).toBe('1')
   })
 
   test('starts a standalone provider proxy for CLI-only OpenAI-compatible providers', async () => {
@@ -134,27 +134,27 @@ describe('managedEnv', () => {
     await writeJson(path.join(tmpDir, 'orion', 'settings.json'), {
       env: {
         CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST: '0',
-        CC_HAHA_LOCAL_ACCESS_TOKEN: 'stale-settings-token',
-        CC_HAHA_IMAGE_PROVIDER_KIND: 'openai_oauth',
-        CC_HAHA_IMAGE_PROVIDER_ID: 'openai-official',
-        CC_HAHA_IMAGE_MODEL: 'gpt-image-2',
+        ORION_LOCAL_ACCESS_TOKEN: 'stale-settings-token',
+        ORION_IMAGE_PROVIDER_KIND: 'openai_oauth',
+        ORION_IMAGE_PROVIDER_ID: 'openai-official',
+        ORION_IMAGE_MODEL: 'gpt-image-2',
         CLAUDE_CODE_PROVIDER_MAX_OUTPUT_TOKENS: '32000',
       },
     })
     process.env.CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST = '1'
-    process.env.CC_HAHA_LOCAL_ACCESS_TOKEN = 'desktop-local-secret'
-    process.env.CC_HAHA_IMAGE_PROVIDER_KIND = 'grok_oauth'
-    process.env.CC_HAHA_IMAGE_PROVIDER_ID = 'grok-official'
-    process.env.CC_HAHA_IMAGE_MODEL = 'grok-imagine-image-quality'
+    process.env.ORION_LOCAL_ACCESS_TOKEN = 'desktop-local-secret'
+    process.env.ORION_IMAGE_PROVIDER_KIND = 'grok_oauth'
+    process.env.ORION_IMAGE_PROVIDER_ID = 'grok-official'
+    process.env.ORION_IMAGE_MODEL = 'grok-imagine-image-quality'
     process.env.CLAUDE_CODE_PROVIDER_MAX_OUTPUT_TOKENS = '96000'
 
     applySafeConfigEnvironmentVariables()
 
     expect(process.env.CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST).toBe('1')
-    expect(process.env.CC_HAHA_LOCAL_ACCESS_TOKEN).toBe('desktop-local-secret')
-    expect(process.env.CC_HAHA_IMAGE_PROVIDER_KIND).toBe('grok_oauth')
-    expect(process.env.CC_HAHA_IMAGE_PROVIDER_ID).toBe('grok-official')
-    expect(process.env.CC_HAHA_IMAGE_MODEL).toBe('grok-imagine-image-quality')
+    expect(process.env.ORION_LOCAL_ACCESS_TOKEN).toBe('desktop-local-secret')
+    expect(process.env.ORION_IMAGE_PROVIDER_KIND).toBe('grok_oauth')
+    expect(process.env.ORION_IMAGE_PROVIDER_ID).toBe('grok-official')
+    expect(process.env.ORION_IMAGE_MODEL).toBe('grok-imagine-image-quality')
     expect(process.env.CLAUDE_CODE_PROVIDER_MAX_OUTPUT_TOKENS).toBe('96000')
   })
 })

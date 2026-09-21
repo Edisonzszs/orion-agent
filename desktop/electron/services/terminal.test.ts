@@ -94,7 +94,7 @@ describe('Electron terminal service', () => {
     vi.spyOn(pty, 'onData').mockImplementation(handler => { handler('early prompt') })
     vi.spyOn(pty, 'onExit').mockImplementation(handler => { handler({ exitCode: 0 }) })
     const service = new ElectronTerminalService({
-      env: { HOME: dir, CLAUDE_CONFIG_DIR: dir, SHELL: '/bin/sh', CC_HAHA_DISABLE_TERMINAL_SHELL_ENV: '1' },
+      env: { HOME: dir, CLAUDE_CONFIG_DIR: dir, SHELL: '/bin/sh', ORION_DISABLE_TERMINAL_SHELL_ENV: '1' },
       cwd: () => dir,
       ptyFactory: { spawn: () => pty },
     })

@@ -395,7 +395,7 @@ describe('persistent storage upgrade migrations', () => {
           ANTHROPIC_DEFAULT_HAIKU_MODEL: 'deepseek-v4-flash',
           ANTHROPIC_DEFAULT_SONNET_MODEL: 'deepseek-v4-pro',
           ANTHROPIC_DEFAULT_OPUS_MODEL: 'deepseek-v4-pro',
-          CC_HAHA_SEND_DISABLED_THINKING: '1',
+          ORION_SEND_DISABLED_THINKING: '1',
           USER_CUSTOM_ENV: 'keep-me',
         },
       }, null, 2),
@@ -410,7 +410,7 @@ describe('persistent storage upgrade migrations', () => {
     const migrated = JSON.parse(await fs.readFile(path.join(productDataDir, 'settings.json'), 'utf-8')) as {
       env?: Record<string, string>
     }
-    expect(migrated.env?.CC_HAHA_SEND_DISABLED_THINKING).toBeUndefined()
+    expect(migrated.env?.ORION_SEND_DISABLED_THINKING).toBeUndefined()
     expect(migrated.env?.ANTHROPIC_DEFAULT_HAIKU_MODEL_SUPPORTED_CAPABILITIES).toBe(
       'thinking,effort,adaptive_thinking,xhigh_effort,max_effort',
     )

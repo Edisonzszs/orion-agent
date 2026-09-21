@@ -1573,7 +1573,7 @@ export class ConversationService {
       'ANTHROPIC_DEFAULT_SONNET_MODEL_SUPPORTED_CAPABILITIES',
       'ANTHROPIC_DEFAULT_OPUS_MODEL',
       'ANTHROPIC_DEFAULT_OPUS_MODEL_SUPPORTED_CAPABILITIES',
-      'CC_HAHA_SEND_DISABLED_THINKING',
+      'ORION_SEND_DISABLED_THINKING',
       'CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS',
       'CLAUDE_CODE_AUTO_COMPACT_WINDOW',
       'CLAUDE_CODE_ATTRIBUTION_HEADER',
@@ -1601,9 +1601,9 @@ export class ConversationService {
     if (options?.resumeInterruptedTurn === false) {
       delete cleanEnv.CLAUDE_CODE_RESUME_INTERRUPTED_TURN
     }
-    delete cleanEnv.CC_HAHA_TRACE_PROVIDER_ID
-    delete cleanEnv.CC_HAHA_TRACE_PROVIDER_NAME
-    delete cleanEnv.CC_HAHA_TRACE_PROVIDER_FORMAT
+    delete cleanEnv.ORION_TRACE_PROVIDER_ID
+    delete cleanEnv.ORION_TRACE_PROVIDER_NAME
+    delete cleanEnv.ORION_TRACE_PROVIDER_FORMAT
     if (this.shouldStripInheritedProviderEnv(options?.providerId)) {
       for (const key of PROVIDER_ENV_KEYS) {
         delete cleanEnv[key]
@@ -1663,7 +1663,7 @@ export class ConversationService {
       ...cleanEnv,
       CLAUDE_CODE_ENABLE_TASKS: '1',
       // Resolve the same preference shown in General before launching the CLI.
-      CC_HAHA_AGENT_TEAMS_ENABLED: agentTeamsEnabled ? '1' : '0',
+      ORION_AGENT_TEAMS_ENABLED: agentTeamsEnabled ? '1' : '0',
       CLAUDE_CODE_ENABLE_SDK_FILE_CHECKPOINTING: '1',
       // Desktop must fail stuck provider streams instead of leaving the UI running forever.
       CLAUDE_ENABLE_STREAM_WATCHDOG: cleanEnv.CLAUDE_ENABLE_STREAM_WATCHDOG || '1',
@@ -1721,35 +1721,35 @@ export class ConversationService {
             // running/idle boundary or a disconnected renderer can kill that
             // follow-up after the fixed idle grace period.
             CLAUDE_CODE_EMIT_SESSION_STATE_EVENTS: '1',
-            CC_HAHA_COMPUTER_USE_HOST_BUNDLE_ID: 'com.claude-code-haha.desktop',
+            ORION_COMPUTER_USE_HOST_BUNDLE_ID: 'com.claude-code-haha.desktop',
           }
         : {}),
       ...(sdkUrl && traceCaptureEnabled
-        ? { CC_HAHA_TRACE_API_CALLS: '1' }
+        ? { ORION_TRACE_API_CALLS: '1' }
         : {}),
       ...(sdkUrl && traceCaptureEnabled && explicitProvider
         ? {
-            CC_HAHA_TRACE_PROVIDER_ID: explicitProvider.id,
-            CC_HAHA_TRACE_PROVIDER_NAME: explicitProvider.name,
-            CC_HAHA_TRACE_PROVIDER_FORMAT: explicitProvider.apiFormat ?? 'anthropic',
+            ORION_TRACE_PROVIDER_ID: explicitProvider.id,
+            ORION_TRACE_PROVIDER_NAME: explicitProvider.name,
+            ORION_TRACE_PROVIDER_FORMAT: explicitProvider.apiFormat ?? 'anthropic',
           }
         : {}),
       ...(desktopServerUrl
-        ? { CC_HAHA_DESKTOP_SERVER_URL: desktopServerUrl }
+        ? { ORION_DESKTOP_SERVER_URL: desktopServerUrl }
         : {}),
       ...(sdkUrl
         ? {
-            CC_HAHA_DESKTOP_AWAIT_MCP: '1',
-            CC_HAHA_DESKTOP_AWAIT_MCP_TIMEOUT_MS: '5000',
+            ORION_DESKTOP_AWAIT_MCP: '1',
+            ORION_DESKTOP_AWAIT_MCP_TIMEOUT_MS: '5000',
           }
         : {}),
       // Tell the CLI entrypoint to skip project .env loading. Provider env
       // should come from Desktop-managed config or inherited launch env, not
       // be reintroduced from the repo's .env file.
-      CC_HAHA_SKIP_DOTENV: '1',
+      ORION_SKIP_DOTENV: '1',
       // Keep the SDK runtime identity for auth and client behavior, but stamp
       // desktop-owned transcripts with an entrypoint visible to Claude /resume.
-      CC_HAHA_TRANSCRIPT_ENTRYPOINT: 'claude-desktop',
+      ORION_TRANSCRIPT_ENTRYPOINT: 'claude-desktop',
       ...(explicitProviderEnv
         ? { CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST: '1' }
         : {}),
@@ -1919,7 +1919,7 @@ export class ConversationService {
         'ANTHROPIC_DEFAULT_SONNET_MODEL_SUPPORTED_CAPABILITIES',
         'ANTHROPIC_DEFAULT_OPUS_MODEL',
         'ANTHROPIC_DEFAULT_OPUS_MODEL_SUPPORTED_CAPABILITIES',
-        'CC_HAHA_SEND_DISABLED_THINKING',
+        'ORION_SEND_DISABLED_THINKING',
         'CLAUDE_CODE_AUTO_COMPACT_WINDOW',
         'CLAUDE_CODE_ATTRIBUTION_HEADER',
         'CLAUDE_CODE_MODEL_CONTEXT_WINDOWS',

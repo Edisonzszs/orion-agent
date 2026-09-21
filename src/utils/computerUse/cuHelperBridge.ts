@@ -20,7 +20,7 @@ import { getRuntimePaths } from './pythonBridge.js'
  */
 
 /** Env override for the binary path (custom installs / tests). */
-const ENV_OVERRIDE = 'CC_HAHA_CU_HELPER_PATH'
+const ENV_OVERRIDE = 'ORION_CU_HELPER_PATH'
 
 let cachedBinary: string | null | undefined
 

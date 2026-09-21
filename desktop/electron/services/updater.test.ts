@@ -192,7 +192,7 @@ describe('Electron updater service', () => {
 
     const env: NodeJS.ProcessEnv = {
       CLAUDE_CONFIG_DIR: 'E:\\cc-haha-data',
-      CC_HAHA_APP_PORTABLE_DIR: '1',
+      ORION_APP_PORTABLE_DIR: '1',
       WEBVIEW2_USER_DATA_FOLDER: 'E:\\cc-haha-data\\EBWebView',
       APPDATA: 'C:\\Users\\someone\\AppData\\Roaming',
     }

@@ -121,7 +121,7 @@ export function resolveManagedProviderProxyAccessToken({
   providerManagedByHost = process.env.CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST,
   apiKey = process.env.ANTHROPIC_API_KEY,
   baseUrl = process.env.ANTHROPIC_BASE_URL,
-  localAccessToken = process.env.CC_HAHA_LOCAL_ACCESS_TOKEN,
+  localAccessToken = process.env.ORION_LOCAL_ACCESS_TOKEN,
   requestUrl = baseUrl,
 }: {
   providerManagedByHost?: string
@@ -251,8 +251,8 @@ export async function getAnthropicClient({
   logForDebugging('[API:auth] OAuth token check complete')
 
   const isOpenAIModel = model ? isOpenAIResponsesModel(model) : false
-  const forceOpenAICodex = isEnvTruthy(process.env.CC_HAHA_OPENAI_OAUTH_PROVIDER)
-  const forceGrok = isEnvTruthy(process.env.CC_HAHA_GROK_OAUTH_PROVIDER)
+  const forceOpenAICodex = isEnvTruthy(process.env.ORION_OPENAI_OAUTH_PROVIDER)
+  const forceGrok = isEnvTruthy(process.env.ORION_GROK_OAUTH_PROVIDER)
   const isClaudeSubscriber = forceGrok ? false : isClaudeAISubscriber()
   const hasOpenAIAuth = shouldUseOpenAICodexAuth()
   const usingGrok = forceGrok && shouldUseGrokAuth()

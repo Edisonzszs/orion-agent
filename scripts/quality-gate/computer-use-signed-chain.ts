@@ -281,7 +281,7 @@ export async function runSignedComputerUseChain(options: SignedChainOptions = {}
       env.CLAUDE_APP_ROOT = path.join(hostApp, 'Contents/Resources/app.asar')
       env.CU_FIXTURE_REQUIRE_PACKAGED_INSTALL = '1'
     } else {
-      env.CC_HAHA_CU_HELPER_PATH = helperBinary
+      env.ORION_CU_HELPER_PATH = helperBinary
     }
     env.CU_FIXTURE_NESTED_HELPER = nested
     const targetApp = path.join(directory, 'Drag Receiver.app')

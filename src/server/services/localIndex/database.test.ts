@@ -13,7 +13,7 @@ import type { Database } from 'bun:sqlite'
 import type { LocalIndexWriteOperation } from './database.js'
 import { LOCAL_INDEX_SCHEMA_VERSION } from './migrations.js'
 
-type EnvironmentName = 'HOME' | 'CLAUDE_CONFIG_DIR' | 'CC_HAHA_LOCAL_INDEX'
+type EnvironmentName = 'HOME' | 'CLAUDE_CONFIG_DIR' | 'ORION_LOCAL_INDEX'
 
 const originalEnvironment: Partial<Record<EnvironmentName, string>> = {}
 const tempDirs: string[] = []
@@ -289,7 +289,7 @@ beforeEach(async () => {
   for (const name of [
     'HOME',
     'CLAUDE_CONFIG_DIR',
-    'CC_HAHA_LOCAL_INDEX',
+    'ORION_LOCAL_INDEX',
   ] as const) {
     originalEnvironment[name] = process.env[name]
   }
@@ -297,13 +297,13 @@ beforeEach(async () => {
   const environmentRoot = await createTempDir('local-index-environment')
   process.env.HOME = join(environmentRoot, 'home')
   process.env.CLAUDE_CONFIG_DIR = join(environmentRoot, 'config')
-  delete process.env.CC_HAHA_LOCAL_INDEX
+  delete process.env.ORION_LOCAL_INDEX
 })
 
 afterEach(async () => {
   restoreEnvironment('HOME')
   restoreEnvironment('CLAUDE_CONFIG_DIR')
-  restoreEnvironment('CC_HAHA_LOCAL_INDEX')
+  restoreEnvironment('ORION_LOCAL_INDEX')
   await Promise.all(tempDirs.splice(0).map(
     directory => rm(directory, { recursive: true, force: true }),
   ))

@@ -43,8 +43,8 @@ const TARGET_EXECUTABLE_RELATIVE = path.join(
 const HELPER_IDENTIFIER = 'dev.cchaha.cu-helper'
 const RUN_DIRECTORY_PREFIX = '/tmp/cc-haha-cu-live-smoke-'
 const FIXTURE_BASENAME = 'computer-use-smoke-fixture.txt'
-const STABLE_TOKEN = 'CC_HAHA_SMOKE_STABLE_TOKEN'
-const MUTATED_TOKEN = 'CC_HAHA_SMOKE_MUTATED_VALUE'
+const STABLE_TOKEN = 'ORION_SMOKE_STABLE_TOKEN'
+const MUTATED_TOKEN = 'ORION_SMOKE_MUTATED_VALUE'
 const INITIAL_FIXTURE = `${STABLE_TOKEN}\ninitial-value\n`
 const MUTATED_FIXTURE = `${STABLE_TOKEN}\n${MUTATED_TOKEN}\n`
 const EXACT_NO_CHANGE_PREFIX =
@@ -747,10 +747,10 @@ func processIdentity(_ app: NSRunningApplication) -> [String: Any]? {
 }
 
 func matchesExpected(_ app: NSRunningApplication) -> Bool {
-    guard let expectedPID = env["CC_HAHA_SMOKE_PID"].flatMap(Int32.init),
-          let expectedBundle = env["CC_HAHA_SMOKE_BUNDLE"],
-          let expectedExecutable = env["CC_HAHA_SMOKE_EXECUTABLE"],
-          let expectedLaunch = env["CC_HAHA_SMOKE_LAUNCH_TIME"].flatMap(Double.init),
+    guard let expectedPID = env["ORION_SMOKE_PID"].flatMap(Int32.init),
+          let expectedBundle = env["ORION_SMOKE_BUNDLE"],
+          let expectedExecutable = env["ORION_SMOKE_EXECUTABLE"],
+          let expectedLaunch = env["ORION_SMOKE_LAUNCH_TIME"].flatMap(Double.init),
           let identity = processIdentity(app),
           let pid = identity["pid"] as? Int,
           let bundle = identity["bundleId"] as? String,
@@ -763,7 +763,7 @@ func matchesExpected(_ app: NSRunningApplication) -> Bool {
         && abs(launch - expectedLaunch) < 0.000001
 }
 
-switch env["CC_HAHA_SMOKE_MODE"] {
+switch env["ORION_SMOKE_MODE"] {
 case "state":
     guard let app = NSWorkspace.shared.frontmostApplication,
           let identity = processIdentity(app),
@@ -785,9 +785,9 @@ case "state":
     ])
 
 case "launch":
-    guard let fixture = env["CC_HAHA_SMOKE_FIXTURE"],
-          let appPath = env["CC_HAHA_SMOKE_APP"],
-          let identityPath = env["CC_HAHA_SMOKE_IDENTITY_FILE"]
+    guard let fixture = env["ORION_SMOKE_FIXTURE"],
+          let appPath = env["ORION_SMOKE_APP"],
+          let identityPath = env["ORION_SMOKE_IDENTITY_FILE"]
     else { fail("launch probe paths are missing") }
     let existing = Set(
         NSRunningApplication.runningApplications(withBundleIdentifier: "com.apple.TextEdit")
@@ -830,7 +830,7 @@ case "launch":
     fail("TextEdit launch run loop exited unexpectedly")
 
 case "terminate":
-    guard let pid = env["CC_HAHA_SMOKE_PID"].flatMap(Int32.init) else {
+    guard let pid = env["ORION_SMOKE_PID"].flatMap(Int32.init) else {
         fail("termination PID is missing")
     }
     guard let app = NSRunningApplication(processIdentifier: pid) else {
@@ -861,9 +861,9 @@ import Darwin
 import Foundation
 
 let env = ProcessInfo.processInfo.environment
-guard let initialX = env["CC_HAHA_SMOKE_POINTER_X"].flatMap(Double.init),
-      let initialY = env["CC_HAHA_SMOKE_POINTER_Y"].flatMap(Double.init),
-      let stopPath = env["CC_HAHA_SMOKE_POINTER_STOP"]
+guard let initialX = env["ORION_SMOKE_POINTER_X"].flatMap(Double.init),
+      let initialY = env["ORION_SMOKE_POINTER_Y"].flatMap(Double.init),
+      let stopPath = env["ORION_SMOKE_POINTER_STOP"]
 else { exit(2) }
 
 func emit(_ value: [String: Any]) {
@@ -895,9 +895,9 @@ async function startPointerMonitor(
   const child = spawn('/usr/bin/swift', ['-e', SWIFT_POINTER_MONITOR], {
     env: {
       ...process.env,
-      CC_HAHA_SMOKE_POINTER_X: String(initial.x),
-      CC_HAHA_SMOKE_POINTER_Y: String(initial.y),
-      CC_HAHA_SMOKE_POINTER_STOP: stopPath,
+      ORION_SMOKE_POINTER_X: String(initial.x),
+      ORION_SMOKE_POINTER_Y: String(initial.y),
+      ORION_SMOKE_POINTER_STOP: stopPath,
     },
     stdio: ['pipe', 'pipe', 'pipe'],
   })
@@ -997,7 +997,7 @@ function runSystemProbe(
     env: {
       ...process.env,
       ...extraEnv,
-      CC_HAHA_SMOKE_MODE: mode,
+      ORION_SMOKE_MODE: mode,
     },
     timeoutMs: mode === 'launch' ? 30_000 : 20_000,
   })
@@ -1027,9 +1027,9 @@ function launchDedicatedTextEdit(
   let raw: unknown
   try {
     raw = runSystemProbe('launch', {
-      CC_HAHA_SMOKE_FIXTURE: fixturePath,
-      CC_HAHA_SMOKE_APP: appPath,
-      CC_HAHA_SMOKE_IDENTITY_FILE: identityPath,
+      ORION_SMOKE_FIXTURE: fixturePath,
+      ORION_SMOKE_APP: appPath,
+      ORION_SMOKE_IDENTITY_FILE: identityPath,
     })
   } catch (error) {
     const launched = readPersistedTargetIdentity(identityPath)
@@ -1074,10 +1074,10 @@ function readPersistedTargetIdentity(
 
 function terminateDedicatedTextEdit(identity: ProcessIdentity): void {
   const raw = runSystemProbe('terminate', {
-    CC_HAHA_SMOKE_PID: String(identity.pid),
-    CC_HAHA_SMOKE_BUNDLE: identity.bundleId,
-    CC_HAHA_SMOKE_EXECUTABLE: identity.executablePath,
-    CC_HAHA_SMOKE_LAUNCH_TIME: String(identity.launchTime),
+    ORION_SMOKE_PID: String(identity.pid),
+    ORION_SMOKE_BUNDLE: identity.bundleId,
+    ORION_SMOKE_EXECUTABLE: identity.executablePath,
+    ORION_SMOKE_LAUNCH_TIME: String(identity.launchTime),
   })
   if (!isObject(raw) || raw.terminated !== true) {
     throw new Error('Dedicated TextEdit cleanup did not complete')

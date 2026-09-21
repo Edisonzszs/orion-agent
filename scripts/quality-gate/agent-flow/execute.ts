@@ -415,7 +415,7 @@ export async function executeAgentFlow(options: {
     seedProviders: false,
     envOverrides: {
       CLAUDE_CLI_PATH: resolve(rootDir, MOCK_CLI),
-      CC_HAHA_DISABLE_TERMINAL_SHELL_ENV: '1',
+      ORION_DISABLE_TERMINAL_SHELL_ENV: '1',
     },
   })
 

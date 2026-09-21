@@ -10,7 +10,7 @@ export type LocalIndexModeResolution = {
 }
 
 export function resolveLocalIndexMode(
-  value = process.env.CC_HAHA_LOCAL_INDEX,
+  value = process.env.ORION_LOCAL_INDEX,
 ): LocalIndexModeResolution {
   // SQLite is the normal product read path. Explicit modes remain available
   // only for deterministic parity/fallback tests and emergency diagnosis.

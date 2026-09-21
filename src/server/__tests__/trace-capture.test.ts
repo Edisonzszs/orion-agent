@@ -44,9 +44,9 @@ async function waitForTrace(
 beforeEach(async () => {
   tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'trace-capture-'))
   originalConfigDir = process.env.CLAUDE_CONFIG_DIR
-  originalLocalIndexMode = process.env.CC_HAHA_LOCAL_INDEX
+  originalLocalIndexMode = process.env.ORION_LOCAL_INDEX
   process.env.CLAUDE_CONFIG_DIR = tmpDir
-  process.env.CC_HAHA_LOCAL_INDEX = 'on'
+  process.env.ORION_LOCAL_INDEX = 'on'
   clearTraceCaptureStateForTests()
 })
 
@@ -58,9 +58,9 @@ afterEach(async () => {
     process.env.CLAUDE_CONFIG_DIR = originalConfigDir
   }
   if (originalLocalIndexMode === undefined) {
-    delete process.env.CC_HAHA_LOCAL_INDEX
+    delete process.env.ORION_LOCAL_INDEX
   } else {
-    process.env.CC_HAHA_LOCAL_INDEX = originalLocalIndexMode
+    process.env.ORION_LOCAL_INDEX = originalLocalIndexMode
   }
   await fs.rm(tmpDir, { recursive: true, force: true })
 })
@@ -284,7 +284,7 @@ describe('trace capture service', () => {
     process.env.CLAUDE_CONFIG_DIR = scopeB
     await record('scope-b-model')
     process.env.CLAUDE_CONFIG_DIR = scopeA
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
 
     const traceDirA = path.join(scopeA, 'orion', 'traces')
     const originalReaddir = mutableFs.readdir.bind(mutableFs)
@@ -774,14 +774,14 @@ describe('trace capture service', () => {
 
   test('captures direct Anthropic-compatible provider calls from desktop fetch override', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
-    const originalProviderId = process.env.CC_HAHA_TRACE_PROVIDER_ID
-    const originalProviderName = process.env.CC_HAHA_TRACE_PROVIDER_NAME
-    const originalProviderFormat = process.env.CC_HAHA_TRACE_PROVIDER_FORMAT
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
-    process.env.CC_HAHA_TRACE_PROVIDER_ID = 'provider-sub2api'
-    process.env.CC_HAHA_TRACE_PROVIDER_NAME = 'Sub2API-ChatGPT'
-    process.env.CC_HAHA_TRACE_PROVIDER_FORMAT = 'anthropic'
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
+    const originalProviderId = process.env.ORION_TRACE_PROVIDER_ID
+    const originalProviderName = process.env.ORION_TRACE_PROVIDER_NAME
+    const originalProviderFormat = process.env.ORION_TRACE_PROVIDER_FORMAT
+    process.env.ORION_TRACE_API_CALLS = '1'
+    process.env.ORION_TRACE_PROVIDER_ID = 'provider-sub2api'
+    process.env.ORION_TRACE_PROVIDER_NAME = 'Sub2API-ChatGPT'
+    process.env.ORION_TRACE_PROVIDER_FORMAT = 'anthropic'
     try {
       globalThis.fetch = (async () => new Response(
         JSON.stringify({ id: 'msg-direct-trace', content: [{ type: 'text', text: 'ok' }] }),
@@ -820,20 +820,20 @@ describe('trace capture service', () => {
       expect(trace.events.map((event) => event.phase)).toEqual(['api_call_started', 'api_call_completed'])
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
-      if (originalProviderId === undefined) delete process.env.CC_HAHA_TRACE_PROVIDER_ID
-      else process.env.CC_HAHA_TRACE_PROVIDER_ID = originalProviderId
-      if (originalProviderName === undefined) delete process.env.CC_HAHA_TRACE_PROVIDER_NAME
-      else process.env.CC_HAHA_TRACE_PROVIDER_NAME = originalProviderName
-      if (originalProviderFormat === undefined) delete process.env.CC_HAHA_TRACE_PROVIDER_FORMAT
-      else process.env.CC_HAHA_TRACE_PROVIDER_FORMAT = originalProviderFormat
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
+      if (originalProviderId === undefined) delete process.env.ORION_TRACE_PROVIDER_ID
+      else process.env.ORION_TRACE_PROVIDER_ID = originalProviderId
+      if (originalProviderName === undefined) delete process.env.ORION_TRACE_PROVIDER_NAME
+      else process.env.ORION_TRACE_PROVIDER_NAME = originalProviderName
+      if (originalProviderFormat === undefined) delete process.env.ORION_TRACE_PROVIDER_FORMAT
+      else process.env.ORION_TRACE_PROVIDER_FORMAT = originalProviderFormat
     }
   })
 
   test('audits trusted OAuth plaintext while the actual transport receives zstd bytes', async () => {
     const originalFetch = globalThis.fetch
-    const overrides = { CC_HAHA_TRACE_API_CALLS: '1', OPENAI_CODEX_OAUTH_FILE: path.join(tmpDir, 'oauth-fixture.json'), CC_HAHA_OPENAI_REQUEST_COMPRESSION: 'true' }
+    const overrides = { ORION_TRACE_API_CALLS: '1', OPENAI_CODEX_OAUTH_FILE: path.join(tmpDir, 'oauth-fixture.json'), ORION_OPENAI_REQUEST_COMPRESSION: 'true' }
     const prior = Object.fromEntries(Object.keys(overrides).map(key => [key, process.env[key]]))
     Object.assign(process.env, overrides)
     clearOpenAIOAuthTokenCache()
@@ -875,8 +875,8 @@ describe('trace capture service', () => {
 
   test('captures direct provider headers when fetch input is a Request', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
+    process.env.ORION_TRACE_API_CALLS = '1'
     try {
       globalThis.fetch = (async () => new Response(
         JSON.stringify({ id: 'msg-request-input', content: [{ type: 'text', text: 'ok' }] }),
@@ -914,15 +914,15 @@ describe('trace capture service', () => {
       expect(trace.calls[0].response.body.preview).toContain('msg-request-input')
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
     }
   })
 
   test('captures direct provider fetch failures without changing thrown behavior', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
+    process.env.ORION_TRACE_API_CALLS = '1'
     try {
       globalThis.fetch = (async () => {
         throw new Error('network down for trace')
@@ -956,16 +956,16 @@ describe('trace capture service', () => {
       expect(trace.events.map((event) => event.phase)).toEqual(['api_call_started', 'api_call_failed'])
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
     }
   })
 
   test('passes session id to local provider proxy without duplicating client-side trace', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
     let seenHeader: string | null = null
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
+    process.env.ORION_TRACE_API_CALLS = '1'
     try {
       globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
         seenHeader = new Headers(init?.headers).get('x-claude-code-session-id')
@@ -989,15 +989,15 @@ describe('trace capture service', () => {
       expect(trace.summary.apiCalls).toBe(0)
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
     }
   })
 
   test('records an aborted error call when the request is aborted mid-stream', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
+    process.env.ORION_TRACE_API_CALLS = '1'
     try {
       // A stream that sends one chunk then goes silent forever, like the
       // wedged upstream in #766. The mock ignores the abort signal, so the
@@ -1052,15 +1052,15 @@ describe('trace capture service', () => {
       expect(trace.events.at(-1)?.severity).toBe('error')
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
     }
   })
 
   test('synthesizes an AbortError when the abort signal carries no reason', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
+    process.env.ORION_TRACE_API_CALLS = '1'
     try {
       globalThis.fetch = (async () => {
         const stream = new ReadableStream<Uint8Array>({
@@ -1096,15 +1096,15 @@ describe('trace capture service', () => {
       expect(trace.calls[0].metadata).toMatchObject({ phase: 'api_call_aborted', aborted: true })
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
     }
   })
 
   test('keeps a completed call ok when the signal aborts after the response finished', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
+    process.env.ORION_TRACE_API_CALLS = '1'
     try {
       globalThis.fetch = (async () => new Response(
         JSON.stringify({ id: 'msg-late-abort', content: [{ type: 'text', text: 'ok' }] }),
@@ -1143,15 +1143,15 @@ describe('trace capture service', () => {
       expect(trace.events.map((event) => event.phase)).toEqual(['api_call_started', 'api_call_completed'])
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
     }
   })
 
   test('marks fetch rejections from an aborted signal with abort metadata', async () => {
     const originalFetch = globalThis.fetch
-    const originalTraceEnv = process.env.CC_HAHA_TRACE_API_CALLS
-    process.env.CC_HAHA_TRACE_API_CALLS = '1'
+    const originalTraceEnv = process.env.ORION_TRACE_API_CALLS
+    process.env.ORION_TRACE_API_CALLS = '1'
     try {
       const abortController = new AbortController()
       globalThis.fetch = (async () => {
@@ -1186,8 +1186,8 @@ describe('trace capture service', () => {
       expect(trace.events.map((event) => event.phase)).toEqual(['api_call_started', 'api_call_failed'])
     } finally {
       globalThis.fetch = originalFetch
-      if (originalTraceEnv === undefined) delete process.env.CC_HAHA_TRACE_API_CALLS
-      else process.env.CC_HAHA_TRACE_API_CALLS = originalTraceEnv
+      if (originalTraceEnv === undefined) delete process.env.ORION_TRACE_API_CALLS
+      else process.env.ORION_TRACE_API_CALLS = originalTraceEnv
     }
   })
 })
@@ -2061,7 +2061,7 @@ describe('trace read cache', () => {
     const projected = (await traceCaptureService.listSessionTraces({
       sessionIds: [sessionId],
     })).traces[0]!.summary.models
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     const canonical = (await traceCaptureService.listSessionTraces({
       sessionIds: [sessionId],
     })).traces[0]!.summary.models
@@ -2103,7 +2103,7 @@ describe('trace read cache', () => {
     const projected = (await traceCaptureService.listSessionTraces({
       sessionIds: [sessionId],
     })).traces[0]!.summary.models
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     const canonical = (await traceCaptureService.listSessionTraces({
       sessionIds: [sessionId],
     })).traces[0]!.summary.models
@@ -2181,7 +2181,7 @@ describe('trace read cache', () => {
   })
 
   test('keeps trace SQLite completely untouched in off mode, including after a runtime rollback', async () => {
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     clearTraceCaptureStateForTests()
 
     await traceCaptureService.recordCall({
@@ -2201,11 +2201,11 @@ describe('trace read cache', () => {
       .toBe('call-off-a')
     await expect(fs.stat(databasePath)).rejects.toThrow()
 
-    process.env.CC_HAHA_LOCAL_INDEX = 'on'
+    process.env.ORION_LOCAL_INDEX = 'on'
     await traceCaptureService.listSessionTraces()
     expect((await fs.stat(databasePath)).isFile()).toBe(true)
 
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     await traceCaptureService.getSessionTraceRevision('session-off')
     await fs.rm(databasePath, { force: true })
     await traceCaptureService.recordCall({
@@ -2253,9 +2253,9 @@ describe('trace read cache', () => {
     expect(duringCooldown.traces[0]?.summary.apiCalls).toBe(1)
     expect(elapsedMs).toBeLessThan(250)
 
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     await traceCaptureService.listSessionTraces({ sessionIds: ['session-busy-open'] })
-    process.env.CC_HAHA_LOCAL_INDEX = 'on'
+    process.env.ORION_LOCAL_INDEX = 'on'
     const recovered = await traceCaptureService.listSessionTraces({
       sessionIds: ['session-busy-open'],
     })
@@ -2309,9 +2309,9 @@ describe('trace read cache', () => {
       sessionIds: ['session-busy-operation'],
     })
     expect(duringCooldown.traces[0]?.summary.apiCalls).toBe(2)
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     await traceCaptureService.listSessionTraces({ sessionIds: ['session-busy-operation'] })
-    process.env.CC_HAHA_LOCAL_INDEX = 'on'
+    process.env.ORION_LOCAL_INDEX = 'on'
     const recovered = await traceCaptureService.listSessionTraces({
       sessionIds: ['session-busy-operation'],
     })
@@ -2340,7 +2340,7 @@ describe('trace read cache', () => {
       ['session-shadow'],
     )
     database.close()
-    process.env.CC_HAHA_LOCAL_INDEX = 'shadow'
+    process.env.ORION_LOCAL_INDEX = 'shadow'
 
     const list = await traceCaptureService.listSessionTraces({ sessionIds: ['session-shadow'] })
 
@@ -2383,7 +2383,7 @@ describe('trace read cache', () => {
     const projected = (await traceCaptureService.listSessionTraces({
       sessionIds: ['session-model-order'],
     })).traces[0]!.summary.models
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     const canonical = (await traceCaptureService.listSessionTraces({
       sessionIds: ['session-model-order'],
     })).traces[0]!.summary.models
@@ -2427,7 +2427,7 @@ describe('trace read cache', () => {
     const projected = (await traceCaptureService.listSessionTraces({
       sessionIds: ['session-start-tie'],
     })).traces[0]!.summary.updatedAt
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     const canonical = (await traceCaptureService.listSessionTraces({
       sessionIds: ['session-start-tie'],
     })).traces[0]!.summary.updatedAt
@@ -2473,7 +2473,7 @@ describe('trace read cache', () => {
     const projected = (await traceCaptureService.listSessionTraces({
       sessionIds: ['session-rebuild-lww-order'],
     })).traces[0]!.summary
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_LOCAL_INDEX = 'off'
     const canonical = (await traceCaptureService.listSessionTraces({
       sessionIds: ['session-rebuild-lww-order'],
     })).traces[0]!.summary

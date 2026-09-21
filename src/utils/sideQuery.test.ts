@@ -69,7 +69,7 @@ async function withCapturedRequests<T>(
       ANTHROPIC_API_KEY: 'loopback-test-key',
       ANTHROPIC_BASE_URL: `http://127.0.0.1:${server.port}`,
       ANTHROPIC_MODEL: model,
-      CC_HAHA_SEND_DISABLED_THINKING: '1',
+      ORION_SEND_DISABLED_THINKING: '1',
       CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1',
     }, originalEnv))
     setIsInteractive(false)

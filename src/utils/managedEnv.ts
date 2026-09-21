@@ -70,13 +70,13 @@ function withoutHostManagedProviderVars(
 // Internal launch controls are never supplied by settings.env. This also
 // covers sdk-cli/OAuth sessions without host-managed provider routing.
 const HOST_TEAM_ENV_KEYS = new Set([
-  'CC_HAHA_AGENT_TEAMS_ENABLED',
-  'CC_HAHA_AGENT_TEAMS_DEFAULT',
+  'ORION_AGENT_TEAMS_ENABLED',
+  'ORION_AGENT_TEAMS_DEFAULT',
 ])
 
 const HOST_OWNED_ENV_KEYS = new Set([
   'CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST',
-  'CC_HAHA_LOCAL_ACCESS_TOKEN',
+  'ORION_LOCAL_ACCESS_TOKEN',
 ])
 
 function withoutHostOwnedEnvVars(

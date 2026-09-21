@@ -4005,7 +4005,7 @@ describe('WebSocket Chat Integration', () => {
       startCalls.push({
         providerId: options?.providerId,
         model: options?.model,
-        imageProviderKind: env.CC_HAHA_IMAGE_PROVIDER_KIND,
+        imageProviderKind: env.ORION_IMAGE_PROVIDER_KIND,
       })
       return originalStartSession(sid, workDir, sdkUrl, options)
     }) as typeof conversationService.startSession

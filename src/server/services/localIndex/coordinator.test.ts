@@ -30,7 +30,7 @@ import type {
 } from './reconciliationWatcher.js'
 import { aggregateActivityStatsForMode } from '../../api/activityStats.js'
 
-type EnvironmentName = 'HOME' | 'CLAUDE_CONFIG_DIR' | 'CC_HAHA_LOCAL_INDEX'
+type EnvironmentName = 'HOME' | 'CLAUDE_CONFIG_DIR' | 'ORION_LOCAL_INDEX'
 
 const tempDirs: string[] = []
 const originalEnvironment: Partial<Record<EnvironmentName, string>> = {}
@@ -48,7 +48,7 @@ function restoreEnvironment(name: EnvironmentName): void {
 }
 
 afterEach(async () => {
-  for (const name of ['HOME', 'CLAUDE_CONFIG_DIR', 'CC_HAHA_LOCAL_INDEX'] as const) {
+  for (const name of ['HOME', 'CLAUDE_CONFIG_DIR', 'ORION_LOCAL_INDEX'] as const) {
     restoreEnvironment(name)
   }
   await Promise.all(tempDirs.splice(0).map(directory =>
@@ -57,7 +57,7 @@ afterEach(async () => {
 })
 
 function rememberEnvironment(): void {
-  for (const name of ['HOME', 'CLAUDE_CONFIG_DIR', 'CC_HAHA_LOCAL_INDEX'] as const) {
+  for (const name of ['HOME', 'CLAUDE_CONFIG_DIR', 'ORION_LOCAL_INDEX'] as const) {
     originalEnvironment[name] = process.env[name]
   }
 }
@@ -1148,7 +1148,7 @@ describe('local index coordinator', () => {
     const secondRoot = await createTempDir('coordinator-scope-b')
     process.env.HOME = join(firstRoot, 'home')
     process.env.CLAUDE_CONFIG_DIR = join(firstRoot, 'config')
-    process.env.CC_HAHA_LOCAL_INDEX = 'on'
+    process.env.ORION_LOCAL_INDEX = 'on'
     const firstCandidate = await createRealTranscript(
       process.env.CLAUDE_CONFIG_DIR,
       '-repo-a',

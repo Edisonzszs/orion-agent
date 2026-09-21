@@ -124,7 +124,7 @@ rm -rf "${DESKTOP_DIR}/src-tauri/binaries/claude-sidecar-"*
 # are keyed to the identity, and an Apple Development cert expires yearly).
 # ---------------------------------------------------------------------------
 SIGN_BUILD_EFFECTIVE="${SIGN_BUILD:-}"
-RESOLVED_SIGN_IDENTITY="${CC_HAHA_SIGN_IDENTITY:-}"
+RESOLVED_SIGN_IDENTITY="${ORION_SIGN_IDENTITY:-}"
 
 if [[ -z "${RESOLVED_SIGN_IDENTITY}" && "${SIGN_BUILD_EFFECTIVE}" != "0" ]]; then
   RESOLVED_SIGN_IDENTITY="$(
@@ -154,10 +154,10 @@ if [[ "${SIGN_BUILD_EFFECTIVE}" == "0" || -z "${RESOLVED_SIGN_IDENTITY}" ]]; the
 else
   SIGN_BUILD_EFFECTIVE=1
   # Every signing step reads one of these: build-sidecars.ts and
-  # native/cu-helper/build.sh read CC_HAHA_SIGN_IDENTITY, electron-builder reads
+  # native/cu-helper/build.sh read ORION_SIGN_IDENTITY, electron-builder reads
   # CSC_NAME. Pinning CSC_NAME rather than leaving auto-discovery on is what
   # guarantees the host lands on the same cert as the other two.
-  export CC_HAHA_SIGN_IDENTITY="${RESOLVED_SIGN_IDENTITY}"
+  export ORION_SIGN_IDENTITY="${RESOLVED_SIGN_IDENTITY}"
   # electron-builder rejects a CSC_NAME carrying the certificate-type prefix
   # ("Please remove prefix \"Developer ID Application:\" …") — it wants only the
   # common name and picks the certificate type itself. `codesign --sign` on the

@@ -17,7 +17,7 @@ const settingsPath = path.join(process.env.CLAUDE_CONFIG_DIR!, 'settings.json')
 await writeFile(settingsPath, JSON.stringify({ env: { ANTHROPIC_API_KEY: 'fake-original-key' }, language: 'en', unknownFutureSetting: { keep: true } }))
 const server = startServer(0, '127.0.0.1')
 const local = `http://127.0.0.1:${server.port}`
-const control = (route: string, body: unknown) => fetch(`${local}/api/public-access/${route}`, { method: 'POST', headers: { Authorization: `Bearer ${process.env.CC_HAHA_LOCAL_ACCESS_TOKEN}` }, body: JSON.stringify(body) })
+const control = (route: string, body: unknown) => fetch(`${local}/api/public-access/${route}`, { method: 'POST', headers: { Authorization: `Bearer ${process.env.ORION_LOCAL_ACCESS_TOKEN}` }, body: JSON.stringify(body) })
 function check(value: unknown, message: string): asserts value { if (!value) throw new Error(message) }
 try {
   const enabled = await (await control('enable', { publicUrl: origin })).json()

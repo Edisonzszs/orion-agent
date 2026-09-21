@@ -95,7 +95,7 @@ export async function stageRipgrepLicenses(binariesDir: string): Promise<string>
 
 export async function prepareRipgrep({
   targetTriple,
-  archivePath = process.env.CC_HAHA_RIPGREP_ARCHIVE,
+  archivePath = process.env.ORION_RIPGREP_ARCHIVE,
 }: {
   targetTriple: string
   archivePath?: string

@@ -104,7 +104,7 @@ describe('release desktop workflow', () => {
         "if: matrix.smoke_platform == 'windows' && matrix.arch == 'x64'",
       )
       expect(smokeStep, workflowPath).toContain('working-directory: desktop')
-      expect(smokeStep, workflowPath).toContain("CC_HAHA_COMPILED_SIDECAR_SMOKE_STARTS: '20'")
+      expect(smokeStep, workflowPath).toContain("ORION_COMPILED_SIDECAR_SMOKE_STARTS: '20'")
       expect(smokeStep, workflowPath).toContain('bun run test:compiled-sidecar-smoke')
       expect(workflow.indexOf('Build sidecars'), workflowPath).toBeLessThan(
         workflow.indexOf('Verify compiled Windows sidecar startup'),
@@ -267,11 +267,11 @@ describe('release desktop workflow', () => {
     const signedBuildStep = extractStep(workflow, 'Build signed macOS Electron release artifacts')
     const cleanupStep = extractStep(workflow, 'Remove temporary macOS signing keychain')
 
-    expect(importIdentityStep).toContain('echo "CC_HAHA_CI_KEYCHAIN=$keychain_path" >> "$GITHUB_ENV"')
-    expect(signedBuildStep).toContain('export CSC_KEYCHAIN="${CC_HAHA_CI_KEYCHAIN:?macOS signing keychain was not prepared}"')
+    expect(importIdentityStep).toContain('echo "ORION_CI_KEYCHAIN=$keychain_path" >> "$GITHUB_ENV"')
+    expect(signedBuildStep).toContain('export CSC_KEYCHAIN="${ORION_CI_KEYCHAIN:?macOS signing keychain was not prepared}"')
     expect(signedBuildStep).not.toContain('CSC_LINK:')
     expect(signedBuildStep).not.toContain('CSC_KEY_PASSWORD:')
-    expect(cleanupStep).toContain('security delete-keychain "$CC_HAHA_CI_KEYCHAIN"')
+    expect(cleanupStep).toContain('security delete-keychain "$ORION_CI_KEYCHAIN"')
     expect(workflow.indexOf('Import macOS signing identity for native runtimes')).toBeLessThan(
       workflow.indexOf('Build signed macOS Electron release artifacts'),
     )
@@ -793,7 +793,7 @@ describe('release desktop workflow', () => {
     expect(installerHook).toContain('ReadEnvStr $2 APPDATA')
     expect(installerHook).toContain('ReadEnvStr $3 USERPROFILE')
     expect(installerHook).toContain('ReadEnvStr $6 CLAUDE_CONFIG_DIR')
-    expect(installerHook).toContain('ReadEnvStr $7 CC_HAHA_APP_PORTABLE_DIR')
+    expect(installerHook).toContain('ReadEnvStr $7 ORION_APP_PORTABLE_DIR')
     expect(installerHook).toContain('No registered installation needs legacy data recovery')
     expect(installerHook).toContain('Var ccHahaPerUserInstallLocation')
     expect(installerHook).toContain('Var ccHahaPerMachineInstallLocation')
@@ -858,7 +858,7 @@ describe('release desktop workflow', () => {
     expect(installerSmoke).toContain('Reinstall removed the application executable')
     expect(installerSmoke).toContain("'中文 安装目录\\Claude Code Haha'")
     expect(installerSmoke).toContain('Invoke-InstalledApplicationSmoke')
-    expect(installerSmoke).toContain('CC_HAHA_ELECTRON_WINDOW_SMOKE_LOG')
+    expect(installerSmoke).toContain('ORION_ELECTRON_WINDOW_SMOKE_LOG')
     expect(installerSmoke).toContain('desktop-server-state.json')
     expect(installerSmoke).toContain('"reason":"after-final-show"')
     expect(installerSmoke).toContain('"http://127.0.0.1:$port/health"')

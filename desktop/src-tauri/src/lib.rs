@@ -556,7 +556,7 @@ fn get_app_mode(app: AppHandle) -> serde_json::Value {
         .clone()
         .or_else(|| app.path().app_config_dir().ok());
     let config_dir_source = if env_config_dir.is_some() {
-        if std::env::var_os("CC_HAHA_APP_PORTABLE_DIR").is_some() {
+        if std::env::var_os("ORION_APP_PORTABLE_DIR").is_some() {
             "portable"
         } else {
             "environment"

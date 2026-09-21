@@ -16,7 +16,7 @@
  * answer to "which certificate?". That answer lives here.
  *
  * Preference order — Developer ID FIRST, deliberately:
- *   1. `CC_HAHA_SIGN_IDENTITY` — explicit override, trusted verbatim.
+ *   1. `ORION_SIGN_IDENTITY` — explicit override, trusted verbatim.
  *   2. `Developer ID Application: …` — long-lived, notarizable, distributable.
  *      TCC grants are keyed to the signing identity, so a cert that does not
  *      expire yearly is what keeps the user's Accessibility + Screen Recording
@@ -45,7 +45,7 @@ export const SIDECAR_SIGNING_IDENTIFIER = 'com.claude-code-haha.desktop.sidecar'
  * output. Pure so the preference order is unit-testable without a keychain.
  *
  * @param securityOutput raw stdout of `security find-identity -v -p codesigning`
- * @param override value of `CC_HAHA_SIGN_IDENTITY`, if set
+ * @param override value of `ORION_SIGN_IDENTITY`, if set
  * @returns the identity's common name, or null when nothing stable is available
  */
 export function resolveStableSigningIdentity(
@@ -98,7 +98,7 @@ export async function detectStableSigningIdentity(): Promise<SigningIdentity | n
     await proc.exited
     return resolveStableSigningIdentity(
       stdout,
-      process.env.CC_HAHA_SIGN_IDENTITY,
+      process.env.ORION_SIGN_IDENTITY,
     )
   } catch {
     return null

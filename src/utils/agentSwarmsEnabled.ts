@@ -25,8 +25,8 @@ function isAgentTeamsFlagSet(): boolean {
 export function isAgentSwarmsEnabled(): boolean {
   // A saved General opt-out is authoritative even for forced/team child launches.
   if (
-    process.env.CC_HAHA_AGENT_TEAMS_ENABLED !== undefined &&
-    !isEnvTruthy(process.env.CC_HAHA_AGENT_TEAMS_ENABLED)
+    process.env.ORION_AGENT_TEAMS_ENABLED !== undefined &&
+    !isEnvTruthy(process.env.ORION_AGENT_TEAMS_ENABLED)
   ) {
     return false
   }
@@ -38,9 +38,9 @@ export function isAgentSwarmsEnabled(): boolean {
 
   // The host resolves General and legacy settings before launching. Standalone
   // CLI sessions retain their upstream opt-in behavior.
-  const optIn = process.env.CC_HAHA_AGENT_TEAMS_ENABLED ??
+  const optIn = process.env.ORION_AGENT_TEAMS_ENABLED ??
     process.env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS ??
-    process.env.CC_HAHA_AGENT_TEAMS_DEFAULT
+    process.env.ORION_AGENT_TEAMS_DEFAULT
 
   // External: require opt-in via env var, host default, or --agent-teams flag
   if (

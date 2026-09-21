@@ -116,7 +116,7 @@ test('subprocess shutdown exits only after pending stdout is flushed', async () 
         CI: '1',
         HOME: tempDir,
         CLAUDE_CONFIG_DIR: join(tempDir, '.claude'),
-        CC_HAHA_SKIP_DOTENV: '1',
+        ORION_SKIP_DOTENV: '1',
         CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1',
         DISABLE_AUTOUPDATER: '1',
         DISABLE_TELEMETRY: '1',

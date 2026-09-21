@@ -22,8 +22,8 @@ import { resetScheduledRunReadModelForTests } from '../services/localIndex/sched
 let tmpDir: string
 const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
 const originalClaudeCliPath = process.env.CLAUDE_CLI_PATH
-const originalDisableTerminalShellEnv = process.env.CC_HAHA_DISABLE_TERMINAL_SHELL_ENV
-const originalLocalIndexMode = process.env.CC_HAHA_LOCAL_INDEX
+const originalDisableTerminalShellEnv = process.env.ORION_DISABLE_TERMINAL_SHELL_ENV
+const originalLocalIndexMode = process.env.ORION_LOCAL_INDEX
 
 async function createTmpDir(): Promise<string> {
   const dir = path.join(
@@ -232,8 +232,8 @@ describe('CronScheduler', () => {
     tmpDir = await createTmpDir()
     process.env.CLAUDE_CONFIG_DIR = tmpDir
     process.env.CLAUDE_CLI_PATH = await createFakeCronCli(tmpDir)
-    process.env.CC_HAHA_DISABLE_TERMINAL_SHELL_ENV = '1'
-    process.env.CC_HAHA_LOCAL_INDEX = 'off'
+    process.env.ORION_DISABLE_TERMINAL_SHELL_ENV = '1'
+    process.env.ORION_LOCAL_INDEX = 'off'
     cronService = new CronService()
     scheduler = new CronScheduler(cronService)
   })
@@ -251,14 +251,14 @@ describe('CronScheduler', () => {
       delete process.env.CLAUDE_CLI_PATH
     }
     if (originalDisableTerminalShellEnv) {
-      process.env.CC_HAHA_DISABLE_TERMINAL_SHELL_ENV = originalDisableTerminalShellEnv
+      process.env.ORION_DISABLE_TERMINAL_SHELL_ENV = originalDisableTerminalShellEnv
     } else {
-      delete process.env.CC_HAHA_DISABLE_TERMINAL_SHELL_ENV
+      delete process.env.ORION_DISABLE_TERMINAL_SHELL_ENV
     }
     if (originalLocalIndexMode) {
-      process.env.CC_HAHA_LOCAL_INDEX = originalLocalIndexMode
+      process.env.ORION_LOCAL_INDEX = originalLocalIndexMode
     } else {
-      delete process.env.CC_HAHA_LOCAL_INDEX
+      delete process.env.ORION_LOCAL_INDEX
     }
     await cleanupTmpDir(tmpDir)
   })
@@ -336,7 +336,7 @@ describe('CronScheduler', () => {
     await fs.mkdir(scopeA, { recursive: true })
     await fs.mkdir(scopeB, { recursive: true })
     process.env.CLAUDE_CONFIG_DIR = scopeA
-    process.env.CC_HAHA_LOCAL_INDEX = 'on'
+    process.env.ORION_LOCAL_INDEX = 'on'
 
     const blockingCli = await createBlockingFakeCronCli(tmpDir)
     process.env.CLAUDE_CLI_PATH = blockingCli.cliPath
@@ -570,7 +570,7 @@ describe('Execution log trimming', () => {
     tmpDir = await createTmpDir()
     process.env.CLAUDE_CONFIG_DIR = tmpDir
     process.env.CLAUDE_CLI_PATH = await createFakeCronCli(tmpDir)
-    process.env.CC_HAHA_DISABLE_TERMINAL_SHELL_ENV = '1'
+    process.env.ORION_DISABLE_TERMINAL_SHELL_ENV = '1'
     cronService = new CronService()
     scheduler = new CronScheduler(cronService)
   })
@@ -588,9 +588,9 @@ describe('Execution log trimming', () => {
       delete process.env.CLAUDE_CLI_PATH
     }
     if (originalDisableTerminalShellEnv) {
-      process.env.CC_HAHA_DISABLE_TERMINAL_SHELL_ENV = originalDisableTerminalShellEnv
+      process.env.ORION_DISABLE_TERMINAL_SHELL_ENV = originalDisableTerminalShellEnv
     } else {
-      delete process.env.CC_HAHA_DISABLE_TERMINAL_SHELL_ENV
+      delete process.env.ORION_DISABLE_TERMINAL_SHELL_ENV
     }
     await cleanupTmpDir(tmpDir)
   })

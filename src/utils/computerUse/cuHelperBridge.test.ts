@@ -16,7 +16,7 @@ function resetComputerUseHelperState(): void {
   // callCuHelper now resolves through ensureInstalledHelper(); clear its module
   // cache too so a prior test's resolution can't leak into the next.
   __resetInstalledHelperCache()
-  delete process.env.CC_HAHA_CU_HELPER_PATH
+  delete process.env.ORION_CU_HELPER_PATH
   delete process.env.CLAUDE_APP_ROOT
 }
 
@@ -33,12 +33,12 @@ function isCurrentDevBinary(candidate: string): boolean {
 
 describe('resolveCuHelperBinary', () => {
   test('returns the env override when it exists', () => {
-    process.env.CC_HAHA_CU_HELPER_PATH = '/custom/cu-helper'
+    process.env.ORION_CU_HELPER_PATH = '/custom/cu-helper'
     expect(resolveCuHelperBinary(p => p === '/custom/cu-helper')).toBe('/custom/cu-helper')
   })
 
   test('ignores overrides and development candidates in a packaged app', () => {
-    process.env.CC_HAHA_CU_HELPER_PATH = '/tmp/evil-helper'
+    process.env.ORION_CU_HELPER_PATH = '/tmp/evil-helper'
     process.env.CLAUDE_APP_ROOT = '/Applications/App.app/Contents/Resources/app.asar'
     const bundled =
       '/Applications/App.app/Contents/Resources/app.asar.unpacked/src-tauri/binaries/cc-haha-computer-use.app/Contents/MacOS/cc-haha-computer-use'
@@ -52,7 +52,7 @@ describe('resolveCuHelperBinary', () => {
   })
 
   test('ignores the env override when it does not exist, falling to candidates', () => {
-    process.env.CC_HAHA_CU_HELPER_PATH = '/missing/cu-helper'
+    process.env.ORION_CU_HELPER_PATH = '/missing/cu-helper'
     const found = resolveCuHelperBinary(isCurrentDevBinary)
     expect(found?.endsWith(currentDevSuffix)).toBe(true)
   })
@@ -123,7 +123,7 @@ describe('resolveCuHelperAppBundle', () => {
   })
 
   test('returns null when the resolved binary is a bare path (no .app wrapper)', () => {
-    process.env.CC_HAHA_CU_HELPER_PATH = '/custom/cu-helper'
+    process.env.ORION_CU_HELPER_PATH = '/custom/cu-helper'
     expect(resolveCuHelperAppBundle(p => p === '/custom/cu-helper')).toBeNull()
   })
 
@@ -152,7 +152,7 @@ describe('isCuHelperAvailable', () => {
   })
 
   test('launch resolution fails closed before touching a helper on unsupported systems', () => {
-    process.env.CC_HAHA_CU_HELPER_PATH = '/x/cu-helper'
+    process.env.ORION_CU_HELPER_PATH = '/x/cu-helper'
     __resetCuHelperCache()
     resolveCuHelperBinary(p => p === '/x/cu-helper')
     expect(resolveLaunchableCuHelperBinary(false)).toBeNull()
@@ -162,7 +162,7 @@ describe('isCuHelperAvailable', () => {
 
 describe('callCuHelper', () => {
   function primeBinary(path = '/x/cu-helper') {
-    process.env.CC_HAHA_CU_HELPER_PATH = path
+    process.env.ORION_CU_HELPER_PATH = path
     __resetCuHelperCache()
     resolveCuHelperBinary(p => p === path)
   }

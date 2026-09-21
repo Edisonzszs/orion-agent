@@ -441,7 +441,7 @@ describe('ProviderService', () => {
 
       const settings = await readSettings()
       const env = settings.env as Record<string, string>
-      expect(env.CC_HAHA_SEND_DISABLED_THINKING).toBeUndefined()
+      expect(env.ORION_SEND_DISABLED_THINKING).toBeUndefined()
       expect(env.ANTHROPIC_DEFAULT_SONNET_MODEL_SUPPORTED_CAPABILITIES).toBe(
         'thinking,effort,adaptive_thinking,xhigh_effort,max_effort',
       )
@@ -570,7 +570,7 @@ describe('ProviderService', () => {
         const settings = await readSettings()
         expect(config.activeId).toBe('openai-official')
         const env = settings.env as Record<string, string>
-        expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBe('1')
+        expect(env.ORION_OPENAI_OAUTH_PROVIDER).toBe('1')
         expect(env.OPENAI_CODEX_OAUTH_FILE).toBe(
           path.join(tmpDir, 'orion', 'openai-oauth.json'),
         )
@@ -613,7 +613,7 @@ describe('ProviderService', () => {
 
         const settings = await readSettings()
         const env = settings.env as Record<string, string>
-        expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBe('1')
+        expect(env.ORION_OPENAI_OAUTH_PROVIDER).toBe('1')
         expect(env.OPENAI_CODEX_OAUTH_FILE).toBe(
           path.join(tmpDir, 'orion', 'openai-oauth.json'),
         )
@@ -688,7 +688,7 @@ describe('ProviderService', () => {
         await svc.activateProvider(provider.id)
 
         const env = (await readSettings()).env as Record<string, string>
-        expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBeUndefined()
+        expect(env.ORION_OPENAI_OAUTH_PROVIDER).toBeUndefined()
         expect(env.OPENAI_CODEX_OAUTH_FILE).toBeUndefined()
         expect(env.ANTHROPIC_BASE_URL).toBe('https://api.example.com')
         expect(env.ANTHROPIC_AUTH_TOKEN).toBe('sk-test-key-123')
@@ -745,7 +745,7 @@ describe('ProviderService', () => {
         const config = await readProvidersConfig()
         const env = (await readSettings()).env as Record<string, string>
         expect(config.activeId).toBe('grok-official')
-        expect(env.CC_HAHA_GROK_OAUTH_PROVIDER).toBe('1')
+        expect(env.ORION_GROK_OAUTH_PROVIDER).toBe('1')
         expect(env.GROK_OAUTH_FILE).toBe(
           path.join(tmpDir, 'orion', 'grok-oauth.json'),
         )
@@ -753,7 +753,7 @@ describe('ProviderService', () => {
         expect(env.ANTHROPIC_DEFAULT_HAIKU_MODEL).toBe('grok-4.6')
         expect(env.ANTHROPIC_DEFAULT_SONNET_MODEL).toBe('grok-4.6')
         expect(env.ANTHROPIC_DEFAULT_OPUS_MODEL).toBe('grok-4.6')
-        expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBeUndefined()
+        expect(env.ORION_OPENAI_OAUTH_PROVIDER).toBeUndefined()
         expect(env.OPENAI_CODEX_OAUTH_FILE).toBeUndefined()
       })
 
@@ -970,19 +970,19 @@ describe('ProviderService', () => {
       let settings = await readSettings()
       let env = settings.env as Record<string, string>
       expect(env).toMatchObject({
-        CC_HAHA_IMAGE_PROVIDER_KIND: 'openai_images',
-        CC_HAHA_IMAGE_PROVIDER_ID: added.id,
-        CC_HAHA_IMAGE_BASE_URL: 'https://images.example.test/v1',
-        CC_HAHA_IMAGE_API_KEY: 'image-secret',
-        CC_HAHA_IMAGE_MODEL: 'image-model',
+        ORION_IMAGE_PROVIDER_KIND: 'openai_images',
+        ORION_IMAGE_PROVIDER_ID: added.id,
+        ORION_IMAGE_BASE_URL: 'https://images.example.test/v1',
+        ORION_IMAGE_API_KEY: 'image-secret',
+        ORION_IMAGE_MODEL: 'image-model',
       })
 
       const updated = await svc.updateProvider(added.id, { imageGeneration: null })
       expect(updated.imageGeneration).toBeUndefined()
       settings = await readSettings()
       env = settings.env as Record<string, string>
-      expect(env.CC_HAHA_IMAGE_PROVIDER_KIND).toBeUndefined()
-      expect(env.CC_HAHA_IMAGE_API_KEY).toBeUndefined()
+      expect(env.ORION_IMAGE_PROVIDER_KIND).toBeUndefined()
+      expect(env.ORION_IMAGE_API_KEY).toBeUndefined()
     })
   })
 
@@ -1302,8 +1302,8 @@ describe('ProviderService', () => {
     })
 
     test('proxy providers keep transient desktop auth out of persisted settings', async () => {
-      const originalLocalAccessToken = process.env.CC_HAHA_LOCAL_ACCESS_TOKEN
-      process.env.CC_HAHA_LOCAL_ACCESS_TOKEN = 'desktop-local-secret'
+      const originalLocalAccessToken = process.env.ORION_LOCAL_ACCESS_TOKEN
+      process.env.ORION_LOCAL_ACCESS_TOKEN = 'desktop-local-secret'
 
       try {
         const svc = new ProviderService()
@@ -1324,9 +1324,9 @@ describe('ProviderService', () => {
         }
       } finally {
         if (originalLocalAccessToken === undefined) {
-          delete process.env.CC_HAHA_LOCAL_ACCESS_TOKEN
+          delete process.env.ORION_LOCAL_ACCESS_TOKEN
         } else {
-          process.env.CC_HAHA_LOCAL_ACCESS_TOKEN = originalLocalAccessToken
+          process.env.ORION_LOCAL_ACCESS_TOKEN = originalLocalAccessToken
         }
       }
     })

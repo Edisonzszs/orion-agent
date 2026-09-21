@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const callerDir = process.env.CALLER_DIR || process.cwd()
-const skipDotenv = process.env.CC_HAHA_SKIP_DOTENV === '1'
+const skipDotenv = process.env.ORION_SKIP_DOTENV === '1'
 const rootEnvPath = path.join(rootDir, '.env')
 const envFileArgs =
   !skipDotenv && existsSync(rootEnvPath)

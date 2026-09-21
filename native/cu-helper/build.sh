@@ -97,7 +97,7 @@ preflight() {
 # 2. Resolve a STABLE signing identity.
 #
 #    Priority:
-#      a) $CC_HAHA_SIGN_IDENTITY (shared host/sidecar/helper build identity)
+#      a) $ORION_SIGN_IDENTITY (shared host/sidecar/helper build identity)
 #      b) $CU_HELPER_IDENTITY (legacy helper-only override for direct builds)
 #      c) the first 'Developer ID Application: ...' identity (release/CI)
 #      d) the first real 'Apple Development: ...' identity in the keychain
@@ -182,12 +182,12 @@ resolve_identity() {
   #     every call (see desktop/scripts/sign-identity.ts). It deliberately wins
   #     over the legacy helper-only variable so stale shell state cannot split a
   #     signed app across two certificates.
-  if [ -n "${CC_HAHA_SIGN_IDENTITY:-}" ]; then
-    SIGN_IDENTITY="$CC_HAHA_SIGN_IDENTITY"
+  if [ -n "${ORION_SIGN_IDENTITY:-}" ]; then
+    SIGN_IDENTITY="$ORION_SIGN_IDENTITY"
     if [ "$SIGN_IDENTITY" = "-" ]; then
-      die "CC_HAHA_SIGN_IDENTITY='-' (ad-hoc) is refused. Ad-hoc signing rotates the TCC identity every build. Use a stable cert."
+      die "ORION_SIGN_IDENTITY='-' (ad-hoc) is refused. Ad-hoc signing rotates the TCC identity every build. Use a stable cert."
     fi
-    log "identity: $SIGN_IDENTITY (from CC_HAHA_SIGN_IDENTITY)"
+    log "identity: $SIGN_IDENTITY (from ORION_SIGN_IDENTITY)"
     return 0
   fi
 

@@ -111,7 +111,7 @@ describe('provider presets API', () => {
     expect(deepseek?.defaultModels.haiku).toBe('deepseek-v4-flash')
     expect(deepseek?.defaultModels.sonnet).toBe('deepseek-v4-pro[1m]')
     expect(deepseek?.defaultModels.opus).toBe('deepseek-v4-pro[1m]')
-    expect(deepseek?.defaultEnv?.CC_HAHA_SEND_DISABLED_THINKING).toBeUndefined()
+    expect(deepseek?.defaultEnv?.ORION_SEND_DISABLED_THINKING).toBeUndefined()
     expect(deepseek?.defaultEnv).toEqual({})
     expect(zhipu?.baseUrl).toBe('https://open.bigmodel.cn/api/anthropic')
     expect(zhipu?.regionalEndpoints).toEqual([
@@ -133,7 +133,7 @@ describe('provider presets API', () => {
     expect(kimi?.regionalEndpoints).toBeUndefined()
     expect(kimi?.authStrategy).toBe('api_key')
     expect(kimi?.defaultModels.main).toBe('k3')
-    expect(kimi?.defaultEnv?.CC_HAHA_SEND_DISABLED_THINKING).toBeUndefined()
+    expect(kimi?.defaultEnv?.ORION_SEND_DISABLED_THINKING).toBeUndefined()
     expect(kimi?.defaultEnv).toEqual({})
     expect(minimax?.baseUrl).toBe('https://api.minimaxi.com/anthropic')
     expect(minimax?.regionalEndpoints).toEqual([
@@ -222,7 +222,7 @@ describe('provider presets API', () => {
     expect(deepseek?.modelContextWindows?.['deepseek-v4-flash']).toBe(1000000)
     expect(zhipu?.apiKeyUrl).toBe('https://www.bigmodel.cn/invite?icode=d41B2qi8Z5xNwTGLNPPF3OZLO2QH3C0EBTSr%2BArzMw4%3D')
     expect(zhipu?.promoText).toContain('cc-haha')
-    expect(zhipu?.defaultEnv?.CC_HAHA_SEND_DISABLED_THINKING).toBeUndefined()
+    expect(zhipu?.defaultEnv?.ORION_SEND_DISABLED_THINKING).toBeUndefined()
     expect(zhipu?.modelContextWindows?.['glm-5.3']).toBe(1000000)
     expect(zhipu?.modelContextWindows?.['glm-5.3-flash']).toBe(1000000)
     expect(zhipu?.modelContextWindows?.['glm-5.2']).toBe(1000000)

@@ -122,8 +122,8 @@ describe('macOS installed app enumeration', () => {
       ['Custom.app', { bundleId: 'com.example.custom-host', displayName: 'Custom Host' }],
       ['Notes.app', { bundleId: 'com.example.notes', displayName: 'Notes' }],
     ])
-    const previousHost = process.env.CC_HAHA_COMPUTER_USE_HOST_BUNDLE_ID
-    process.env.CC_HAHA_COMPUTER_USE_HOST_BUNDLE_ID = 'com.example.custom-host'
+    const previousHost = process.env.ORION_COMPUTER_USE_HOST_BUNDLE_ID
+    process.env.ORION_COMPUTER_USE_HOST_BUNDLE_ID = 'com.example.custom-host'
     let apps: Awaited<ReturnType<typeof listInstalledMacApps>>
     try {
       apps = await listInstalledMacApps({
@@ -133,8 +133,8 @@ describe('macOS installed app enumeration', () => {
         readMetadata: async appPath => metadata.get(appPath.split('/').at(-1) ?? '') ?? null,
       })
     } finally {
-      if (previousHost === undefined) delete process.env.CC_HAHA_COMPUTER_USE_HOST_BUNDLE_ID
-      else process.env.CC_HAHA_COMPUTER_USE_HOST_BUNDLE_ID = previousHost
+      if (previousHost === undefined) delete process.env.ORION_COMPUTER_USE_HOST_BUNDLE_ID
+      else process.env.ORION_COMPUTER_USE_HOST_BUNDLE_ID = previousHost
     }
 
     expect(apps).toEqual([

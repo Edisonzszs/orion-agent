@@ -146,7 +146,7 @@ describe('ElectronServerRuntime', () => {
 
     await runtime.startServer()
 
-    expect(sidecarMocks.serverPlans[0]!.env.CC_HAHA_ELECTRON_DIAGNOSTICS_FILE)
+    expect(sidecarMocks.serverPlans[0]!.env.ORION_ELECTRON_DIAGNOSTICS_FILE)
       .toBe('/isolated/user-data/diagnostics/electron-host.log')
     expect(sidecarMocks.serverPlans[0]!.env.CLAUDE_CONFIG_DIR).toBe(isolatedConfigDir)
     expect(sidecarMocks.serverPlans[0]!.env.CLAUDE_CONFIG_DIR)
@@ -163,13 +163,13 @@ describe('ElectronServerRuntime', () => {
     expect(localToken.length).toBeGreaterThanOrEqual(32)
     expect(petToken.length).toBeGreaterThanOrEqual(32)
     expect(petToken).not.toBe(localToken)
-    expect(sidecarMocks.serverPlans[0]!.env.CC_HAHA_LOCAL_ACCESS_TOKEN).toBe(localToken)
-    expect(sidecarMocks.serverPlans[0]!.env.CC_HAHA_PET_ACCESS_TOKEN).toBe(petToken)
+    expect(sidecarMocks.serverPlans[0]!.env.ORION_LOCAL_ACCESS_TOKEN).toBe(localToken)
+    expect(sidecarMocks.serverPlans[0]!.env.ORION_PET_ACCESS_TOKEN).toBe(petToken)
     for (const adapter of sidecarMocks.spawnSidecar.mock.calls
       .map(([plan]) => plan)
       .filter(plan => plan.args[0] === 'adapters')) {
-      expect(adapter.env.CC_HAHA_LOCAL_ACCESS_TOKEN).toBe(localToken)
-      expect(adapter.env.CC_HAHA_PET_ACCESS_TOKEN).toBeUndefined()
+      expect(adapter.env.ORION_LOCAL_ACCESS_TOKEN).toBe(localToken)
+      expect(adapter.env.ORION_PET_ACCESS_TOKEN).toBeUndefined()
     }
   })
 
@@ -192,7 +192,7 @@ describe('ElectronServerRuntime', () => {
     await runtime.startServer()
 
     const serverEnv = sidecarMocks.serverPlans[0]!.env
-    expect(serverEnv.CC_HAHA_SYSTEM_PROXY_URL).toBe('http://127.0.0.1:49123')
+    expect(serverEnv.ORION_SYSTEM_PROXY_URL).toBe('http://127.0.0.1:49123')
     expect(serverEnv.HTTP_PROXY).toBeUndefined()
     expect(serverEnv.HTTPS_PROXY).toBeUndefined()
     expect(serverEnv.ALL_PROXY).toBeUndefined()
@@ -336,7 +336,7 @@ describe('ElectronServerRuntime', () => {
     expect(serverEnv.HTTP_PROXY).toBeUndefined()
     expect(serverEnv.HTTPS_PROXY).toBeUndefined()
     expect(serverEnv.ALL_PROXY).toBeUndefined()
-    expect(serverEnv.CC_HAHA_SYSTEM_PROXY_URL).toBeUndefined()
+    expect(serverEnv.ORION_SYSTEM_PROXY_URL).toBeUndefined()
     expect(serverEnv[SYSTEM_PROXY_ERROR_ENV]).toContain('System proxy bridge unavailable: failed via')
     expect(serverEnv[SYSTEM_PROXY_ERROR_ENV]).not.toContain('password')
     expect(serverEnv[SYSTEM_PROXY_ERROR_ENV]).not.toContain('sk-secret')

@@ -3,7 +3,7 @@ import { rm, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { tmpdir } from 'os'
 import {
-  CC_HAHA_RIPGREP_PATH_ENV,
+  ORION_RIPGREP_PATH_ENV,
   getBundledRipgrepPath,
   getRipgrepStatus,
   isUsableBuiltinRipgrepPath,
@@ -12,14 +12,14 @@ import {
 } from '../ripgrep.js'
 
 const tempFiles: string[] = []
-const originalExplicitPath = process.env[CC_HAHA_RIPGREP_PATH_ENV]
+const originalExplicitPath = process.env[ORION_RIPGREP_PATH_ENV]
 
 afterEach(async () => {
   await Promise.all(tempFiles.splice(0).map(path => rm(path, { force: true })))
   if (originalExplicitPath === undefined) {
-    delete process.env[CC_HAHA_RIPGREP_PATH_ENV]
+    delete process.env[ORION_RIPGREP_PATH_ENV]
   } else {
-    process.env[CC_HAHA_RIPGREP_PATH_ENV] = originalExplicitPath
+    process.env[ORION_RIPGREP_PATH_ENV] = originalExplicitPath
   }
   resetRipgrepStateForTests()
 })
@@ -87,7 +87,7 @@ describe('packaged ripgrep resolution', () => {
     const filePath = join(tmpdir(), `cc-haha-explicit-rg-${Date.now()}`)
     await writeFile(filePath, '')
     tempFiles.push(filePath)
-    process.env[CC_HAHA_RIPGREP_PATH_ENV] = filePath
+    process.env[ORION_RIPGREP_PATH_ENV] = filePath
     resetRipgrepStateForTests()
 
     expect(getRipgrepStatus()).toMatchObject({

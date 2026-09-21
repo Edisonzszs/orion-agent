@@ -81,7 +81,7 @@ describe('providerRuntimeEnv', () => {
 
     const env = mergeActiveProviderManagedEnv(
       {
-        CC_HAHA_OPENAI_OAUTH_PROVIDER: '1',
+        ORION_OPENAI_OAUTH_PROVIDER: '1',
         OPENAI_CODEX_OAUTH_FILE: path.join(tmpDir, 'stale-openai-oauth.json'),
         ANTHROPIC_MODEL: 'stale-openai-model',
         DISABLE_AUTOUPDATER: '1',
@@ -90,18 +90,18 @@ describe('providerRuntimeEnv', () => {
     )
 
     expect(env).toMatchObject({
-      CC_HAHA_GROK_OAUTH_PROVIDER: '1',
+      ORION_GROK_OAUTH_PROVIDER: '1',
       GROK_OAUTH_FILE: path.join(tmpDir, 'orion', 'grok-oauth.json'),
-      CC_HAHA_IMAGE_PROVIDER_KIND: 'grok_oauth',
-      CC_HAHA_IMAGE_PROVIDER_ID: 'grok-official',
-      CC_HAHA_IMAGE_MODEL: 'grok-imagine-image-quality',
+      ORION_IMAGE_PROVIDER_KIND: 'grok_oauth',
+      ORION_IMAGE_PROVIDER_ID: 'grok-official',
+      ORION_IMAGE_MODEL: 'grok-imagine-image-quality',
       ANTHROPIC_MODEL: 'grok-4.6',
       ANTHROPIC_DEFAULT_HAIKU_MODEL: 'grok-4.6',
       ANTHROPIC_DEFAULT_SONNET_MODEL: 'grok-4.6',
       ANTHROPIC_DEFAULT_OPUS_MODEL: 'grok-4.6',
       DISABLE_AUTOUPDATER: '1',
     })
-    expect(env.CC_HAHA_OPENAI_OAUTH_PROVIDER).toBeUndefined()
+    expect(env.ORION_OPENAI_OAUTH_PROVIDER).toBeUndefined()
     expect(env.OPENAI_CODEX_OAUTH_FILE).toBeUndefined()
     expect(env.ANTHROPIC_API_KEY).toBeUndefined()
     expect(env.ANTHROPIC_AUTH_TOKEN).toBeUndefined()
@@ -133,11 +133,11 @@ describe('providerRuntimeEnv', () => {
 
     const env = readActiveProviderManagedEnv(tmpDir)
     expect(env).toMatchObject({
-      CC_HAHA_IMAGE_PROVIDER_KIND: 'openai_images',
-      CC_HAHA_IMAGE_PROVIDER_ID: 'provider-images',
-      CC_HAHA_IMAGE_BASE_URL: 'https://images.example.test/v1',
-      CC_HAHA_IMAGE_API_KEY: 'image-secret',
-      CC_HAHA_IMAGE_MODEL: 'upstream-image-model',
+      ORION_IMAGE_PROVIDER_KIND: 'openai_images',
+      ORION_IMAGE_PROVIDER_ID: 'provider-images',
+      ORION_IMAGE_BASE_URL: 'https://images.example.test/v1',
+      ORION_IMAGE_API_KEY: 'image-secret',
+      ORION_IMAGE_MODEL: 'upstream-image-model',
     })
   })
 
@@ -161,18 +161,18 @@ describe('providerRuntimeEnv', () => {
     })
 
     const env = mergeActiveProviderManagedEnv({
-      CC_HAHA_IMAGE_PROVIDER_KIND: 'openai_images',
-      CC_HAHA_IMAGE_PROVIDER_ID: 'stale-provider',
-      CC_HAHA_IMAGE_BASE_URL: 'https://stale.example.test/v1',
-      CC_HAHA_IMAGE_API_KEY: 'stale-secret',
-      CC_HAHA_IMAGE_MODEL: 'stale-model',
+      ORION_IMAGE_PROVIDER_KIND: 'openai_images',
+      ORION_IMAGE_PROVIDER_ID: 'stale-provider',
+      ORION_IMAGE_BASE_URL: 'https://stale.example.test/v1',
+      ORION_IMAGE_API_KEY: 'stale-secret',
+      ORION_IMAGE_MODEL: 'stale-model',
     }, tmpDir)
 
-    expect(env.CC_HAHA_IMAGE_PROVIDER_KIND).toBeUndefined()
-    expect(env.CC_HAHA_IMAGE_PROVIDER_ID).toBeUndefined()
-    expect(env.CC_HAHA_IMAGE_BASE_URL).toBeUndefined()
-    expect(env.CC_HAHA_IMAGE_API_KEY).toBeUndefined()
-    expect(env.CC_HAHA_IMAGE_MODEL).toBeUndefined()
+    expect(env.ORION_IMAGE_PROVIDER_KIND).toBeUndefined()
+    expect(env.ORION_IMAGE_PROVIDER_ID).toBeUndefined()
+    expect(env.ORION_IMAGE_BASE_URL).toBeUndefined()
+    expect(env.ORION_IMAGE_API_KEY).toBeUndefined()
+    expect(env.ORION_IMAGE_MODEL).toBeUndefined()
   })
 
   test('keeps Claude Code effort capabilities for an unlisted custom model', async () => {

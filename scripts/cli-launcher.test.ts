@@ -14,7 +14,7 @@ test('source CLI launcher runs through Bun without requiring Bash', async () => 
         cwd: repoRoot,
         env: {
           ...process.env,
-          CC_HAHA_SKIP_DOTENV: '1',
+          ORION_SKIP_DOTENV: '1',
           CLAUDE_CONFIG_DIR: configDir,
         },
         stdout: 'pipe',

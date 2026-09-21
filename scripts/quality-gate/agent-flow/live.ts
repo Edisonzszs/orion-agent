@@ -424,7 +424,7 @@ export async function executeLiveAgentFlow(options: {
   const sandbox = createQualityGateSandbox({
     label: 'agent-flow-live',
     seedProviders: true,
-    envOverrides: { CC_HAHA_DISABLE_TERMINAL_SHELL_ENV: '1' },
+    envOverrides: { ORION_DISABLE_TERMINAL_SHELL_ENV: '1' },
   })
   try {
     applyLiveTargetSandboxOverrides(sandbox.configDir, target)

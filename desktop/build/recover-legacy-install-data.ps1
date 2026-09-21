@@ -7,7 +7,7 @@ param(
   [string]$RecoveryRoot = '',
   [string]$ProcessName = 'Claude Code Haha.exe',
   [string]$ActiveConfigDir = $env:CLAUDE_CONFIG_DIR,
-  [string]$ActiveConfigManaged = $env:CC_HAHA_APP_PORTABLE_DIR,
+  [string]$ActiveConfigManaged = $env:ORION_APP_PORTABLE_DIR,
   [ValidateSet('trusted-user', 'trusted-uac-outer', 'untrusted-elevated')]
   [string]$InstallerIdentitySafety = 'trusted-user',
   [switch]$SkipProcessCheck,

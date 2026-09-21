@@ -416,9 +416,9 @@ function trimRuns(data: RunsFile): void {
 const DEFAULT_TASK_TIMEOUT_MS = 10 * 60 * 1000 // 10 minutes
 
 export function resolveCronTaskTimeoutMs(
-  env: { CC_HAHA_TASK_TIMEOUT_MS?: string } = process.env,
+  env: { ORION_TASK_TIMEOUT_MS?: string } = process.env,
 ): number {
-  const raw = env.CC_HAHA_TASK_TIMEOUT_MS?.trim()
+  const raw = env.ORION_TASK_TIMEOUT_MS?.trim()
   if (!raw) return DEFAULT_TASK_TIMEOUT_MS
 
   const timeoutMs = Number(raw)
@@ -463,7 +463,7 @@ export function resolveCronProjectRoot(
   options: CronCliResolutionOptions = {},
 ): string {
   const env = options.env ?? process.env
-  const explicitRoot = env.CC_HAHA_ROOT?.trim()
+  const explicitRoot = env.ORION_ROOT?.trim()
   if (explicitRoot && isSourceProjectRoot(path.resolve(explicitRoot))) {
     return path.resolve(explicitRoot)
   }
@@ -854,7 +854,7 @@ export class CronScheduler {
   ): Promise<Record<string, string | undefined>> {
     const cleanEnv = await getProcessEnvWithTerminalShellEnvironment()
     delete cleanEnv.CLAUDE_CODE_OAUTH_TOKEN
-    delete cleanEnv.CC_HAHA_AGENT_TEAMS_ENABLED
+    delete cleanEnv.ORION_AGENT_TEAMS_ENABLED
 
     if (this.shouldStripInheritedProviderEnv(task.providerId)) {
       for (const key of Object.keys(cleanEnv)) {
@@ -885,11 +885,11 @@ export class CronScheduler {
     return {
       ...cleanEnv,
       CLAUDE_CODE_ENABLE_TASKS: '1',
-      CC_HAHA_AGENT_TEAMS_ENABLED: agentTeamsEnabled ? '1' : '0',
+      ORION_AGENT_TEAMS_ENABLED: agentTeamsEnabled ? '1' : '0',
       CLAUDE_CODE_ENTRYPOINT: 'sdk-cli',
       CALLER_DIR: workDir,
       PWD: workDir,
-      CC_HAHA_SKIP_DOTENV: '1',
+      ORION_SKIP_DOTENV: '1',
       ...(explicitProviderEnv
         ? {
             CLAUDE_CODE_PROVIDER_MANAGED_BY_HOST: '1',

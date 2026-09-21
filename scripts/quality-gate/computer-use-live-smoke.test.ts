@@ -52,7 +52,7 @@ function state(overrides: Partial<LiveAppState> = {}): LiveAppState {
     durationMs: 10,
     axText: [
       'g8:0 standard window smoke-fixture.txt',
-      '\tg8:7 text area CC_HAHA_SMOKE_STABLE_TOKEN',
+      '\tg8:7 text area ORION_SMOKE_STABLE_TOKEN',
       '\tg8:9 button close',
     ].join('\n'),
     elements: [
@@ -60,7 +60,7 @@ function state(overrides: Partial<LiveAppState> = {}): LiveAppState {
         index: 7,
         role: 'AXTextArea',
         settable: true,
-        value: 'CC_HAHA_SMOKE_STABLE_TOKEN',
+        value: 'ORION_SMOKE_STABLE_TOKEN',
       },
     ],
     screenshot: {
@@ -287,7 +287,7 @@ describe('computer-use live smoke AX proof', () => {
   })
 
   test('derives an opaque editable handle from raw element metadata plus rendered generation', () => {
-    expect(findEditableHandle(state(), 'CC_HAHA_SMOKE_STABLE_TOKEN')).toBe(
+    expect(findEditableHandle(state(), 'ORION_SMOKE_STABLE_TOKEN')).toBe(
       'g8:7',
     )
   })
@@ -301,11 +301,11 @@ describe('computer-use live smoke AX proof', () => {
               index: 7,
               role: 'AXTextArea',
               settable: false,
-              value: 'CC_HAHA_SMOKE_STABLE_TOKEN',
+              value: 'ORION_SMOKE_STABLE_TOKEN',
             },
           ],
         }),
-        'CC_HAHA_SMOKE_STABLE_TOKEN',
+        'ORION_SMOKE_STABLE_TOKEN',
       ),
     ).toThrow(/exactly one/i)
 
@@ -317,19 +317,19 @@ describe('computer-use live smoke AX proof', () => {
               index: 7,
               role: 'AXTextArea',
               settable: true,
-              value: 'CC_HAHA_SMOKE_STABLE_TOKEN',
+              value: 'ORION_SMOKE_STABLE_TOKEN',
             },
             {
               index: 8,
               role: 'AXTextField',
               settable: true,
-              value: 'CC_HAHA_SMOKE_STABLE_TOKEN',
+              value: 'ORION_SMOKE_STABLE_TOKEN',
             },
           ],
           axText:
-            'g8:7 text area CC_HAHA_SMOKE_STABLE_TOKEN\ng8:8 text field CC_HAHA_SMOKE_STABLE_TOKEN',
+            'g8:7 text area ORION_SMOKE_STABLE_TOKEN\ng8:8 text field ORION_SMOKE_STABLE_TOKEN',
         }),
-        'CC_HAHA_SMOKE_STABLE_TOKEN',
+        'ORION_SMOKE_STABLE_TOKEN',
       ),
     ).toThrow(/exactly one/i)
   })

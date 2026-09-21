@@ -118,7 +118,7 @@ jobs:
         if: matrix.smoke_platform == 'windows' && matrix.arch == 'x64'
         working-directory: desktop
         env:
-          CC_HAHA_COMPILED_SIDECAR_SMOKE_STARTS: '20'
+          ORION_COMPILED_SIDECAR_SMOKE_STARTS: '20'
         run: bun run test:compiled-sidecar-smoke
 
       - name: Build renderer and Electron bundles

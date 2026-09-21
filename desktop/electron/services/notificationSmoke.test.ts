@@ -50,10 +50,10 @@ describe('Electron notification smoke hook', () => {
 
     expect(scheduleNotificationSmoke({
       env: {
-        CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_SESSION_ID: 'session-smoke',
-        CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_TITLE: 'Target smoke',
-        CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_BODY: 'Click target smoke',
-        CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_DELAY_MS: '10',
+        ORION_ELECTRON_NOTIFICATION_SMOKE_SESSION_ID: 'session-smoke',
+        ORION_ELECTRON_NOTIFICATION_SMOKE_TITLE: 'Target smoke',
+        ORION_ELECTRON_NOTIFICATION_SMOKE_BODY: 'Click target smoke',
+        ORION_ELECTRON_NOTIFICATION_SMOKE_DELAY_MS: '10',
       },
       NotificationClass,
       onAction,
@@ -112,9 +112,9 @@ describe('Electron notification smoke hook', () => {
 
     expect(scheduleNotificationSmoke({
       env: {
-        CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_SESSION_ID: 'session-smoke',
-        CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_TITLE: 'Target smoke',
-        CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_TRIGGER_ACTION: '1',
+        ORION_ELECTRON_NOTIFICATION_SMOKE_SESSION_ID: 'session-smoke',
+        ORION_ELECTRON_NOTIFICATION_SMOKE_TITLE: 'Target smoke',
+        ORION_ELECTRON_NOTIFICATION_SMOKE_TRIGGER_ACTION: '1',
       },
       NotificationClass,
       onAction,
@@ -173,7 +173,7 @@ describe('Electron notification smoke hook', () => {
 
     expect(logNotificationSmokeRendererAck({}, { target: { type: 'session', sessionId: 'session-smoke' } })).toBe(false)
     expect(logNotificationSmokeRendererAck({
-      CC_HAHA_ELECTRON_NOTIFICATION_SMOKE_LOG: logPath,
+      ORION_ELECTRON_NOTIFICATION_SMOKE_LOG: logPath,
     } as NodeJS.ProcessEnv, { target: { type: 'session', sessionId: 'session-smoke' } })).toBe(true)
 
     const [entry] = readFileSync(logPath, 'utf-8').trim().split('\n').map(line => JSON.parse(line) as Record<string, unknown>)
