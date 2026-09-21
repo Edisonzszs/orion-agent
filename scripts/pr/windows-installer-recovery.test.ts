@@ -63,8 +63,13 @@ describe('Windows installer recovery prerequisites', () => {
     expect(installerHook).toContain(
       'IfFileExists "$ccHahaPerUserInstallLocation\\CLAUDE_CONFIG_DIR\\*.*"',
     )
+    // Dual probe (batch 5): the app-mode dir is branch-selected into $R1 first
+    // (Orion Agent fast path, Claude Code Haha legacy fallback), then the mode
+    // file is opened from the already-extended $R1.
+    expect(installerHook).toContain('StrCpy $R1 "$R1\\Orion Agent"')
+    expect(installerHook).toContain('StrCpy $R1 "$R1\\Claude Code Haha"')
     expect(installerHook).toContain(
-      'FileOpen $R2 "$R1\\Claude Code Haha\\app-mode.json" r',
+      'FileOpen $R2 "$R1\\app-mode.json" r',
     )
     expect(installerHook).toContain('StrCmp $R3 \'  "mode": "default",$\\n\'')
     expect(installerHook).toContain('StrCmp $R3 \'  "portable_dir": null$\\n\'')

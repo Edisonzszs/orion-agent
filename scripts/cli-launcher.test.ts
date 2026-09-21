@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os'
 import path from 'node:path'
 
 test('source CLI launcher runs through Bun without requiring Bash', async () => {
-  const configDir = await mkdtemp(path.join(tmpdir(), 'cc-haha-cli-launcher-'))
+  const configDir = await mkdtemp(path.join(tmpdir(), 'orion-cli-launcher-'))
   const repoRoot = path.resolve(import.meta.dir, '..')
 
   try {

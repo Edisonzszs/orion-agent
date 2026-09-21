@@ -1,8 +1,8 @@
 /**
  * Provider Service — preset-based provider configuration
  *
- * Storage: ~/.claude/cc-haha/providers.json (lightweight index)
- * Active provider env vars written to ~/.claude/cc-haha/settings.json
+ * Storage: ~/.claude/orion/providers.json (lightweight index)
+ * Active provider env vars written to ~/.claude/orion/settings.json
  * (isolated from the original Claude Code's ~/.claude/settings.json)
  */
 
@@ -488,7 +488,7 @@ export class ProviderService {
 
   /**
    * Check whether any usable auth exists:
-   *  1. The active cc-haha provider or built-in OAuth provider has auth
+   *  1. The active Orion-managed provider or built-in OAuth provider has auth
    *  2. Claude Official has a desktop-managed OAuth token
    *  3. process.env already has ANTHROPIC_API_KEY / ANTHROPIC_AUTH_TOKEN
    *  4. Original ~/.claude/settings.json contains one of those auth variables
@@ -496,7 +496,7 @@ export class ProviderService {
    */
   async checkAuthStatus(): Promise<{
     hasAuth: boolean
-    source: 'cc-haha-provider' | 'claude-oauth' | 'openai-oauth' | 'grok-oauth' | 'original-settings' | 'env' | 'none'
+    source: 'orion-provider' | 'claude-oauth' | 'openai-oauth' | 'grok-oauth' | 'original-settings' | 'env' | 'none'
     activeProvider?: string
   }> {
     // 1–2. Check the selected provider, including Claude Official (activeId=null).
@@ -542,7 +542,7 @@ export class ProviderService {
         )
         const authEnv = buildProviderAuthEnv(provider, presetDefaultEnv, needsProxy)
         if (Object.values(authEnv).some(value => value.length > 0)) {
-          return { hasAuth: true, source: 'cc-haha-provider', activeProvider: provider.name }
+          return { hasAuth: true, source: 'orion-provider', activeProvider: provider.name }
         }
       }
     } else {

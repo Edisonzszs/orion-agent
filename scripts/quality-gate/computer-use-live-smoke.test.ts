@@ -148,16 +148,16 @@ describe('computer-use live smoke path confinement', () => {
   test('derives the fixture and this process daemon artifacts deterministically', () => {
     expect(
       deriveLiveSmokePaths(
-        '/tmp/cc-haha-cu-live-smoke-ABC123',
+        '/tmp/orion-cu-live-smoke-ABC123',
         '/Users/test/.claude/.runtime',
         4321,
       ),
     ).toEqual({
-      runDirectory: '/tmp/cc-haha-cu-live-smoke-ABC123',
+      runDirectory: '/tmp/orion-cu-live-smoke-ABC123',
       fixturePath:
-        '/tmp/cc-haha-cu-live-smoke-ABC123/computer-use-smoke-fixture.txt',
+        '/tmp/orion-cu-live-smoke-ABC123/computer-use-smoke-fixture.txt',
       targetIdentityPath:
-        '/tmp/cc-haha-cu-live-smoke-ABC123/.textedit-identity.json',
+        '/tmp/orion-cu-live-smoke-ABC123/.textedit-identity.json',
       daemonSocket:
         '/Users/test/.claude/.runtime/cu-helper.daemon.4321.1.sock',
       daemonPidfile:
@@ -167,15 +167,15 @@ describe('computer-use live smoke path confinement', () => {
 
   test('accepts only one generated child directory directly beneath /tmp', () => {
     expect(() =>
-      assertSafeRunDirectory('/tmp/cc-haha-cu-live-smoke-ABC123'),
+      assertSafeRunDirectory('/tmp/orion-cu-live-smoke-ABC123'),
     ).not.toThrow()
 
     for (const unsafe of [
       '/',
       '/tmp',
-      '/tmp/cc-haha-cu-live-smoke-',
-      '/tmp/cc-haha-cu-live-smoke-ABC123/..',
-      '/var/tmp/cc-haha-cu-live-smoke-ABC123',
+      '/tmp/orion-cu-live-smoke-',
+      '/tmp/orion-cu-live-smoke-ABC123/..',
+      '/var/tmp/orion-cu-live-smoke-ABC123',
       '/tmp/other-ABC123',
     ]) {
       expect(() => assertSafeRunDirectory(unsafe)).toThrow(/unsafe/i)

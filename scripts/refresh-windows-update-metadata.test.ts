@@ -7,7 +7,7 @@ import { parse } from 'yaml'
 import { refreshWindowsUpdateMetadata } from './refresh-windows-update-metadata'
 
 function tempDir() {
-  return mkdtempSync(join(tmpdir(), 'cc-haha-signed-windows-metadata-'))
+  return mkdtempSync(join(tmpdir(), 'orion-signed-windows-metadata-'))
 }
 
 describe('signed Windows update metadata refresh', () => {

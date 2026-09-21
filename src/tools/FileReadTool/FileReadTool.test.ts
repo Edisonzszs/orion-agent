@@ -22,7 +22,7 @@ function makeToolUseContext(): ToolUseContext {
 const temporaryDirectories: string[] = []
 
 test('uses the shared image processor for the final image compression fallback', async () => {
-  const root = await mkdtemp(join(tmpdir(), 'cc-haha-read-image-fallback-'))
+  const root = await mkdtemp(join(tmpdir(), 'orion-read-image-fallback-'))
   temporaryDirectories.push(root)
   const filePath = join(root, 'fixture.png')
   const creator = await getImageCreator()
@@ -116,7 +116,7 @@ describe('FileReadTool pages validation', () => {
 
 describe('FileReadTool Windows text fidelity', () => {
   test('preserves Unicode paths and literal tabs in model-facing output', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'cc-haha-read-'))
+    const root = await mkdtemp(join(tmpdir(), 'orion-read-'))
     temporaryDirectories.push(root)
     const directory = join(root, '中文目录')
     const filePath = join(directory, 'Tab 样例.txt')

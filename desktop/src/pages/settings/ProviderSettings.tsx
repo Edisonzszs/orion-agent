@@ -1524,7 +1524,7 @@ function ProviderFormModal({ open, onClose, mode, provider, presets, browserMode
     setSaveFailed(false)
     setCredentialRequired(false)
     try {
-      // Write the edited cc-haha settings.json first so provider-specific model
+      // Write the edited orion settings.json first so provider-specific model
       // settings never conflict with the user's global ~/.claude/settings.json.
       if (!browserMode && settingsJson.trim()) {
         try {

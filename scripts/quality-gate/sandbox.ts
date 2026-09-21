@@ -255,7 +255,7 @@ export function createQualityGateSandbox(options: {
 }): QualityGateSandbox {
   const source = options.source ?? process.env
   const sourceConfigDir = options.sourceConfigDir ?? realUserConfigDir(source)
-  const home = mkdtempSync(join(tmpdir(), `cc-haha-qa-${options.label}-`))
+  const home = mkdtempSync(join(tmpdir(), `orion-qa-${options.label}-`))
   const env = buildSandboxLaneEnv(home, options.envOverrides ?? {}, source)
   const configDir = env.CLAUDE_CONFIG_DIR
   mkdirSync(configDir, { recursive: true })

@@ -153,11 +153,11 @@ describe('Settings > Diagnostics tab', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     diagnosticsApiMock.getStatus.mockResolvedValue({
-      logDir: '/tmp/claude/cc-haha/diagnostics',
-      diagnosticsPath: '/tmp/claude/cc-haha/diagnostics/diagnostics.jsonl',
-      cliDiagnosticsPath: '/tmp/claude/cc-haha/diagnostics/cli-diagnostics.jsonl',
-      runtimeErrorsPath: '/tmp/claude/cc-haha/diagnostics/runtime-errors.log',
-      exportDir: '/tmp/claude/cc-haha/diagnostics/exports',
+      logDir: '/tmp/claude/orion/diagnostics',
+      diagnosticsPath: '/tmp/claude/orion/diagnostics/diagnostics.jsonl',
+      cliDiagnosticsPath: '/tmp/claude/orion/diagnostics/cli-diagnostics.jsonl',
+      runtimeErrorsPath: '/tmp/claude/orion/diagnostics/runtime-errors.log',
+      exportDir: '/tmp/claude/orion/diagnostics/exports',
       retentionDays: 7,
       maxBytes: 50 * 1024 * 1024,
       totalBytes: 4096,
@@ -195,7 +195,7 @@ describe('Settings > Diagnostics tab', () => {
     })
     diagnosticsApiMock.exportBundle.mockResolvedValue({
       bundle: {
-        path: '/tmp/claude/cc-haha/diagnostics/exports/orion-diagnostics.tar.gz',
+        path: '/tmp/claude/orion/diagnostics/exports/orion-diagnostics.tar.gz',
         fileName: 'orion-diagnostics.tar.gz',
         bytes: 1024,
       },
@@ -262,7 +262,7 @@ describe('Settings > Diagnostics tab', () => {
     fireEvent.click(screen.getByText('Diagnostics'))
 
     expect(await screen.findByText('Log directory')).toBeInTheDocument()
-    expect(screen.getByText('/tmp/claude/cc-haha/diagnostics')).toBeInTheDocument()
+    expect(screen.getByText('/tmp/claude/orion/diagnostics')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Export Bundle/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Copy Error Summary/i })).toBeInTheDocument()
     expect(screen.getByText('cli_start_failed')).toBeInTheDocument()
@@ -407,7 +407,7 @@ describe('Settings > Diagnostics tab', () => {
     await act(async () => {
       exportRequest.resolve({
         bundle: {
-          path: '/tmp/claude/cc-haha/diagnostics/exports/race.tar.gz',
+          path: '/tmp/claude/orion/diagnostics/exports/race.tar.gz',
           fileName: 'race.tar.gz',
           bytes: 128,
         },
@@ -462,7 +462,7 @@ describe('Settings > Diagnostics tab', () => {
     render(<Settings />)
     fireEvent.click(screen.getByText('Diagnostics'))
 
-    expect(await screen.findByText('/tmp/claude/cc-haha/diagnostics')).toBeInTheDocument()
+    expect(await screen.findByText('/tmp/claude/orion/diagnostics')).toBeInTheDocument()
     const section = screen.getByRole('region', { name: 'Local index' })
     expect(within(section).getByText('Local-index status is unavailable. Existing diagnostics remain available.')).toBeInTheDocument()
     expect(useUIStore.getState().toasts).toHaveLength(0)
@@ -508,11 +508,11 @@ describe('Settings > Diagnostics tab', () => {
 
   it('describes persisted corruption evidence accurately when current logs have no physical lines', async () => {
     diagnosticsApiMock.getStatus.mockResolvedValueOnce({
-      logDir: '/tmp/claude/cc-haha/diagnostics',
-      diagnosticsPath: '/tmp/claude/cc-haha/diagnostics/diagnostics.jsonl',
-      cliDiagnosticsPath: '/tmp/claude/cc-haha/diagnostics/cli-diagnostics.jsonl',
-      runtimeErrorsPath: '/tmp/claude/cc-haha/diagnostics/runtime-errors.log',
-      exportDir: '/tmp/claude/cc-haha/diagnostics/exports',
+      logDir: '/tmp/claude/orion/diagnostics',
+      diagnosticsPath: '/tmp/claude/orion/diagnostics/diagnostics.jsonl',
+      cliDiagnosticsPath: '/tmp/claude/orion/diagnostics/cli-diagnostics.jsonl',
+      runtimeErrorsPath: '/tmp/claude/orion/diagnostics/runtime-errors.log',
+      exportDir: '/tmp/claude/orion/diagnostics/exports',
       retentionDays: 7,
       maxBytes: 50 * 1024 * 1024,
       totalBytes: 0,
@@ -535,11 +535,11 @@ describe('Settings > Diagnostics tab', () => {
 
   it('explains temporary target overflow while active diagnostic segments are still open', async () => {
     diagnosticsApiMock.getStatus.mockResolvedValueOnce({
-      logDir: '/tmp/claude/cc-haha/diagnostics',
-      diagnosticsPath: '/tmp/claude/cc-haha/diagnostics/diagnostics.jsonl',
-      cliDiagnosticsPath: '/tmp/claude/cc-haha/diagnostics/cli-diagnostics.jsonl',
-      runtimeErrorsPath: '/tmp/claude/cc-haha/diagnostics/runtime-errors.log',
-      exportDir: '/tmp/claude/cc-haha/diagnostics/exports',
+      logDir: '/tmp/claude/orion/diagnostics',
+      diagnosticsPath: '/tmp/claude/orion/diagnostics/diagnostics.jsonl',
+      cliDiagnosticsPath: '/tmp/claude/orion/diagnostics/cli-diagnostics.jsonl',
+      runtimeErrorsPath: '/tmp/claude/orion/diagnostics/runtime-errors.log',
+      exportDir: '/tmp/claude/orion/diagnostics/exports',
       retentionDays: 7,
       maxBytes: 50 * 1024 * 1024,
       totalBytes: 52 * 1024 * 1024,
@@ -580,7 +580,7 @@ describe('Settings > Diagnostics tab', () => {
     await waitFor(() => {
       expect(diagnosticsApiMock.exportBundle).toHaveBeenCalled()
     })
-    expect(await screen.findByText('/tmp/claude/cc-haha/diagnostics/exports/orion-diagnostics.tar.gz')).toBeInTheDocument()
+    expect(await screen.findByText('/tmp/claude/orion/diagnostics/exports/orion-diagnostics.tar.gz')).toBeInTheDocument()
   })
 
   it('asks with the shared confirm dialog before clearing diagnostics', async () => {

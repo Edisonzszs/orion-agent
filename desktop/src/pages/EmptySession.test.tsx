@@ -295,7 +295,7 @@ describe('EmptySession', () => {
     mocks.resetTaskList.mockResolvedValue(undefined)
     mocks.getProviderAuthStatus.mockResolvedValue({
       hasAuth: true,
-      source: 'cc-haha-provider',
+      source: 'orion-provider',
     })
   })
 

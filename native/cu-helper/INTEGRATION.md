@@ -298,22 +298,21 @@ gates on `isLockHeldLocally()` before releasing the lock. Proposed additions:
 Both are best-effort and never block lock release: a hung `overlayHide` must not
 wedge an abort, mirroring the existing `UNHIDE_TIMEOUT_MS` guard.
 
-### 3.5 `desktop/src-tauri/tauri.conf.json` — `externalBin`
+### 3.5 Desktop packaging — how the binary ships today
 
-Add the signed binary as a Tauri sidecar alongside the existing one:
+> Historical note: this section originally documented wiring the helper into the
+> Tauri desktop shell via `desktop/src-tauri/tauri.conf.json` `externalBin`. That
+> shell and its config were removed when the desktop app moved to Electron +
+> electron-builder; the wiring below is the current path.
 
-```jsonc
-"externalBin": [
-  "binaries/claude-sidecar",
-  "binaries/cu-helper"          // <- added
-]
-```
-
-Tauri resolves `externalBin` entries with a target-triple suffix
-(`binaries/cu-helper-aarch64-apple-darwin`); `build.sh`'s output binary is copied
-to that location by the desktop packaging step. The binary must already be
-**code-signed with the stable identity** (§4) *before* Tauri bundles it, so the
-app's notarized package preserves the TCC-stable signature.
+The desktop packaging step is `desktop/scripts/build-sidecars.ts` (driven by
+`desktop/scripts/build-macos-arm64.sh` / the release workflow). On macOS it runs
+`native/cu-helper/build.sh`, then copies the produced binary **and** its sibling
+SwiftPM resource bundle byte-for-byte (`cp -R`) into the electron-builder sidecar
+output, so the signature `build.sh` applied is preserved as-is in the notarized
+package. The binary must already be **code-signed with the stable identity** (§4)
+*before* `build-sidecars.ts` copies it, so the app's notarized package preserves
+the TCC-stable signature.
 
 ---
 

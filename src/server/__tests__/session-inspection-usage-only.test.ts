@@ -58,7 +58,7 @@ async function inspect(query: string): Promise<Record<string, unknown>> {
 }
 
 beforeEach(async () => {
-  tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'cc-haha-usage-only-'))
+  tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'orion-usage-only-'))
   workDir = path.join(tempRoot, 'project')
   await fs.mkdir(workDir, { recursive: true })
   __resetWebSocketHandlerStateForTests()

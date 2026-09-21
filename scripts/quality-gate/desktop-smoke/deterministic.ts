@@ -49,12 +49,12 @@ export const DESKTOP_UI_SMOKE_ALLOW_SELECTOR = 'button[aria-label^="Allow: "]'
 
 export function buildDesktopUiSmokeBootstrap(sessionId: string) {
   return [
-    `localStorage.setItem('cc-haha-locale', ${JSON.stringify(DESKTOP_UI_SMOKE_LOCALE)})`,
-    `localStorage.setItem('cc-haha-open-tabs', ${JSON.stringify(JSON.stringify({
+    `localStorage.setItem('orion-locale', ${JSON.stringify(DESKTOP_UI_SMOKE_LOCALE)})`,
+    `localStorage.setItem('orion-open-tabs', ${JSON.stringify(JSON.stringify({
       openTabs: [{ sessionId, title: 'Desktop UI Smoke', type: 'session' }],
       activeTabId: sessionId,
     }))})`,
-    `localStorage.removeItem('cc-haha-session-runtime')`,
+    `localStorage.removeItem('orion-session-runtime')`,
   ].join(';')
 }
 

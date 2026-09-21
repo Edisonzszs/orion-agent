@@ -54,7 +54,7 @@ describe('Agent Teams runtime opt-in', () => {
     rmSync(fixtureDir, { recursive: true, force: true })
   })
 
-  test('enables a cc-haha managed session without an upstream opt-in', () => {
+  test('enables a orion managed session without an upstream opt-in', () => {
     process.env.ORION_AGENT_TEAMS_DEFAULT = '1'
     expect(isAgentSwarmsEnabled()).toBe(true)
     expect(gate).toHaveBeenCalledWith('tengu_amber_flint', true)

@@ -64,7 +64,7 @@ let originalConfigDir: string | undefined
 let originalLocalAccessToken: string | undefined
 
 async function tempRoot(label: string): Promise<string> {
-  const root = await mkdtemp(join(tmpdir(), `cc-haha-${label}-`))
+  const root = await mkdtemp(join(tmpdir(), `orion-${label}-`))
   tempDirs.push(root)
   return root
 }

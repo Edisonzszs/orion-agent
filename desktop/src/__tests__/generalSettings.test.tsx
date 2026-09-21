@@ -253,7 +253,7 @@ describe('Settings > General tab', () => {
       autoDreamEnabled: false,
       skipWebFetchPreflight: true,
       desktopNotificationsEnabled: true,
-      traceCapture: { enabled: true, storageDir: '/Users/test/.claude/cc-haha/traces' },
+      traceCapture: { enabled: true, storageDir: '/Users/test/.claude/orion/traces' },
       chatSendBehavior: 'enter',
       responseLanguage: '',
       proxyManagedSettingsWarning: false,

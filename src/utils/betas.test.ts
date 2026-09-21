@@ -15,7 +15,7 @@ let sandbox: string
 beforeEach(() => {
   savedEnv = { ...process.env }
   savedSdkBetas = getSdkBetas()
-  sandbox = mkdtempSync(join(tmpdir(), 'cc-haha-betas-'))
+  sandbox = mkdtempSync(join(tmpdir(), 'orion-betas-'))
   for (const key of Object.keys(process.env)) delete process.env[key]
   Object.assign(process.env, createSandboxedTestEnvironment(sandbox, {
     ANTHROPIC_API_KEY: 'beta-fixture-key',

@@ -15,7 +15,7 @@ import {
 const scratchDirs: string[] = []
 
 function scratch(prefix: string) {
-  const dir = mkdtempSync(join(tmpdir(), `cc-haha-sandbox-test-${prefix}-`))
+  const dir = mkdtempSync(join(tmpdir(), `orion-sandbox-test-${prefix}-`))
   scratchDirs.push(dir)
   return dir
 }

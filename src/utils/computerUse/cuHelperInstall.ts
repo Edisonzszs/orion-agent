@@ -234,7 +234,7 @@ function codesignOutput(args: string[]): { ok: boolean; output: string } {
 }
 
 function leafCertificateFingerprint(target: string): string | undefined {
-  const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'cc-haha-cu-signature-'))
+  const tempRoot = mkdtempSync(path.join(os.tmpdir(), 'orion-cu-signature-'))
   try {
     const prefix = path.join(tempRoot, 'cert-')
     const extracted = codesignOutput([

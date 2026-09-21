@@ -36,12 +36,12 @@ describe('isUsableBuiltinRipgrepPath', () => {
 
   test('rejects missing paths', () => {
     expect(
-      isUsableBuiltinRipgrepPath(join(tmpdir(), 'missing-cc-haha-rg')),
+      isUsableBuiltinRipgrepPath(join(tmpdir(), 'missing-orion-rg')),
     ).toBe(false)
   })
 
   test('accepts real filesystem paths', async () => {
-    const filePath = join(tmpdir(), `cc-haha-rg-${Date.now()}`)
+    const filePath = join(tmpdir(), `orion-rg-${Date.now()}`)
     await writeFile(filePath, '')
     tempFiles.push(filePath)
 
@@ -84,7 +84,7 @@ describe('packaged ripgrep resolution', () => {
   })
 
   test('prefers an explicit packaged executable over PATH lookup', async () => {
-    const filePath = join(tmpdir(), `cc-haha-explicit-rg-${Date.now()}`)
+    const filePath = join(tmpdir(), `orion-explicit-rg-${Date.now()}`)
     await writeFile(filePath, '')
     tempFiles.push(filePath)
     process.env[ORION_RIPGREP_PATH_ENV] = filePath

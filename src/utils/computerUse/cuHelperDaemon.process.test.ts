@@ -161,7 +161,7 @@ describe.skipIf(process.platform === 'win32')(
   'cu-helper detached daemon lifecycle',
   () => {
     test('startup enumeration cannot poison the first resumed turn across shutdown and restart', async () => {
-      runtimeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'cc-haha-cu-process-'))
+      runtimeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'orion-cu-process-'))
       const socketPath = path.join(runtimeRoot, 'cu-helper.sock')
       const resumedSession = 'resumed-session'
 

@@ -1279,7 +1279,7 @@ describe('Models API', () => {
     expect(res.status).toBe(400)
   })
 
-  it('GET /api/models/current should prefer cc-haha managed model over global user model when provider is active', async () => {
+  it('GET /api/models/current should prefer orion managed model over global user model when provider is active', async () => {
     await hahaOAuthService.saveTokens({
       accessToken: 'unrelated-claude-access',
       refreshToken: 'unrelated-claude-refresh',
@@ -1315,7 +1315,7 @@ describe('Models API', () => {
     expect(body.model.id).toBe('glm-5-turbo')
   })
 
-  it('PUT /api/models/current should persist to cc-haha managed settings when provider is active', async () => {
+  it('PUT /api/models/current should persist to orion managed settings when provider is active', async () => {
     const settingsSvc = new SettingsService()
     const providerSvc = new ProviderService()
     const provider = await providerSvc.addProvider({

@@ -470,7 +470,7 @@ describe('build-sidecars Windows x64 target mapping', () => {
       ORION_LOCAL_INDEX: process.env.ORION_LOCAL_INDEX,
       ORION_LOCAL_ACCESS_TOKEN: process.env.ORION_LOCAL_ACCESS_TOKEN,
     }
-    const rootDir = await mkdtemp(joinPath(tmpdir(), 'cc-haha-hung-sidecar-smoke-'))
+    const rootDir = await mkdtemp(joinPath(tmpdir(), 'orion-hung-sidecar-smoke-'))
     const child = spawn(process.execPath, ['-e', 'setInterval(() => {}, 1000)'], {
       stdio: ['pipe', 'pipe', 'pipe'],
     })
@@ -568,7 +568,7 @@ describe.skipIf(!compiledSidecarSmokeEnabled)('compiled sidecar local-index smok
     )
     await stat(builtExecutable)
 
-    const rootDir = await mkdtemp(joinPath(tmpdir(), 'cc-haha-compiled-sidecar-smoke-'))
+    const rootDir = await mkdtemp(joinPath(tmpdir(), 'orion-compiled-sidecar-smoke-'))
     const unicodeInstallDir = joinPath(rootDir, '中文 安装目录')
     const executable = process.platform === 'win32'
       ? joinPath(unicodeInstallDir, path.basename(builtExecutable))
@@ -582,7 +582,7 @@ describe.skipIf(!compiledSidecarSmokeEnabled)('compiled sidecar local-index smok
     const authenticationProofs: CompiledSidecarAuthProof[] = []
     const databasePath = joinPath(
       configDir,
-      'cc-haha',
+      'orion',
       'db',
       'index-v1.sqlite',
     )
@@ -753,7 +753,7 @@ describe.skipIf(!compiledSidecarSmokeEnabled)('compiled sidecar adapters mode', 
 
     // An isolated HOME/CLAUDE_CONFIG_DIR: the launcher reads adapters.json, and
     // this must never see the developer's real credentials.
-    const rootDir = await mkdtemp(joinPath(tmpdir(), 'cc-haha-adapters-smoke-'))
+    const rootDir = await mkdtemp(joinPath(tmpdir(), 'orion-adapters-smoke-'))
     try {
       const child = spawn(executable, ['adapters', '--app-root', repoRoot, ...args], {
         env: {

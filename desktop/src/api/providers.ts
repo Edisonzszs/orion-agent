@@ -20,10 +20,9 @@ type ProviderResponse = { provider: SavedProvider }
 type TestResultResponse = { result: ProviderTestResult }
 type AuthStatusResponse = {
   hasAuth: boolean
-  // 'cc-haha-provider' is a wire-contract value the server still emits
-  // (src/server/services/providerService.ts); it is not a storage key, so the
-  // de-brand rename deliberately leaves it until the server side follows.
-  source: 'cc-haha-provider' | 'claude-oauth' | 'openai-oauth' | 'grok-oauth' | 'original-settings' | 'env' | 'none'
+  // 'orion-provider' is the wire-contract value the server emits
+  // (src/server/services/providerService.ts); it is not a storage key.
+  source: 'orion-provider' | 'claude-oauth' | 'openai-oauth' | 'grok-oauth' | 'original-settings' | 'env' | 'none'
   activeProvider?: string
 }
 

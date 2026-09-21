@@ -1373,7 +1373,7 @@ describe('cc-switch candidate mapping', () => {
   })
 
   test('refuses a provider whose base URL is a full endpoint', async () => {
-    // cc-haha always appends /v1/messages etc., so importing one of these would
+    // Orion always appends /v1/messages etc., so importing one of these would
     // produce an entry that 404s on every request.
     await writeFixtureDb([{
       id: 'full',

@@ -1434,7 +1434,7 @@ describe('ProviderService', () => {
 
       expect(status).toEqual({
         hasAuth: true,
-        source: 'cc-haha-provider',
+        source: 'orion-provider',
         activeProvider: provider.name,
       })
     })
@@ -1451,7 +1451,7 @@ describe('ProviderService', () => {
 
       expect(status).toEqual({
         hasAuth: true,
-        source: 'cc-haha-provider',
+        source: 'orion-provider',
         activeProvider: provider.name,
       })
     })

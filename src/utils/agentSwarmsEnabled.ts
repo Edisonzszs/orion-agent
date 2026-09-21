@@ -16,10 +16,10 @@ function isAgentTeamsFlagSet(): boolean {
  * This is the single gate that should be checked everywhere teammates
  * are referenced (prompts, code, tools isEnabled, UI, etc.).
  *
- * A cc-haha General opt-out takes priority over all opt-ins.
+ * A orion General opt-out takes priority over all opt-ins.
  * Ant builds: enabled unless the host explicitly opts out.
  * External builds require both:
- * 1. Opt-in via the cc-haha host preference, legacy env, or --agent-teams
+ * 1. Opt-in via the orion host preference, legacy env, or --agent-teams
  * 2. GrowthBook gate 'tengu_amber_flint' enabled (killswitch)
  */
 export function isAgentSwarmsEnabled(): boolean {

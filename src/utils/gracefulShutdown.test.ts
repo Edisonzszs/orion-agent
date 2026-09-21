@@ -13,7 +13,7 @@ afterEach(async () => {
 })
 
 test.serial('in-process shutdown waits for stdout drain and callback before exit', async () => {
-  const isolatedDir = await mkdtemp(join(tmpdir(), 'cc-haha-shutdown-direct-'))
+  const isolatedDir = await mkdtemp(join(tmpdir(), 'orion-shutdown-direct-'))
   const originalConfigDir = process.env.CLAUDE_CONFIG_DIR
   const originalHome = process.env.HOME
   const originalNonessentialTraffic =
@@ -77,7 +77,7 @@ test.serial('in-process shutdown waits for stdout drain and callback before exit
 })
 
 test('subprocess shutdown exits only after pending stdout is flushed', async () => {
-  tempDir = await mkdtemp(join(tmpdir(), 'cc-haha-shutdown-drain-'))
+  tempDir = await mkdtemp(join(tmpdir(), 'orion-shutdown-drain-'))
   const markerPath = join(tempDir, 'write-callback-completed')
   const processModule = pathToFileURL(resolve('src/utils/process.ts')).href
   const shutdownModule = pathToFileURL(

@@ -17,7 +17,7 @@ import {
 const tempDirs: string[] = []
 
 async function tempFile(contents: string | Buffer): Promise<string> {
-  const root = await mkdtemp(join(tmpdir(), 'cc-haha-source-fingerprint-'))
+  const root = await mkdtemp(join(tmpdir(), 'orion-source-fingerprint-'))
   tempDirs.push(root)
   const path = join(root, 'session.jsonl')
   await writeFile(path, contents)

@@ -493,7 +493,7 @@ verify_relocated_cursor_resources() (
 
   # The subshell isolates this variable. Bash 3 unwinds function-local variables
   # before an EXIT trap after die(), so it must remain available for cleanup.
-  probe_root="$(mktemp -d "${TMPDIR:-/tmp}/cc-haha-cursor-probe.XXXXXX")"
+  probe_root="$(mktemp -d "${TMPDIR:-/tmp}/orion-cursor-probe.XXXXXX")"
   trap 'rm -rf "$probe_root"' EXIT
   local probe_app="$probe_root/cc-haha-computer-use.app"
   local report="$probe_root/resources.json"

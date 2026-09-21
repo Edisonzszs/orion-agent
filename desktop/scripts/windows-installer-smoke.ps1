@@ -13,19 +13,19 @@ if ($env:CI -ne 'true') {
 
 $resolvedArtifactsDir = (Resolve-Path -LiteralPath $ArtifactsDir).Path
 $installers = @(Get-ChildItem -LiteralPath $resolvedArtifactsDir -File |
-  Where-Object { $_.Name -like "Claude-Code-Haha-*-win-$Arch.exe" })
+  Where-Object { $_.Name -like "Orion-Agent-*-win-$Arch.exe" })
 if ($installers.Count -ne 1) {
   throw "Expected exactly one Windows $Arch installer in $resolvedArtifactsDir, found $($installers.Count)."
 }
 $installer = $installers[0].FullName
 
-$testRoot = Join-Path ([IO.Path]::GetTempPath()) "cc-haha-installer-smoke-$([Guid]::NewGuid().ToString('N'))"
-$installDir = Join-Path $testRoot '中文 安装目录\Claude Code Haha'
+$testRoot = Join-Path ([IO.Path]::GetTempPath()) "orion-installer-smoke-$([Guid]::NewGuid().ToString('N'))"
+$installDir = Join-Path $testRoot '中文 安装目录\Orion Agent'
 $appData = Join-Path $testRoot 'AppData\Roaming'
 $localAppData = Join-Path $testRoot 'AppData\Local'
 $userProfile = Join-Path $testRoot 'UserProfile'
-$appExe = Join-Path $installDir 'Claude Code Haha.exe'
-$uninstaller = Join-Path $installDir 'Uninstall Claude Code Haha.exe'
+$appExe = Join-Path $installDir 'Orion Agent.exe'
+$uninstaller = Join-Path $installDir 'Uninstall Orion Agent.exe'
 $recoveryHelper = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..\build\recover-legacy-install-data.ps1')).Path
 $processHelper = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..\build\check-install-processes.ps1')).Path
 $siblingProcess = $null
@@ -253,7 +253,7 @@ function Invoke-InstalledApplicationSmoke {
   $configDir = Join-Path $IsolatedUserProfile '.claude'
   $serverStateFile = Join-Path $configDir 'desktop-server-state.json'
   $windowLog = Join-Path $testRoot 'electron-window-smoke.jsonl'
-  $hostDiagnostics = Join-Path $configDir 'cc-haha\diagnostics\electron-host.log'
+  $hostDiagnostics = Join-Path $configDir 'orion\diagnostics\electron-host.log'
   $smokeEnvironmentNames = @(
     'CLAUDE_CONFIG_DIR',
     'ORION_ELECTRON_WINDOW_SMOKE_LOG',
@@ -338,7 +338,7 @@ function Invoke-InstalledApplicationSmoke {
             -Stage 'Installed application Unicode-path smoke cleanup' `
             -Arguments @(
               '-InstallDir', $InstallDirectory,
-              '-ProcessName', 'Claude Code Haha.exe',
+              '-ProcessName', 'Orion Agent.exe',
               '-Action', 'KillForce',
               '-InstallerPid', [string]$PID,
               '-InstallerParentPid', '0'
@@ -424,7 +424,7 @@ try {
 
   $processProbeSource = Join-Path $env:SystemRoot 'System32\ping.exe'
   $siblingDir = "$installDir Tools"
-  $siblingProbe = Join-Path $siblingDir 'Claude Code Haha.exe'
+  $siblingProbe = Join-Path $siblingDir 'Orion Agent.exe'
   New-Item -ItemType Directory -Path $siblingDir -Force | Out-Null
   Copy-Item -LiteralPath $processProbeSource -Destination $siblingProbe
   $siblingProcess = Start-Process -FilePath $siblingProbe -ArgumentList @('-t', '127.0.0.1') -PassThru
@@ -444,7 +444,7 @@ try {
     -ExpectedExitCode 0 `
     -Arguments @(
       '-InstallDir', $installDir,
-      '-ProcessName', 'Claude Code Haha.exe',
+      '-ProcessName', 'Orion Agent.exe',
       '-Action', 'Find',
       '-InstallerPid', [string]$PID,
       '-InstallerParentPid', [string]$installProcess.Id

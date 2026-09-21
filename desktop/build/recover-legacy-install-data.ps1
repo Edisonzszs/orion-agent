@@ -779,7 +779,7 @@ function Write-TestMode {
 }
 
 function Run-SelfTest {
-  $testRoot = Join-Path ([IO.Path]::GetTempPath()) "cc-haha-storage-recovery-$([Guid]::NewGuid().ToString('N'))"
+  $testRoot = Join-Path ([IO.Path]::GetTempPath()) "orion-storage-recovery-$([Guid]::NewGuid().ToString('N'))"
   New-Item -ItemType Directory -Path $testRoot | Out-Null
   try {
     $canonicalTestRoot = Get-CanonicalPathIdentity $testRoot

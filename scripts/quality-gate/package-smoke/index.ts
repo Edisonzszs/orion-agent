@@ -624,7 +624,7 @@ function addMacosCursorResourceCheck(
       report.notes.push(`SKIPPED: ${executionLabel}; binary ${architectures.join(',')}, host ${hostMachOArch}. Only package structure was checked.`)
       return
     }
-    probeRoot = mkdtempSync(join(tmpdir(), 'cc-haha-packaged-cursor-'))
+    probeRoot = mkdtempSync(join(tmpdir(), 'orion-packaged-cursor-'))
     const app = join(probeRoot, 'Relocated Helper.app')
     cpSync(helperApp, app, { recursive: true, verbatimSymlinks: true })
     assertCursorResourcesContained(app, join(app, sequenceRelative))

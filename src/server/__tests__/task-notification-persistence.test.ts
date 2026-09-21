@@ -14,7 +14,7 @@ describe('background task notification persistence', () => {
 
   beforeEach(async () => {
     previousConfigDir = process.env.CLAUDE_CONFIG_DIR
-    configDir = await fs.mkdtemp(path.join(os.tmpdir(), 'cc-haha-task-notification-'))
+    configDir = await fs.mkdtemp(path.join(os.tmpdir(), 'orion-task-notification-'))
     process.env.CLAUDE_CONFIG_DIR = configDir
     await fs.mkdir(path.join(configDir, 'projects'), { recursive: true })
   })

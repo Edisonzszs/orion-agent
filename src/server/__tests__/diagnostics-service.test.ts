@@ -12,7 +12,7 @@ let tmpDir: string
 let originalConfigDir: string | undefined
 
 beforeEach(async () => {
-  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'cc-haha-diagnostics-test-'))
+  tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'orion-diagnostics-test-'))
   originalConfigDir = process.env.CLAUDE_CONFIG_DIR
   process.env.CLAUDE_CONFIG_DIR = tmpDir
 })

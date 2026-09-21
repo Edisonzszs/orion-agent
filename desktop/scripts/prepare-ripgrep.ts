@@ -103,7 +103,7 @@ export async function prepareRipgrep({
   const asset = getRipgrepAsset(targetTriple)
   const desktopRoot = path.resolve(scriptDirectory, '..')
   const binariesDir = path.join(desktopRoot, 'src-tauri', 'binaries')
-  const temporaryDir = await mkdtemp(path.join(tmpdir(), 'cc-haha-ripgrep-'))
+  const temporaryDir = await mkdtemp(path.join(tmpdir(), 'orion-ripgrep-'))
 
   try {
     const downloadedArchive = path.join(temporaryDir, asset.archiveName)

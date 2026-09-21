@@ -26,7 +26,7 @@ test('local proxy side queries keep their explicit small budget despite a provid
     })
   }, [{ type: 'text', text: 'OK' }])
   expect(requests[0]?.max_tokens).toBe(256)
-  expect(headers[0]?.get('x-cc-haha-output-budget-source')).toBe('explicit')
+  expect(headers[0]?.get('x-orion-output-budget-source')).toBe('explicit')
 })
 
 async function withCapturedRequests<T>(
@@ -59,7 +59,7 @@ async function withCapturedRequests<T>(
       })
     },
   })
-  const sandbox = await mkdtemp(join(tmpdir(), 'cc-haha-side-query-'))
+  const sandbox = await mkdtemp(join(tmpdir(), 'orion-side-query-'))
   const originalEnv = { ...process.env }
   const interactive = getIsInteractive()
   try {

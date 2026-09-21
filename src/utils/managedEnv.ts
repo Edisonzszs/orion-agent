@@ -128,7 +128,7 @@ function filterSettingsEnv(
 }
 
 /**
- * Read env vars from ~/.claude/cc-haha/settings.json (Haha-specific provider
+ * Read env vars from ~/.claude/orion/settings.json (Orion-specific provider
  * config). This file is written by ProviderService.syncToSettings() and
  * contains ANTHROPIC_BASE_URL, ANTHROPIC_AUTH_TOKEN, model defaults, etc.
  * Returns an empty object if the file doesn't exist or is invalid.
@@ -209,9 +209,9 @@ export function applySafeConfigEnvironmentVariables(): void {
     )
   }
 
-  // cc-haha provider isolation: apply env from ~/.claude/cc-haha/settings.json
-  // AFTER userSettings so Haha-specific provider config takes priority over
-  // the original Claude Code's settings. This prevents Haha from polluting
+  // orion provider isolation: apply env from ~/.claude/orion/settings.json
+  // AFTER userSettings so Orion-specific provider config takes priority over
+  // the original Claude Code's settings. This prevents Orion from polluting
   // ~/.claude/settings.json while still allowing it to override provider vars.
   Object.assign(process.env, filterSettingsEnv(getProductSettingsEnv()))
 
@@ -256,8 +256,8 @@ export function applyConfigEnvironmentVariables(): void {
 
   Object.assign(process.env, filterSettingsEnv(getSettings_DEPRECATED()?.env))
 
-  // cc-haha provider isolation: same as in applySafeConfigEnvironmentVariables,
-  // apply Haha-specific env last so it overrides the original settings.
+  // orion provider isolation: same as in applySafeConfigEnvironmentVariables,
+  // apply Orion-specific env last so it overrides the original settings.
   Object.assign(process.env, filterSettingsEnv(getProductSettingsEnv()))
 
   // Clear caches so agents are rebuilt with the new env vars

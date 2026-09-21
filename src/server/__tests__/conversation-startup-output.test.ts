@@ -21,7 +21,7 @@ describe('ConversationService startup output', () => {
 
   beforeEach(async () => {
     service = new ConversationService()
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'cc-haha-startup-output-'))
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'orion-startup-output-'))
     for (const key of envKeys) {
       originalEnv.set(key, process.env[key])
     }

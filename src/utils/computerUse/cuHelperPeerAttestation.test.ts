@@ -25,7 +25,7 @@ describe('reverse cu-helper daemon attestation', () => {
 
   test('passes the connected socket to a packaged signed helper verifier', async () => {
     const calls: { file: string; args: string[]; peerFd: number }[] = []
-    const pathRoot = mkdtempSync('/tmp/cc-haha-peer-path-')
+    const pathRoot = mkdtempSync('/tmp/orion-peer-path-')
     const expectedPath = join(pathRoot, 'cc-haha-computer-use')
     writeFileSync(expectedPath, '')
     try {
@@ -102,7 +102,7 @@ describe('reverse cu-helper daemon attestation', () => {
   })
 
   test('hard timeout reaps the direct verifier without consuming the parent socket', async () => {
-    const fixtureRoot = mkdtempSync(join(tmpdir(), 'cc-haha-peer-timeout-'))
+    const fixtureRoot = mkdtempSync(join(tmpdir(), 'orion-peer-timeout-'))
     const socketPath = join(fixtureRoot, 'peer.sock')
 
     const server = createServer()

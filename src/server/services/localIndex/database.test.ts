@@ -19,7 +19,7 @@ const originalEnvironment: Partial<Record<EnvironmentName, string>> = {}
 const tempDirs: string[] = []
 
 async function createTempDir(label: string): Promise<string> {
-  const directory = await mkdtemp(join(tmpdir(), `cc-haha-${label}-`))
+  const directory = await mkdtemp(join(tmpdir(), `orion-${label}-`))
   tempDirs.push(directory)
   return directory
 }

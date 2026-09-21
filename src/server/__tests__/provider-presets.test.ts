@@ -221,7 +221,7 @@ describe('provider presets API', () => {
     expect(deepseek?.modelContextWindows?.['deepseek-v4-pro']).toBe(1000000)
     expect(deepseek?.modelContextWindows?.['deepseek-v4-flash']).toBe(1000000)
     expect(zhipu?.apiKeyUrl).toBe('https://www.bigmodel.cn/invite?icode=d41B2qi8Z5xNwTGLNPPF3OZLO2QH3C0EBTSr%2BArzMw4%3D')
-    expect(zhipu?.promoText).toContain('cc-haha')
+    expect(zhipu?.promoText).toContain('Orion Agent')
     expect(zhipu?.defaultEnv?.ORION_SEND_DISABLED_THINKING).toBeUndefined()
     expect(zhipu?.modelContextWindows?.['glm-5.3']).toBe(1000000)
     expect(zhipu?.modelContextWindows?.['glm-5.3-flash']).toBe(1000000)
@@ -262,7 +262,7 @@ describe('provider presets API', () => {
     expect(qiniuai?.modelContextWindows?.['z-ai/glm-5.2']).toBe(1000000)
     expect(qiniuai?.modelContextWindows?.['moonshotai/kimi-k3']).toBe(262144)
     expect(atlascloud?.apiKeyUrl).toBe(
-      'https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=cc-haha',
+      'https://www.atlascloud.ai/?utm_source=github&utm_medium=link&utm_campaign=orion-agent',
     )
     expect(atlascloud?.featured).toBe(true)
     expect(custom?.promoText).toBeUndefined()

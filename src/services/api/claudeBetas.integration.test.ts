@@ -18,7 +18,7 @@ async function runRelay(options: {
   provider?: SavedProvider
   requireContextBeta?: boolean
 } = {}) {
-  const sandbox = await mkdtemp(join(tmpdir(), 'cc-haha-context-beta-'))
+  const sandbox = await mkdtemp(join(tmpdir(), 'orion-context-beta-'))
   const requests: {
     model: string
     beta: string

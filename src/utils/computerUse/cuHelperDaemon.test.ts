@@ -140,7 +140,7 @@ describe('cu-helper daemon system commands', () => {
   })
 
   test('creates a private runtime directory before the native daemon binds', () => {
-    const root = mkdtempSync(path.join(tmpdir(), 'cc-haha-cu-runtime-test-'))
+    const root = mkdtempSync(path.join(tmpdir(), 'orion-cu-runtime-test-'))
     try {
       const runtimeDir = path.join(root, '.runtime')
       __prepareDaemonSocketDirectoryForTests(
@@ -156,7 +156,7 @@ describe('cu-helper daemon system commands', () => {
   })
 
   test('refuses a symlinked runtime directory for the owner-only socket', () => {
-    const root = mkdtempSync(path.join(tmpdir(), 'cc-haha-cu-runtime-test-'))
+    const root = mkdtempSync(path.join(tmpdir(), 'orion-cu-runtime-test-'))
     try {
       const actual = path.join(root, 'actual')
       const runtimeDir = path.join(root, '.runtime')

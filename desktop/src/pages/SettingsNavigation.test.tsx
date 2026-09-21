@@ -6,8 +6,8 @@ vi.mock('../api/traces', () => ({
   tracesApi: {
     list: vi.fn().mockResolvedValue({
       total: 0,
-      storageDir: '/tmp/cc-haha/traces',
-      settings: { enabled: true, storageDir: '/tmp/cc-haha/traces' },
+      storageDir: '/tmp/orion/traces',
+      settings: { enabled: true, storageDir: '/tmp/orion/traces' },
       traces: [],
     }),
     deleteSession: vi.fn(),

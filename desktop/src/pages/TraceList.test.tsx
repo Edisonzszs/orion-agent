@@ -33,10 +33,10 @@ vi.mock('../lib/desktopHost', async (importOriginal) => {
 
 const traceList: TraceSessionList = {
   total: 1,
-  storageDir: '/tmp/cc-haha/traces',
+  storageDir: '/tmp/orion/traces',
   settings: {
     enabled: true,
-    storageDir: '/tmp/cc-haha/traces',
+    storageDir: '/tmp/orion/traces',
   },
   traces: [{
     sessionId: 'session-trace-list',
@@ -111,7 +111,7 @@ describe('TraceList', () => {
     expect(tracesApi.list).toHaveBeenCalledWith({ limit: 50, offset: 0, query: '' })
 
     // header: storage dir + collection badge + aggregate chips
-    expect(screen.getByText('/tmp/cc-haha/traces')).toBeInTheDocument()
+    expect(screen.getByText('/tmp/orion/traces')).toBeInTheDocument()
     expect(screen.getByText('Collecting')).toBeInTheDocument()
     expect(screen.getByText('Sessions')).toBeInTheDocument()
 
@@ -255,7 +255,7 @@ describe('TraceList', () => {
 
     fireEvent.click(within(alert).getByRole('button', { name: 'Retry' }))
 
-    expect(await screen.findByText('/tmp/cc-haha/traces')).toBeInTheDocument()
+    expect(await screen.findByText('/tmp/orion/traces')).toBeInTheDocument()
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
   })
 
@@ -293,7 +293,7 @@ describe('TraceList', () => {
   it('shows the paused badge when capture is disabled', async () => {
     vi.mocked(tracesApi.list).mockResolvedValue({
       ...traceList,
-      settings: { enabled: false, storageDir: '/tmp/cc-haha/traces' },
+      settings: { enabled: false, storageDir: '/tmp/orion/traces' },
     })
 
     render(<TraceList />)

@@ -42,7 +42,7 @@ describe('image processor module loading', () => {
   })
 
   test('loads both bundled image APIs from the executable installation instead of the project', async () => {
-    const root = await mkdtemp(join(tmpdir(), 'cc-haha-image-module-'))
+    const root = await mkdtemp(join(tmpdir(), 'orion-image-module-'))
     directories.push(root)
     const moduleDirectory = join(root, 'app.asar.unpacked', 'node_modules', 'sharp')
     const executable = join(root, 'app.asar.unpacked', 'src-tauri', 'binaries', 'claude-sidecar')

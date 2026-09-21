@@ -22,7 +22,7 @@ async function listFiles(dir: string) {
 
 describe('persistent storage upgrade migrations', () => {
   beforeEach(async () => {
-    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'cc-haha-persistence-'))
+    tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'orion-persistence-'))
     process.env.CLAUDE_CONFIG_DIR = tempDir
     resetPersistentStorageMigrationsForTests()
   })

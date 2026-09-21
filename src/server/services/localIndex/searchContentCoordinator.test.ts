@@ -17,7 +17,7 @@ import type {
 const tempDirs: string[] = []
 
 async function createTempScope(): Promise<string> {
-  const scope = await mkdtemp(join(tmpdir(), 'cc-haha-search-content-coordinator-'))
+  const scope = await mkdtemp(join(tmpdir(), 'orion-search-content-coordinator-'))
   tempDirs.push(scope)
   return scope
 }

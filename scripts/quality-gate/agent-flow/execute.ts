@@ -405,7 +405,7 @@ export async function executeAgentFlow(options: {
 
   const port = await getPort()
   const baseUrl = `http://127.0.0.1:${port}`
-  const workRoot = await mkdtemp(join(tmpdir(), 'cc-haha-agent-flow-'))
+  const workRoot = await mkdtemp(join(tmpdir(), 'orion-agent-flow-'))
   cpSync(join(rootDir, FIXTURE), workRoot, { recursive: true })
 
   // No provider, no credentials, no network: the runtime is the repository's own

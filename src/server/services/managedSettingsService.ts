@@ -58,7 +58,7 @@ export class ManagedSettingsService {
     await ensurePersistentStorageUpgraded()
     return readRecoverableJsonFile({
       filePath: this.getSettingsPath(),
-      label: 'cc-haha managed settings',
+      label: 'orion managed settings',
       defaultValue: {},
       normalize: normalizeJsonObject,
     })

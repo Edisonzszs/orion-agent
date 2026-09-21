@@ -856,7 +856,7 @@ describe('release desktop workflow', () => {
     expect(installerSmoke).toContain('$Stage completed successfully.')
     expect(installerSmoke).toContain('Fresh install did not create the application executable')
     expect(installerSmoke).toContain('Reinstall removed the application executable')
-    expect(installerSmoke).toContain("'中文 安装目录\\Claude Code Haha'")
+    expect(installerSmoke).toContain("'中文 安装目录\\Orion Agent'")
     expect(installerSmoke).toContain('Invoke-InstalledApplicationSmoke')
     expect(installerSmoke).toContain('ORION_ELECTRON_WINDOW_SMOKE_LOG')
     expect(installerSmoke).toContain('desktop-server-state.json')

@@ -41,7 +41,7 @@ const TARGET_EXECUTABLE_RELATIVE = path.join(
   'TextEdit',
 )
 const HELPER_IDENTIFIER = 'dev.cchaha.cu-helper'
-const RUN_DIRECTORY_PREFIX = '/tmp/cc-haha-cu-live-smoke-'
+const RUN_DIRECTORY_PREFIX = '/tmp/orion-cu-live-smoke-'
 const FIXTURE_BASENAME = 'computer-use-smoke-fixture.txt'
 const STABLE_TOKEN = 'ORION_SMOKE_STABLE_TOKEN'
 const MUTATED_TOKEN = 'ORION_SMOKE_MUTATED_VALUE'
@@ -310,7 +310,7 @@ export async function acquireLiveSmokeLock(
 export function assertSafeRunDirectory(runDirectory: string): void {
   const resolved = path.resolve(runDirectory)
   const basename = path.basename(resolved)
-  const exactGeneratedName = /^cc-haha-cu-live-smoke-[A-Za-z0-9]{6}$/
+  const exactGeneratedName = /^orion-cu-live-smoke-[A-Za-z0-9]{6}$/
   if (
     path.dirname(resolved) !== '/tmp'
     || !exactGeneratedName.test(basename)
@@ -1107,7 +1107,7 @@ function removeRunDirectory(runDirectory: string): void {
   const realRun = realpathSync(runDirectory)
   if (
     path.dirname(realRun) !== realTmp
-    || !/^cc-haha-cu-live-smoke-[A-Za-z0-9]{6}$/.test(path.basename(realRun))
+    || !/^orion-cu-live-smoke-[A-Za-z0-9]{6}$/.test(path.basename(realRun))
   ) {
     throw new Error(`Refusing cleanup after run directory escaped /tmp: ${realRun}`)
   }

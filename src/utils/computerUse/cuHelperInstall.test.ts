@@ -151,7 +151,7 @@ describe('ensureInstalledHelper', () => {
   })
 
   test('installs and refreshes a canonical bundle through the real lock and recoverable replace path', () => {
-    const tempRoot = mkdtempSync(path.join(tmpdir(), 'cc-haha-cu-install-'))
+    const tempRoot = mkdtempSync(path.join(tmpdir(), 'orion-cu-install-'))
     try {
       const sourceApp = path.join(
         tempRoot,
@@ -200,7 +200,7 @@ describe('ensureInstalledHelper', () => {
   })
 
   test('restores the last working bundle when post-replacement verification fails', () => {
-    const tempRoot = mkdtempSync(path.join(tmpdir(), 'cc-haha-cu-rollback-'))
+    const tempRoot = mkdtempSync(path.join(tmpdir(), 'orion-cu-rollback-'))
     try {
       const sourceApp = path.join(
         tempRoot,

@@ -45,7 +45,7 @@ describe('offline test environment', () => {
   })
 
   test('routes cross-platform user and temporary directories into one sandbox', () => {
-    const sandboxHome = mkdtempSync(join(tmpdir(), 'cc-haha-test-env-'))
+    const sandboxHome = mkdtempSync(join(tmpdir(), 'orion-test-env-'))
     try {
       const environment = createSandboxedTestEnvironment(sandboxHome, {}, {
         PATH: '/usr/bin',
@@ -67,7 +67,7 @@ describe('offline test environment', () => {
   })
 
   test('prevents descendant Bun processes from loading a workspace dotenv file', async () => {
-    const sandboxHome = mkdtempSync(join(tmpdir(), 'cc-haha-test-env-'))
+    const sandboxHome = mkdtempSync(join(tmpdir(), 'orion-test-env-'))
     const workspace = join(sandboxHome, 'workspace')
     mkdirSync(workspace)
     writeFileSync(

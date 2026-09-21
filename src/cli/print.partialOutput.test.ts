@@ -25,7 +25,7 @@ describe('print mode partial output', () => {
           })
         },
       })
-      configDir = await mkdtemp(join(tmpdir(), 'cc-haha-print-partial-'))
+      configDir = await mkdtemp(join(tmpdir(), 'orion-print-partial-'))
 
       try {
         const child = Bun.spawn(
@@ -102,7 +102,7 @@ describe('print mode partial output', () => {
           data() {},
         },
       })
-      configDir = await mkdtemp(join(tmpdir(), 'cc-haha-print-transport-'))
+      configDir = await mkdtemp(join(tmpdir(), 'orion-print-transport-'))
 
       try {
         const child = Bun.spawn(
