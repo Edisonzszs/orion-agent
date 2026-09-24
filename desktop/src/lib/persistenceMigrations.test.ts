@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, test } from 'vitest'
+import { beforeEach, describe, expect, it, test } from 'vitest'
 import {
   CURRENT_DESKTOP_PERSISTENCE_SCHEMA_VERSION,
   DESKTOP_PERSISTENCE_VERSION_KEY,
