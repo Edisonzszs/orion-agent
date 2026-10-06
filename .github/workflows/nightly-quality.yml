@@ -52,27 +52,37 @@ jobs:
       # Every deterministic lane, unconditionally — no path routing, no dependency
       # graph. This is the run that catches a check the router stopped selecting.
       - name: Policy and gate regressions
+        if: always()
         run: bun run check:policy
       - name: Deterministic agent flow
+        if: always()
         run: bun run check:agent-flow
       - name: Root runtime tests
+        if: always()
         run: bun run check:server
       - name: Provider contracts
+        if: always()
         run: bun run check:provider-contract
       - name: Desktop/server chat contracts
+        if: always()
         run: bun run check:chat-contract
       - name: Adapter tests
+        if: always()
         run: bun run check:adapters
       - name: Desktop lint, tests, and build
+        if: always()
         run: bun run check:desktop
       - name: Electron host checks
+        if: always()
         run: bun run check:electron
       - name: Persistence upgrade contracts
+        if: always()
         run: bun run check:persistence-upgrade
       - name: Quarantine governance
+        if: always()
         run: bun run check:quarantine
       - name: Coverage ratchet
-        if: ${{ !inputs.skip_coverage }}
+        if: ${{ always() && !inputs.skip_coverage }}
         env:
           COVERAGE_BASE_REF: origin/main
         run: bun run check:coverage
@@ -81,6 +91,7 @@ jobs:
       # reason when agent-browser is unavailable on the runner rather than failing
       # the whole nightly run.
       - name: Deterministic desktop UI smoke
+        if: always()
         run: bun run check:desktop-ui-smoke
 
       - name: Upload nightly artifacts
