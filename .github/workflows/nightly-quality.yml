@@ -46,6 +46,8 @@ jobs:
       - name: Install adapter dependencies
         working-directory: adapters
         run: bun install --frozen-lockfile
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
 
       # Every deterministic lane, unconditionally — no path routing, no dependency
       # graph. This is the run that catches a check the router stopped selecting.
