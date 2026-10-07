@@ -1,23 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-  <rect x="64" y="64" width="896" height="896" rx="220" fill="#1E1E1E"/>
-  <g transform="translate(256,256) scale(1)">
-  <defs>
-    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#171717"/>
-      <stop offset="1" stop-color="#3F3F3F"/>
-    </linearGradient>
-    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3F3F3F"/>
-      <stop offset="1" stop-color="#555555"/>
-    </linearGradient>
-    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#BBB8B2"/>
-      <stop offset="1" stop-color="#9D9993"/>
-    </linearGradient>
-  </defs>
-
-  <path d="M92 170 Q92 138 119 122 L178 88 Q198 76 219 88 L268 116 L214 148 L177 127 Q168 122 159 127 L132 143 Q123 149 123 160 L123 247 Q123 258 133 264 L163 281 L163 325 L119 300 Q92 284 92 252 Z" fill="url(#g1)"/>
-  <path d="M206 71 Q222 43 254 43 Q268 43 281 50 L393 115 Q421 131 421 163 L421 260 Q421 285 399 298 L374 313 Q357 323 341 313 Q326 304 326 285 L326 195 Q326 182 314 175 L238 131 Q226 124 214 131 L177 152 L157 117 Z" fill="url(#g2)"/>
-  <path d="M236 210 Q249 187 276 187 Q289 187 301 194 L326 208 L326 252 L300 237 Q289 231 279 237 L263 246 Q252 252 252 265 L252 300 Q252 313 263 319 L360 375 Q388 391 388 423 Q388 438 380 451 Q364 478 332 478 Q318 478 305 471 L210 416 Q182 400 182 368 L182 284 Q182 259 204 246 Z" fill="url(#g3)"/>
-</g>
+  <!-- The app icon IS the product mark: the same three-module geometry as
+       desktop/src/components/composite/OrionMark.tsx (what the Settings > About
+       page renders), as a bare monochrome unit - no plate. Scale x1.25 of the
+       512 box centered in 1024 leaves ~192px clear space per side (brand guide:
+       ~1/4 of the symbol width). Off-white stone reads on dark taskbars; the
+       kit 03_Logos_SVG variants were measured inconsistent with the kit PNGs
+       and are NOT used as sources. -->
+  <g transform="translate(192,192) scale(1.25)" fill="#E8E6E3">
+    <path d="M92 170 Q92 138 119 122 L178 88 Q198 76 219 88 L268 116 L214 148 L177 127 Q168 122 159 127 L132 143 Q123 149 123 160 L123 247 Q123 258 133 264 L163 281 L163 325 L119 300 Q92 284 92 252 Z"/>
+    <path d="M206 71 Q222 43 254 43 Q268 43 281 50 L393 115 Q421 131 421 163 L421 260 Q421 285 399 298 L374 313 Q357 323 341 313 Q326 304 326 285 L326 195 Q326 182 314 175 L238 131 Q226 124 214 131 L177 152 L157 117 Z"/>
+    <path d="M236 210 Q249 187 276 187 Q289 187 301 194 L326 208 L326 252 L300 237 Q289 231 279 237 L263 246 Q252 252 252 265 L252 300 Q252 313 263 319 L360 375 Q388 391 388 423 Q388 438 380 451 Q364 478 332 478 Q318 478 305 471 L210 416 Q182 400 182 368 L182 284 Q182 259 204 246 Z"/>
+  </g>
 </svg>

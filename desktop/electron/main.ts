@@ -143,6 +143,10 @@ function previewAgentPath() {
   return path.join(appRoot(), 'src-tauri', 'resources', 'preview-agent.js')
 }
 
+function appIconPath() {
+  return path.join(appRoot(), 'public', 'app-icon.png')
+}
+
 function rendererEntry() {
   return resolveRendererEntry({
     isPackaged: app.isPackaged,
@@ -884,6 +888,10 @@ async function createMainWindow() {
     // dark-theme user gets a white flash on every launch.
     backgroundColor: resolveStartupWindowBackground(),
     ...windowChromeOptionsForPlatform(process.platform),
+    // The packaged exe carries the product icon itself; electron.exe does
+    // not, so without this a dev run shows the generic Electron logo in the
+    // taskbar. macOS skips it — the dock reads the app bundle icon.
+    ...(process.platform === 'darwin' ? {} : { icon: appIconPath() }),
     webPreferences: {
       preload: preloadPath(),
       contextIsolation: true,
