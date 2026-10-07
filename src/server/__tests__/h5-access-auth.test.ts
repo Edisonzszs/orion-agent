@@ -721,6 +721,35 @@ describe('remote H5 auth and CORS integration', () => {
     })
   })
 
+  test('answers H5 control-plane preflight from the trusted desktop dev origin', async () => {
+    // Regression: preflights carry no credentials by spec, so the credential
+    // gates used to 403 the vite dev renderer's /api/h5-access preflight
+    // without CORS headers, failing the real request in the browser.
+    const response = await fetch(`${baseUrl}/api/h5-access`, {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'http://localhost:1420',
+        'Access-Control-Request-Method': 'GET',
+      },
+    })
+    expect(response.status).toBe(204)
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe(
+      'http://localhost:1420',
+    )
+  })
+
+  test('blocks remote preflight to the H5 control plane while H5 access is disabled', async () => {
+    const response = await fetch(`${baseUrl}/api/h5-access`, {
+      method: 'OPTIONS',
+      headers: {
+        Origin: PHONE_ORIGIN,
+        'Access-Control-Request-Method': 'GET',
+      },
+    })
+    expect(response.status).toBe(403)
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBeNull()
+  })
+
   test('blocks remote preflight requests to capability routes while H5 access is disabled', async () => {
     const response = await fetch(`${baseUrl}/api/status`, {
       method: 'OPTIONS',

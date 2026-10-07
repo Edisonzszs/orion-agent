@@ -200,6 +200,22 @@ function isH5AccessControlRequest(
     return false
   }
 
+  // A CORS preflight carries no credentials by spec, so the credential check
+  // below would reject even the desktop renderer's own preflight — and the
+  // 403 has no CORS headers, so the browser fails the real request the
+  // preflight announces ("Failed to fetch" in the vite dev app). Answer the
+  // preflight when its Origin is already classified local-trusted; the actual
+  // request right behind it still has to pass the credential gate.
+  const isCorsPreflight =
+    req.method === 'OPTIONS' &&
+    req.headers.has('access-control-request-method')
+  if (
+    isCorsPreflight &&
+    classifyH5Request(req, url, context) === 'local-trusted'
+  ) {
+    return false
+  }
+
   if (requiresLocalAccessCredential(url.pathname, context)) {
     return true
   }
