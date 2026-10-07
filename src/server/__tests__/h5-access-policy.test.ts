@@ -113,6 +113,33 @@ describe('h5AccessPolicy', () => {
     }
   })
 
+  test('trusts the pinned vite dev renderer origin even with the process token configured', () => {
+    const desktopContext = {
+      clientAddress: '127.0.0.1',
+      localAccessTokenConfigured: true,
+      localAccessAuthorized: false,
+    }
+    // Regression: a CORS preflight (OPTIONS, no credentials by spec) from the
+    // vite dev renderer must stay local-trusted when the local access token is
+    // configured, or the disabled-H5 gate 403s it before CORS answers and the
+    // dev app fails every /api call with "Failed to fetch".
+    const request = req('http://127.0.0.1:3456/api/models', {
+      method: 'OPTIONS',
+      headers: {
+        Origin: 'http://localhost:1420',
+        'Access-Control-Request-Method': 'GET',
+      },
+    })
+    expect(classifyH5Request(request, new URL(request.url), desktopContext)).toBe('local-trusted')
+    expect(shouldBlockDisabledH5Access({
+      request,
+      url: new URL(request.url),
+      h5Enabled: false,
+      explicitAuthRequired: false,
+      context: desktopContext,
+    })).toBe(false)
+  })
+
   test('keeps loopback browser origins usable for tokenless local development servers', () => {
     const request = req('http://127.0.0.1:3456/api/status', {
       headers: { Origin: 'http://localhost:5173' },

@@ -6,7 +6,13 @@ export type H5RequestContext = {
   internalSdkAuthorized?: boolean
 }
 
-const LOCAL_DESKTOP_ORIGINS = new Set(['file://'])
+// 'file://' is the packaged desktop renderer. 'http://localhost:1420' is the
+// vite dev renderer (strictPort pins it in desktop/vite.config.ts): it must be
+// trusted even when the local access token is configured, because CORS
+// preflights carry no credentials by spec — without this origin the disabled-H5
+// gate 403s every dev preflight before the CORS handler can answer, and the dev
+// app dies with "Failed to fetch" on its first /api call.
+const LOCAL_DESKTOP_ORIGINS = new Set(['file://', 'http://localhost:1420'])
 const PROXY_TRACE_HEADERS = [
   'forwarded',
   'x-forwarded-for',
