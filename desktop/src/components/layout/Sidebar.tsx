@@ -941,38 +941,24 @@ export function Sidebar({
         data-desktop-drag-region
         className={`px-3 pb-2 ${isDesktopRuntime && !isWindows ? 'pt-[44px]' : 'pt-3'}`}
       >
-        <div className={`flex ${expanded ? 'items-center justify-between gap-3' : 'flex-col items-center gap-2'}`}>
-          {/* The mark only stands in for the wordmark on the rail. Expanded,
-              the name says it better and the icon beside it is just clutter;
-              collapsed, the copy is width-clamped to zero and the header would
-              otherwise be empty. `sm` is the cleanest cut of the mark — the
-              ring alone, no stars to turn to mush at 24px. */}
-          {/* Expanded, `pl-3` lands the wordmark on the same 24px line as the
-              nav icons, the search glyph and the settings gear below it —
-              the section's own `px-3` alone left it sticking out on its own.
-              Collapsed, the mark is centered on the rail instead. */}
-          <div className={`flex min-w-0 items-center ${expanded ? 'gap-2.5 pl-3' : 'justify-center'}`}>
-            {!expanded ? <OrionMark size="sm" /> : null}
-            {/* One form, at every width. The header used to carry the product
-                name and swap to this below ~230px of title region, which meant
-                the app answered to two names depending on how the sidebar was
-                dragged. It goes by the short one. */}
-            <span
-              className={`sidebar-copy ${expanded ? 'sidebar-copy--visible' : 'sidebar-copy--hidden'} text-base font-bold tracking-tight text-[var(--color-text-primary)]`}
-              style={{ fontFamily: 'var(--font-headline)' }}
-            >
-              orion <span className="text-[var(--color-brand)]">agent</span>
-            </span>
-          </div>
-          <div className={`flex items-center ${expanded ? 'gap-1.5' : 'flex-col gap-2'}`}>
-            {/* 折叠态下整个会话列表都不渲染，露一个切不动视图的铃铛只会让人点空。
-                跟 GitHub 链接同一套处理：宽度夹到零、退出 tab 顺序，并且 `aria-hidden`
-                ——`sidebar-copy--hidden` 只是 `max-width:0; opacity:0`，元素仍留在
-                无障碍树里，少了这一条读屏还会念出一个按不动的按钮。 */}
-            <span
-              className={`sidebar-copy ${expanded ? 'sidebar-copy--visible' : 'sidebar-copy--hidden'} inline-flex`}
-              aria-hidden={!expanded}
-            >
+        {expanded ? (
+          <div className="flex items-center justify-between gap-3">
+            {/* `pl-3` lands the wordmark on the same 24px line as the nav
+                icons, the search glyph and the settings gear below it — the
+                section's own `px-3` alone left it sticking out on its own. */}
+            <div className="flex min-w-0 items-center gap-2.5 pl-3">
+              {/* One form, at every width. The header used to carry the
+                  product name and swap to the mark below ~230px of title
+                  region, which meant the app answered to two names depending
+                  on how the sidebar was dragged. It goes by the short one. */}
+              <span
+                className="sidebar-copy sidebar-copy--visible text-base font-bold tracking-tight text-[var(--color-text-primary)]"
+                style={{ fontFamily: 'var(--font-headline)' }}
+              >
+                orion <span className="text-[var(--color-brand)]">agent</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
               <IconButton
                 icon={<Bell className="h-[17px] w-[17px]" strokeWidth={1.9} aria-hidden="true" />}
                 label={t('sidebar.taskView')}
@@ -982,45 +968,75 @@ export function Sidebar({
                 filled={isTaskView}
                 pressed={isTaskView}
                 surface="sidebar"
-                tabIndex={expanded ? undefined : -1}
                 data-testid="sidebar-task-view-toggle"
               />
-            </span>
-            <a
-              href={PRODUCT.homepage}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`sidebar-copy ${expanded ? 'sidebar-copy--visible' : 'sidebar-copy--hidden'} inline-flex items-center justify-center rounded-[var(--radius-sm)] p-1 text-[var(--color-text-tertiary)] transition-colors hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]`}
-              title="GitHub"
-              tabIndex={expanded ? undefined : -1}
-              aria-hidden={!expanded}
-            >
-              <GitHubIcon />
-            </a>
-            {isMobile ? (
-              <button
-                type="button"
-                onClick={closeMobileDrawer}
-                className="sidebar-toggle-button flex h-11 w-11 items-center justify-center rounded-[var(--radius-lg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-sidebar)]"
-                aria-label={t('sidebar.collapse')}
-                title={t('sidebar.collapse')}
+              <a
+                href={PRODUCT.homepage}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-[var(--radius-sm)] p-1 text-[var(--color-text-tertiary)] transition-colors hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]"
+                title="GitHub"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={toggleSidebar}
-                data-testid={expanded ? 'sidebar-collapse-button' : 'sidebar-expand-button'}
-                className={`sidebar-toggle-button ${expanded ? 'sidebar-toggle-button--open h-8 w-8' : 'sidebar-toggle-button--collapsed h-8 w-8'} flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-sidebar)]`}
-                aria-label={expanded ? t('sidebar.collapse') : t('sidebar.expand')}
-                title={expanded ? t('sidebar.collapse') : t('sidebar.expand')}
-              >
-                <SidebarToggleIcon collapsed={!expanded} />
-              </button>
-            )}
+                <GitHubIcon />
+              </a>
+              {isMobile ? (
+                <button
+                  type="button"
+                  onClick={closeMobileDrawer}
+                  className="sidebar-toggle-button flex h-11 w-11 items-center justify-center rounded-[var(--radius-lg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-sidebar)]"
+                  aria-label={t('sidebar.collapse')}
+                  title={t('sidebar.collapse')}
+                >
+                  <span className="material-symbols-outlined text-[20px]">close</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={toggleSidebar}
+                  data-testid="sidebar-collapse-button"
+                  className="sidebar-toggle-button sidebar-toggle-button--open h-8 w-8 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-sidebar)]"
+                  aria-label={t('sidebar.collapse')}
+                  title={t('sidebar.collapse')}
+                >
+                  <SidebarToggleIcon collapsed={false} />
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* The toggle owns the top slot on the rail — the same top-of-header
+             position it holds when expanded, so the control never moves
+             (VS Code / Claude Desktop convention). The bell and the GitHub
+             link are expanded-only chrome: rendering them clamped-but-mounted
+             here used to park their invisible height between the mark and the
+             toggle, shoving the toggle down the rail. The mark only stands in
+             for the wordmark on the rail; `sm` is the cleanest cut — the ring
+             alone, no stars to turn to mush at 24px. The wordmark stays
+             mounted under its width clamp so the collapse animation has
+             something to shrink. */
+          <div className="flex flex-col items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleSidebar}
+              data-testid="sidebar-expand-button"
+              className="sidebar-toggle-button sidebar-toggle-button--collapsed h-8 w-8 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-border-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface-sidebar)]"
+              aria-label={t('sidebar.expand')}
+              title={t('sidebar.expand')}
+            >
+              <SidebarToggleIcon collapsed />
+            </button>
+            <div className="flex min-w-0 items-center justify-center">
+              <OrionMark size="sm" />
+              <span
+                className="sidebar-copy sidebar-copy--hidden text-base font-bold tracking-tight text-[var(--color-text-primary)]"
+                style={{ fontFamily: 'var(--font-headline)' }}
+                aria-hidden="true"
+              >
+                orion <span className="text-[var(--color-brand)]">agent</span>
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className={`px-3 pb-3 flex flex-col ${expanded ? 'gap-0.5' : 'items-center gap-2'}`}>

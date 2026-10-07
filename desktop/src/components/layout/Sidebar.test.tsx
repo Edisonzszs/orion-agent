@@ -2845,16 +2845,39 @@ describe('Sidebar', () => {
       expect(useTabStore.getState().tabs.map((tab) => tab.sessionId)).toContain('yesterday-1')
     })
 
-    it('takes the bell out of reach while the sidebar is collapsed', () => {
+    it('takes the bell out of the collapsed rail entirely', () => {
       seedSessions()
       useUIStore.setState({ sidebarOpen: false } as Partial<ReturnType<typeof useUIStore.getState>>)
 
       render(<Sidebar />)
 
-      // 折叠态不渲染会话列表，能聚焦或被读出来但切不动视图的铃铛只会让人点空。
-      // `sidebar-copy--hidden` 只夹宽度和透明度，所以两条都得自己钉住。
-      expect(screen.getByTestId('sidebar-task-view-toggle')).toHaveAttribute('tabindex', '-1')
+      // 折叠态不渲染会话列表，切不动视图的铃铛只会让人点空——连同 GitHub
+      // 链接一起从折叠分支里整棵摘掉，而不是夹宽占位。
+      expect(screen.queryByTestId('sidebar-task-view-toggle')).not.toBeInTheDocument()
       expect(screen.queryByRole('button', { name: 'Task view' })).not.toBeInTheDocument()
+    })
+
+    it('pins the expand toggle at the top of the collapsed rail, above the mark', () => {
+      useUIStore.setState({ sidebarOpen: false } as Partial<ReturnType<typeof useUIStore.getState>>)
+
+      render(<Sidebar />)
+
+      const toggle = screen.getByTestId('sidebar-expand-button')
+      const titleRegion = screen.getByTestId('sidebar-title-region')
+
+      // The toggle is the header's first interactive element — same slot the
+      // collapse button occupies when expanded, so the control never moves.
+      expect(titleRegion.querySelector('button')).toBe(toggle)
+
+      // The brand mark sits below the toggle on the rail.
+      const brandRow = screen.getByText('agent').closest('div') as HTMLElement
+      const mark = brandRow.querySelector('svg')
+      expect(mark).not.toBeNull()
+      expect(toggle.compareDocumentPosition(brandRow) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+
+      // Collapsed chrome (GitHub link) leaves the DOM instead of squatting on
+      // invisible height above the toggle.
+      expect(screen.queryByTitle('GitHub')).not.toBeInTheDocument()
     })
 
     it('keeps the bell reachable once the sidebar is expanded again', () => {
